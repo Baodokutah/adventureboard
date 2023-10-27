@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# adventureboard
-A software engineering project
 =======
 # Getting Started with Create React App
 

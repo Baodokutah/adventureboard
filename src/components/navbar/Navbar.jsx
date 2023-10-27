@@ -46,7 +46,7 @@ return (
                     <li><Link to="/">Trang chủ</Link></li>
                     <li><Link to="ctxh">CTXH</Link></li>
                     <li><Link to="study">Nhóm môn học</Link></li>
-                    <li><Link to="flag"><span className="login">Đăng nhập</span></Link></li>
+                    <li><Link to="logged"><span className="login">Đăng nhập</span></Link></li>
                 </ul>
             </div>
 
