@@ -50,14 +50,15 @@
     background: white;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for a more 3D look */
 }
-.ctxh h2, .study h2 {
-    font-size: 3.5vw;
-    margin-bottom: 2vh;
-}
 
 .ctxh h1, .study h1 {
     font-size: 4vw;
     margin-bottom: 10vh;
+}
+
+.ctxh h2, .study h2 {
+    font-size: 3.5vw;
+    margin-bottom: 2vh;
 }
 
 .ctxh p, .study p {

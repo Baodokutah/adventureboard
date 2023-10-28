@@ -1,4 +1,4 @@
-nav {
+.nav {
     display: flex;
     align-items: center;
     justify-content: space-between; 
@@ -8,6 +8,23 @@ nav {
     margin-left: 0px !important;
 
 }
+
+.logged {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; 
+    background: rgba(151, 116, 83, 0.69);
+    padding: 10px 20px;
+    max-width: 100%;
+    margin-left: 0px !important;
+    gap: 100px !important;
+
+}
+
+Input {
+    width: 100vh;
+}
+
 
 #navbar {
     padding: 0;
@@ -83,7 +100,7 @@ svg{
     #navbar.active {
         right: 0px;
         z-index: 2;
-        background: rgba(0, 0, 0, 0);
+        /* background: rgba(0, 0, 0, 0); */
 
     }
 
