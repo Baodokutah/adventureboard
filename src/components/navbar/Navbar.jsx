@@ -1,17 +1,83 @@
 import { Component } from "react";
 import "./navbar.css";
 import { Link } from "react-router-dom";
+import { styled } from '@mui/material/styles';
+import Switch from '@mui/joy/Switch';
+import SearchIcon from '@mui/icons-material/Search';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import Input from '@mui/joy/Input';
+import Avatar from '@mui/material/Avatar';
+
+
+
+const MaterialUISwitch = styled(Switch)(({ theme }) => ({
+    width: 62,
+    height: 34,
+    padding: 7,
+    '& .MuiSwitch-switchBase': {
+      margin: 1,
+      padding: 0,
+      transform: 'translateX(6px)',
+      '&.Mui-checked': {
+        color: '#fff',
+        transform: 'translateX(22px)',
+        '& .MuiSwitch-thumb:before': {
+          backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
+            '#fff',
+          )}" d="M4.2 2.5l-.7 1.8-1.8.7 1.8.7.7 1.8.6-1.8L6.7 5l-1.9-.7-.6-1.8zm15 8.3a6.7 6.7 0 11-6.6-6.6 5.8 5.8 0 006.6 6.6z"/></svg>')`,
+        },
+        '& + .MuiSwitch-track': {
+          opacity: 1,
+          backgroundColor: theme.palette.mode === 'dark' ? '#8796A5' : '#aab4be',
+        },
+      },
+    },
+    '& .MuiSwitch-thumb': {
+      backgroundColor: theme.palette.mode === 'dark' ? '#003892' : '#001e3c',
+      width: 32,
+      height: 32,
+      '&:before': {
+        content: "''",
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        left: 0,
+        top: 0,
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+        backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
+          '#fff',
+        )}" d="M9.305 1.667V3.75h1.389V1.667h-1.39zm-4.707 1.95l-.982.982L5.09 6.072l.982-.982-1.473-1.473zm10.802 0L13.927 5.09l.982.982 1.473-1.473-.982-.982zM10 5.139a4.872 4.872 0 00-4.862 4.86A4.872 4.872 0 0010 14.862 4.872 4.872 0 0014.86 10 4.872 4.872 0 0010 5.139zm0 1.389A3.462 3.462 0 0113.471 10a3.462 3.462 0 01-3.473 3.472A3.462 3.462 0 016.527 10 3.462 3.462 0 0110 6.528zM1.665 9.305v1.39h2.083v-1.39H1.666zm14.583 0v1.39h2.084v-1.39h-2.084zM5.09 13.928L3.616 15.4l.982.982 1.473-1.473-.982-.982zm9.82 0l-.982.982 1.473 1.473.982-.982-1.473-1.473zM9.305 16.25v2.083h1.389V16.25h-1.39z"/></svg>')`,
+      },
+    },
+    '& .MuiSwitch-track': {
+      width: 62,
+      opacity: 1,
+      backgroundColor: theme.palette.mode === 'dark' ? '#8796A5' : '#aab4be',
+      borderRadius: 20 / 2,
+    },
+  }));
 
 
 class Navbar extends Component{
-state = {clicked: false};
+    state = {
+        clicked: false,
+        isLoggedIn: false
+      };
+      
 handleClick = () => {
     this.setState({clicked: !this.state.clicked})
 }
+handleLogin = () => {
+    // This is where you might have actual login logic in a real application.
+    // For now, we'll just update the state to simulate a login.
+    this.setState({ isLoggedIn: true });
+  };
+  
 render(){
 return (
     <>
-        <nav>
+        <nav className={this.state.isLoggedIn ? "logged" : "nav"}>
             <Link to="/">
             <svg xmlns="http://www.w3.org/2000/svg" width="75" height="75" viewBox="0 0 75 75" fill="none">
   <path d="M33.8073 0.115097C33.1988 0.368273 33.1538 0.989703 33.3002 6.3179C33.3679 8.83815 33.3904 9.02227 33.6045 9.28696C33.7735 9.4941 33.9989 9.59767 34.3594 9.6322C34.8214 9.68974 34.9229 9.65521 35.2609 9.3445L35.644 8.99926V7.08893C35.644 6.04171 35.6665 5.17861 35.7004 5.17861C35.7342 5.17861 36.4666 6.08774 37.3342 7.20401C39.092 9.47108 39.3963 9.7818 39.8808 9.7818C40.2977 9.7818 40.8386 9.50561 40.9964 9.21791C41.1428 8.93021 41.1541 1.04724 40.9964 0.644464C40.8837 0.333749 40.3653 1.71661e-05 39.9935 1.71661e-05C39.6104 1.71661e-05 39.1822 0.264701 39.0132 0.586925C38.8892 0.828592 38.8554 1.4155 38.8554 2.99209C38.8554 4.18892 38.8103 5.06353 38.754 5.06353C38.6413 5.06353 37.1089 3.11868 35.8356 1.35796C35.3961 0.748036 34.9341 0.184145 34.8102 0.126605C34.5397 -0.0229988 34.1566 -0.0229988 33.8073 0.115097Z" fill="black"/>
@@ -40,20 +106,41 @@ return (
 </svg>
             </Link>
 
+            {this.state.isLoggedIn  ? ( 
+                <div className="navbarlog">
+                <ul id="navbar" className={this.state.clicked ? "#navbar active" : "#navbar"}>
+                    <li>
+                    <MaterialUISwitch sx={{ m: 1 }} defaultChecked />
+                    </li>
+                    <li>
+                    <Input
 
+                        color="neutral"
+                        placeholder="Tìm kiếm bài đăng"
+                        variant="outlined"
+                    />
+                    </li>
+                    <li><SearchIcon /></li>
+                    <li><NotificationsActiveIcon/></li>
+                    <li><Avatar>H</Avatar></li>
+                </ul>
+            </div>
+            )
+            : (
             <div>
                 <ul id="navbar" className={this.state.clicked ? "#navbar active" : "#navbar"}>
                     <li><Link to="/">Trang chủ</Link></li>
                     <li><Link to="ctxh">CTXH</Link></li>
                     <li><Link to="study">Nhóm môn học</Link></li>
-                    <li><Link to="flag"><span className="login">Đăng nhập</span></Link></li>
+                    <li><Link to="logged"  onClick={this.handleLogin}><span className="login">Đăng nhập</span></Link></li>
                 </ul>
             </div>
-
+            )}
 
             <div className="mobile" onClick={this.handleClick}>
             <i id="bar" className={this.state.clicked ? "fas fa-times" : "fas fa-bars"}></i>
             </div>
+          
         </nav>
     </>
 );
