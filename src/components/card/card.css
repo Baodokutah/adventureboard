@@ -1,0 +1,102 @@
+.card{
+    display: flex;
+    max-width: 95vw;
+    margin-left: 3vw;
+    justify-content: center;
+    align-items: center;
+    gap: 4vw;
+    height: 85vh;
+
+}
+
+.ctxh{
+    border-radius: 20px;
+    height: 75vh;
+    border: 1px solid #000;
+    color: #fff;
+    background: #8B5A2B;
+}
+
+.study {
+    border-radius: 20px;
+    height: 75vh;
+    border: 1px solid #000;
+    color: #000;
+    background: white;
+}
+
+
+.ctxh, .study {
+    display: flex; /* Added flex properties to center content */
+    flex-direction: column; /* Makes content vertical */
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    width: calc(50% - 2vw); /* Calculates width by subtracting the gap */
+    height: 75vh;
+    padding: 5vw; /* Added padding for better spacing */
+}
+
+.ctxh{
+    border: 1px solid #000;
+    color: #fff;
+    background: #8B5A2B;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2); /* Optional: Add shadow for a more 3D look */
+}
+
+.study {
+    border: 1px solid #000;
+    color: #000;
+    background: white;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for a more 3D look */
+}
+
+.ctxh h1, .study h1 {
+    font-size: 4vw;
+    margin-bottom: 10vh;
+}
+
+.ctxh h2, .study h2 {
+    font-size: 3.5vw;
+    margin-bottom: 2vh;
+}
+
+.ctxh p, .study p {
+    margin-bottom: 15vh;
+    text-align: center;
+    font-size: 1.7vw;
+}
+.ctxh button {
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;    
+    justify-content: center;
+    font-weight: bold;
+    border: none;
+    border-radius: 50px;
+    font-size: 2vw;
+    width: 20vw;
+    height: 8vh;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 1vh;
+}
+
+
+.study button {
+    background: #8B5A2B;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;    
+    justify-content: center;
+    font-weight: bold;
+    border: none;
+    border-radius: 50px;
+    font-size: 2vw;
+    width: 30vw;
+    height: 8vh;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 1vh;
+}
