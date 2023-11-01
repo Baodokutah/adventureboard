@@ -106,7 +106,7 @@ function FilterBox_Group() {
 
 export default function FilterBox() {
   return (
-    <div id='filterBox' style={{ width: '19.16%', height:"440px", marginLeft:'3.286%', maxWidth:'276px'}}>
+    <div id='filterBox' style={{ width: '19.16%', height:"440px", left:'3.286%', maxWidth:'276px', position:'relative'}}>
         <Box className='createPost'>
           <h2 style={{ color: 'white' }}>Tạo bài viết</h2>
         </Box>
