@@ -1,0 +1,21 @@
+.tag{
+    border: 1px solid black;
+    border-radius: 30px;
+    width: 104px;
+    height: 23px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: white; */
+}
+
+.tagBox{
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */ /* You can uncomment this line if needed */
+    justify-content: space-between;
+    background-color: white;
+    border-radius: 11px;
+    border: 2px solid black;
+    padding: 10px;
+}
