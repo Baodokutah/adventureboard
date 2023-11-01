@@ -1,10 +1,12 @@
-
+import FilterBox from '../../components/filter/Filter';
+import Posts from '../../components/post/Post';
 
 function Study() {
     return (
-        <>
-        <h1>Hi this is study</h1>
-        </>
+        <div className='componentDisplay'>
+            <FilterBox />
+            <Posts />
+        </div>
     );
 }
 
