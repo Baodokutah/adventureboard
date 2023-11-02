@@ -21,6 +21,11 @@
 
 }
 
+#switch {
+    padding: 0;
+    margin-left: -50px !important;
+}
+
 Input {
     width: 100vh;
 }

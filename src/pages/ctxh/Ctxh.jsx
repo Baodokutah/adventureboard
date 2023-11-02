@@ -3,9 +3,11 @@
 
 function CTXH() {
     return (
-        <>
-        <h1>Hi this is CTXH</h1>
-        </>
+        <div className='componentDisplay'>
+            <FilterBox />
+            <Posts />
+          
+        </div>
     );
 }
 
