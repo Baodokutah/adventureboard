@@ -1,9 +1,9 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { Link } from 'react-router-dom';
 
 import './filter.css'
 
@@ -11,56 +11,39 @@ function FilterBox_CTXH() {
   // const [selected, setSelected] = React.useState(false);
 
   return (
-    <Box className='filterBigBox'>
+  <div className='filterBigBox'>
 
-    <Box className='filterBox'><h1>Bộ lọc</h1></Box>
+    <div className='filterBox'><h1>Bộ lọc</h1></div>
 
       <h3>Cơ sở</h3>
-        <Box
-          sx={{
-            display: 'flex',
-            // alignItems: 'flex-start',
-            flexDirection: 'row',
-            bgcolor: 'white',
-            borderRadius: 0,
-          }}
-        >
-        </Box>
+        <div className='filterTagBox'>
+          <button className='filterTagButton'>Cơ sở 1</button>
+          <button className='filterTagButton'>Cơ sở 2</button>
+        </div>
 
       <h3>Số ngày CTXH</h3>
-        <Box
-          sx={{
-            display: 'flex',
-            // alignItems: 'flex-start',
-            flexDirection: 'row',
-            bgcolor: 'white',
-            borderRadius: 0,
-          }}
-        >
-        </Box>
-
+        <div className='filterTagBox'>
+          <button className='filterTagButton'>&le; 1 ngày</button>
+          <button className='filterTagButton'>&gt; 1 ngày</button>
+        </div>
       <h3>Thời gian</h3>
-        <Box
-          sx={{
-            display: 'flex',
-            // alignItems: 'flex-start',
-            flexDirection: 'row',
-            bgcolor: 'white',
-            borderRadius: 0,
-          }}
-        >
-
-        </Box>
-  </Box>
+      <div className='filterTagBox'>
+        <span className='filterTagButton'>Sáng</span>
+        <span className='filterTagButton'>Chiều</span>
+      </div>
+      <div className='filterTagBox'>
+      <span className='filterTagButton'>Tối</span>
+      </div>
+  </div>
   );
 }
 
 function FilterBox_Group() {
   return (
-      <Box className='filterBigBox'>
-      <Box className='filterBox'><h1>Bộ lọc</h1></Box>
+      <div className='filterBigBox'>
+      <div className='filterBox'><h1>Bộ lọc</h1></div>
           <h3>Mã môn</h3>
-          <Box className='tagBox_Study'>
+          <div className='tagBox_Study'>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label"></InputLabel>
               <Select
@@ -78,10 +61,10 @@ function FilterBox_Group() {
                 <MenuItem value={3}>CO2014</MenuItem>
               </Select>
             </FormControl>
-          </Box>
+          </div>
 
           <h3>Nhóm lớp</h3>
-          <Box className='tagBox_Study'>
+          <div className='tagBox_Study'>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label"></InputLabel>
               <Select
@@ -99,17 +82,19 @@ function FilterBox_Group() {
                 <MenuItem value={3}>LA</MenuItem>
               </Select>
             </FormControl>
-          </Box>
-      </Box>
+          </div>
+      </div>
   );
 }
 
 export default function FilterBox() {
   return (
-    <div id='filterBox' style={{ width: '19.16%', height:"440px", left:'3.286%', maxWidth:'276px', position:'relative'}}>
-        <Box className='createPost'>
+    <div id='filterBox' className='filter'>
+      <Link to='/create' className='link'>
+        <div className='createPost'>
           <h2 style={{ color: 'white' }}>Tạo bài viết</h2>
-        </Box>
+        </div>
+      </Link>
         {window.location.pathname==='/ctxh' ? (<FilterBox_CTXH/>) : window.location.pathname==='/study' ? (<FilterBox_Group/>) : (<></>)}
     </div>
   );
