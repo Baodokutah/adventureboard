@@ -12,6 +12,8 @@ function CTXH() {
             {/* <Posts /> */}
             {/* <ListOfMem />
             <Posts /> */}
+            <ListOfMem />
+            <Posts />
         </div>
     );
 }
