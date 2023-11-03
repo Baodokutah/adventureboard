@@ -8,7 +8,7 @@ import Input from '@mui/joy/Input';
 import Avatar from '@mui/material/Avatar';
 import clsx from 'clsx';
 import { useSwitch } from '@mui/base/useSwitch';
-
+import React, { useState } from 'react';
 
 
 function MUISwitch(props) {
@@ -123,7 +123,7 @@ class Navbar extends Component{
         clicked: false,
         isLoggedIn: false
       };
-      
+
 handleClick = () => {
     this.setState({clicked: !this.state.clicked})
 }
@@ -132,7 +132,7 @@ handleLogin = () => {
     // For now, we'll just update the state to simulate a login.
     this.setState({ isLoggedIn: true });
   };
-  
+
 render(){
 return (
     <>
@@ -165,11 +165,11 @@ return (
 </svg>
             </Link>
 
-            {this.state.isLoggedIn  ? ( 
+            {this.state.isLoggedIn  ? (
                 <div className="navbarlog">
                 <ul id="navbar" className={this.state.clicked ? "#navbar active" : "#navbar"}>
                     <li id="switch">
-                    <MUISwitch  defaultChecked />
+                      <MUISwitch  defaultChecked />
                     </li>
                     <li>
                     <Input
@@ -199,7 +199,7 @@ return (
             <div className="mobile" onClick={this.handleClick}>
             <i id="bar" className={this.state.clicked ? "fas fa-times" : "fas fa-bars"}></i>
             </div>
-          
+
         </nav>
     </>
 );
