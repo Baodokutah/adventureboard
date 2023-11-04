@@ -1,5 +1,5 @@
 .create{
-    min-width: 91.67%;
+    width: 91.67%;
     height: 80%;
     left: 3.8%;
     top: 2.34%;
@@ -19,8 +19,8 @@
 }
 
 .titleInput{
-    min-height: 14%;
-    min-width: 80%;
+    height: 14%;
+    width: 80%;
     border-radius: 11px;
     border: 1px solid #000;
     background: #FFF;
@@ -28,8 +28,8 @@
 }
 
 .contentInput{
-    min-height: 79%;
-    min-width: 80%;
+    height: 79%;
+    width: 80%;
     border-radius: 11px;
     border: 1px solid #000;
     background: #FFF;
