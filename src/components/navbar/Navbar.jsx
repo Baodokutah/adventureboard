@@ -206,10 +206,10 @@ return (
                     <li><Avatar>H</Avatar></li>
                     </>
             ) : (
-                    <>
+                    <div id="navhome" >
                     <li><NotificationsActiveIcon/></li>
                     <li><Avatar>H</Avatar></li>
-                    </>
+                    </div>
             )}
                 </ul>
             </div>

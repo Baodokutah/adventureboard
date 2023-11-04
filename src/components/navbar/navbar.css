@@ -19,6 +19,13 @@
     margin-left: 0px !important;
 }
 
+#navhome{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 75vw;
+}
+
 .logged > * { 
     flex: 1 1 auto !important; /* This means grow, shrink and have an automatic base size */
     /* min-width: 0;  */
@@ -51,7 +58,9 @@ Input {
     flex-shrink: 1 !important;
 
 }
-
+.navhome {
+    margin-left: 0px;
+}
 #navbar li a {
     text-decoration: none;
     color: black; 
