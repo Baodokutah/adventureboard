@@ -9,8 +9,6 @@ import Avatar from '@mui/material/Avatar';
 import clsx from 'clsx';
 import { useSwitch } from '@mui/base/useSwitch';
 import { useNavigate, useLocation } from 'react-router-dom';
-import React, { useState } from 'react';
-
 
 function MUISwitch(props) {
 
@@ -180,7 +178,7 @@ return (
             </Link>
 
             {this.state.isLoggedIn  ? (
-                <div className="navbarlog">
+                <div>
                 <ul id="navbar" className={this.state.clicked ? "#navbar active" : "#navbar"}>
                     <li id="switch">
                       <MUISwitch  defaultChecked />
