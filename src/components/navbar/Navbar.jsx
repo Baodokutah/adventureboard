@@ -8,16 +8,29 @@ import Input from '@mui/joy/Input';
 import Avatar from '@mui/material/Avatar';
 import clsx from 'clsx';
 import { useSwitch } from '@mui/base/useSwitch';
-
+import { useNavigate, useLocation } from 'react-router-dom';
 
 
 function MUISwitch(props) {
-  const { getInputProps, checked, disabled, focusVisible } = useSwitch(props);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isCtxh = location.pathname === '/ctxh';
+  const isStudy = location.pathname === '/study';
+
+  const handleChange = (event) => {
+    navigate(event.target.checked ? '/study' : '/ctxh');
+  };
+  
+  const { getInputProps } = useSwitch({
+    ...props,
+    onChange: handleChange,
+  });
 
   const stateClasses = {
-    checked,
-    disabled,
-    focusVisible,
+    checked: isStudy,
+    disabled: isCtxh,
+    focusVisible: props.focusVisible,
   };
 
   return (
@@ -133,6 +146,8 @@ handleLogin = () => {
     this.setState({ isLoggedIn: true });
   };
   
+
+
 render(){
 return (
     <>
