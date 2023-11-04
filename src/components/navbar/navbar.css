@@ -18,6 +18,10 @@
     max-width: 100%;
     margin-left: 0px !important;
 
+
+.logged > * { 
+    flex: 1 1 auto !important; /* This means grow, shrink and have an automatic base size */
+    /* min-width: 0;  */
 }
 
 #switch {
@@ -26,7 +30,8 @@
 }
 
 Input {
-    width: 100vh;
+    width: 50vw;
+
 }
 
 
@@ -43,6 +48,8 @@ Input {
     margin: 0;
     padding: 0 20px;
     position: relative;
+    flex-shrink: 1 !important;
+
 }
 
 #navbar li a {
@@ -96,15 +103,24 @@ svg{
         right: -500px;
         width: 300px;
         height: 100vh;
-        background:  rgba(151, 116, 83, 0.69);
+        background:  rgb(183, 159, 136);
+        z-index: 4;
         box-shadow: 0 40px 60px rgba(0, 0, 0, 0);
         padding: 40px 0 0 10px;
         transition: 0.3s ease-in-out;
     }
+
+    #switch {
+        margin-left: -10px !important;
+    }
+    
+    Input{
+        width: 30vw;
+    }
     
     #navbar.active {
         right: 0px;
-        z-index: 2;
+        z-index: 4;
         /* background: rgba(0, 0, 0, 0); */
 
     }
@@ -115,6 +131,8 @@ svg{
 
     .mobile {
         display: block;
+        position: fixed;
+        right: 30px;
     }
 
     .mobile i {

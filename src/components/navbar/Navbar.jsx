@@ -11,9 +11,6 @@ import { useSwitch } from '@mui/base/useSwitch';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 
-
-
-
 function MUISwitch(props) {
 
   const navigate = useNavigate();
@@ -189,7 +186,7 @@ return (
 </svg>
             </Link>
             {this.state.isLoggedIn  ? (
-                <div className="navbarlog">
+                <div>
                 <ul id="navbar" className={this.state.clicked ? "#navbar active" : "#navbar"}>
                 {location.pathname !== "/" && location.pathname !== "/logged" ? (
                   <>
