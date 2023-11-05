@@ -9,7 +9,7 @@ import Avatar from '@mui/material/Avatar';
 import clsx from 'clsx';
 import { useSwitch } from '@mui/base/useSwitch';
 import { useNavigate, useLocation } from 'react-router-dom';
-
+import { AuthContext } from "../../context/AuthContext";
 
 function MUISwitch(props) {
 
@@ -137,11 +137,16 @@ export function withLocation(Component) {
     return <Component {...props} location={location} />;
   }
 }
+
+
+
+
 class Navbar extends Component{
     state = {
         clicked: false,
-        isLoggedIn: false
       };
+   
+      static contextType = AuthContext;
 
 handleClick = () => {
     this.setState({clicked: !this.state.clicked})
@@ -149,7 +154,7 @@ handleClick = () => {
 handleLogin = () => {
     // This is where you might have actual login logic in a real application.
     // For now, we'll just update the state to simulate a login.
-    this.setState({ isLoggedIn: true });
+    this.context.setLoggedIn(true);
   };
 
 
@@ -185,10 +190,10 @@ return (
   <path d="M35.8242 63.3975C35.2721 63.5471 34.8665 64.1915 33.9312 66.309C31.1367 72.7074 30.8099 73.49 30.8437 73.8237C30.9114 74.8364 32.0494 75.2967 32.7931 74.6062C32.9171 74.4912 33.2213 73.9963 33.4579 73.5015L33.8974 72.6154H36.2524H38.6075L38.9455 73.3404C39.5991 74.7673 40.3089 75.2622 41.1315 74.8709C41.9316 74.4796 42.033 73.8697 41.4921 72.7304C41.2667 72.2586 40.7146 71.0157 40.2639 69.9685C38.6751 66.3205 37.6159 64.0534 37.368 63.7887C37.2328 63.6391 36.9398 63.478 36.7257 63.409C36.275 63.2824 36.2186 63.2824 35.8242 63.3975ZM36.8834 68.8177C37.2215 69.5082 37.5032 70.1296 37.5032 70.1987C37.5032 70.2677 37.0299 70.3138 36.2637 70.3138C35.5876 70.3138 35.0242 70.2792 35.0242 70.2447C35.0242 70.1411 36.1736 67.5518 36.2186 67.5518C36.2412 67.5518 36.5454 68.1157 36.8834 68.8177Z" fill="black"/>
 </svg>
             </Link>
-            {this.state.isLoggedIn  ? (
+            {this.context.loggedIn  ? (
                 <div>
                 <ul id="navbar" className={this.state.clicked ? "#navbar active" : "#navbar"}>
-                {location.pathname !== "/" && location.pathname !== "/logged" ? (
+                {location.pathname !== "/"  ? (
                   <>
                     <li id="switch">
                       <MUISwitch  defaultChecked />
@@ -220,7 +225,7 @@ return (
                     <li><Link to="/">Trang chủ</Link></li>
                     <li><Link to="ctxh">CTXH</Link></li>
                     <li><Link to="study">Nhóm môn học</Link></li>
-                    <li><Link to="logged"  onClick={this.handleLogin}><span className="login">Đăng nhập</span></Link></li>
+                    <li><Link to="/"  onClick={this.handleLogin}><span className="login">Đăng nhập</span></Link></li>
                 </ul>
             </div>
             )}
@@ -234,6 +239,5 @@ return (
 );
 }
 }
-
 
 export default withLocation(Navbar);
