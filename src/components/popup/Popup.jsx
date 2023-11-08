@@ -54,7 +54,7 @@ function PopupButton({open, onClose, action}){
     console.log('pepedump')
     if (!open) return null;
     return(
-        <Confirm open={open} onClose={onClose} action={action}/>
+        <Success open={open} onClose={onClose} action={action}/>
     );
   };
 
