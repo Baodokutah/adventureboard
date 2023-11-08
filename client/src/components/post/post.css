@@ -101,6 +101,17 @@
     overflow: auto; /* Enable horizontal scrolling if necessary */
 }
 
+.cmt .cmtInput {
+  display: flex;
+  width: 91%;
+  max-height: 65px;
+  gap: 2%;
+}
+
+.cmt .cmtInput img {
+  height: 65px;
+  width: 65px;
+}
 
 .ui.comments {
     margin: 1.5em 0em;
