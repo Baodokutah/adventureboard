@@ -15,8 +15,10 @@ function InPost({ title, tags, content}) {
       </div>
       <div className='content'><pre>{content}</pre></div>
       <div className='cmt'>
-        <input className='commentInput'></input>
-
+        <div className='cmtInput'>
+          <input className='commentInput'></input>
+          <img src='https://www.svgrepo.com/show/453320/comment.svg' />
+        </div>
         <div className="ui comments">
           <div className="comment">
             <div className="avatar">
