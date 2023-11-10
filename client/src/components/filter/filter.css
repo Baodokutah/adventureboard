@@ -46,6 +46,11 @@
     gap: 2.8%;
 }
 
+.filterBigBox h3{
+    /* margin-left: 9%; */
+    /* position: relative; */
+}
+
 .filterBigBox > *:not(:first-child) {
     /* margin-bottom: 3.29%; Add margin-bottom-LEFT to all children except the 1st one */
     left: 9%;
@@ -64,16 +69,20 @@
     gap: 24px;
     height: 23px;
     background: white;
-    width: 84%;
+    width: 100%;
+    flex-wrap: wrap;
+    /* margin-left: 0%; */
+    align-items: center;
+    /* justify-content: center; */
 }
 
-.filterTagButton{
+.filterTagBox button{
     border-radius: 30px;
     border: 1px solid #000;
     background: #FFF;
-    display: inline-flex;
+    /* display: inline-flex; */
     height: 23px;
-    width: 53.3%;
+    width: 36%;
     max-width: 104px;
     justify-content: center;
     align-items: center;
@@ -85,4 +94,5 @@
     left: 3.286%;
     max-width: 276px;
     position: relative;
+    float: left;
 }

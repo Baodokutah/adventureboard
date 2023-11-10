@@ -8,11 +8,7 @@ import './ctxh.css'
 function CTXH() {
     return (
         <div className='componentDisplay'>
-            {/* <FilterBox /> */}
-            {/* <Posts /> */}
-            {/* <ListOfMem />
-            <Posts /> */}
-            <ListOfMem />
+            <FilterBox />
             <Posts />
         </div>
     );

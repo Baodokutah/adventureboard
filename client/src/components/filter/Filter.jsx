@@ -1,14 +1,17 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import './filter.css'
 
 function FilterBox_CTXH() {
-  // const [selected, setSelected] = React.useState(false);
+  const [Selected, setSelected] = useState(false);
+  const handleClickTag = () => {
+    setSelected(!Selected);
+  };
 
   return (
   <div className='filterBigBox'>
@@ -17,22 +20,20 @@ function FilterBox_CTXH() {
 
       <h3>Cơ sở</h3>
         <div className='filterTagBox'>
-          <button className='filterTagButton'>Cơ sở 1</button>
-          <button className='filterTagButton'>Cơ sở 2</button>
+          <button>Cơ sở 1</button>
+          <button>Cơ sở 2</button>
         </div>
 
       <h3>Số ngày CTXH</h3>
         <div className='filterTagBox'>
-          <button className='filterTagButton'>&le; 1 ngày</button>
-          <button className='filterTagButton'>&gt; 1 ngày</button>
+          <button>&le; 1 ngày</button>
+          <button>&gt; 1 ngày</button>
         </div>
       <h3>Thời gian</h3>
       <div className='filterTagBox'>
-        <span className='filterTagButton'>Sáng</span>
-        <span className='filterTagButton'>Chiều</span>
-      </div>
-      <div className='filterTagBox'>
-      <span className='filterTagButton'>Tối</span>
+        <button>Sáng</button>
+        <button>Chiều</button>
+        <button>Tối</button>
       </div>
   </div>
   );
@@ -88,6 +89,8 @@ function FilterBox_Group() {
 }
 
 export default function FilterBox() {
+  const location = useLocation();
+  
   return (
     <div id='filterBox' className='filter'>
       <Link to='/create' className='link'>
@@ -95,7 +98,7 @@ export default function FilterBox() {
           <h2 style={{ color: 'white' }}>Tạo bài viết</h2>
         </div>
       </Link>
-        {window.location.pathname==='/ctxh' ? (<FilterBox_CTXH/>) : window.location.pathname==='/study' ? (<FilterBox_Group/>) : (<></>)}
+        {location.pathname==='/ctxh' ? (<FilterBox_CTXH/>) : location.pathname==='/study' ? (<FilterBox_Group/>) : (<></>)}
     </div>
   );
 }

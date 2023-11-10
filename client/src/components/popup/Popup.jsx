@@ -1,10 +1,10 @@
 import React from 'react';
-import Popup from 'reactjs-popup';
-import {Link} from 'react-router-dom';
+import {useNavigate } from 'react-router-dom';
 
 import './popup.css'
 
-function Success({open, onClose, action}){
+function Success({open, onClose, action, page}){
+    const navigate = useNavigate();
     return(
         <div onClick={onClose} className='overlayModal'>
         <div
@@ -17,7 +17,7 @@ function Success({open, onClose, action}){
             <div className='contentModal'>
                 <h1>{action}</h1>
             </div>
-                <p className='confirmButtonModal' onClick={onClose}>
+                <p className='confirmButtonModal' onClick={() => {navigate('/' + page)}}>
                     Xác nhận
                 </p>
             </div>
@@ -50,11 +50,11 @@ function Confirm({open, onClose, action}){
     </div>
     );
 }
-function PopupButton({open, onClose, action}){
+function PopupButton({open, onClose, action, page}){
     console.log('pepedump')
     if (!open) return null;
     return(
-        <Success open={open} onClose={onClose} action={action}/>
+        <Success open={open} onClose={onClose} action={action} page={page}/>
     );
   };
 
