@@ -1,4 +1,5 @@
 import React from 'react';
+import {useNavigate} from 'react-router-dom'
 
 import './post.css';
 
@@ -70,8 +71,9 @@ export default function Posts() {
   // const post2Tags = ['tag1', 'tag2', 'tag3'];
 
   return (
-    <div className='inPostDisplay'>
-      <InPost title={post1Title} tags={post1Tags} content={post1Content}/>
+    <div className='PostDisplay'>
+      <PostTitle title={post1Title} tags={post1Tags} content={post1Content}/>
+      <PostTitle title={post1Title} tags={post1Tags} content={post1Content}/>
     </div>
   );
 }
