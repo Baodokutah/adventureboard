@@ -1,0 +1,13 @@
+.pcard{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 11px;
+    border: 1px solid #000;
+    background: #FFF;
+    width: 276px;
+    height: 302px;
+    flex-shrink: 0;    
+    gap: 30px
+}

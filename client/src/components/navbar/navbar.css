@@ -87,11 +87,7 @@ Input {
 .login:hover {
     background-color: #c24135; 
 }
-svg{
-    width: 75px;
-    height: 75px;
-    flex-shrink: 0;
-}
+
 
 .mobile {
     display: none;
