@@ -1,0 +1,13 @@
+.profile {
+    display: flex;
+    max-width: 95vw;
+    margin-left: 3vw;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-top: 10vh;
+    gap: 4vw;
+}
+
+Avatar {
+    height: 12px;
+}
