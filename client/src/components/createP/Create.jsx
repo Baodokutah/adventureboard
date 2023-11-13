@@ -1,10 +1,13 @@
 import './create.css'
 import PopupButton from '../popup/Popup';
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 function Create()
 {
     const [openModal, setOpenModal] = useState(false);
+    const location = useLocation();
+    const currentPage = localStorage.getItem('currentPage') || '404';    
 
     return(
         <div className="create">
@@ -23,7 +26,9 @@ function Create()
                 <PopupButton
                 open={openModal}
                 onClose={() => setOpenModal(false)}
-                action='Tạo bài viết thành công!' />
+                action='Tạo bài viết thành công!' 
+                page={currentPage}
+                />
             </div>
         </div>
     );

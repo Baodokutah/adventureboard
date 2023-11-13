@@ -1,12 +1,12 @@
 import FilterBox from '../../components/filter/Filter';
-import { PostTitle, InPost  } from '../../components/post/Post';
-import { Post } from '../../dummyData';
+import { PostTitle, InPost } from '../../components/post/Post';
+import { Post, Comment } from '../../dummyData';
 import { useNavigate, useParams } from 'react-router-dom';
 import ListOfMem from '../../components/listofmem/Listofmem';
 import "./study.css"
 
 function Study() {
-    const { id } = useParams(); // Assuming you have set up your route to have :id
+    const { id } = useParams(); 
     const navigate = useNavigate();
   
     const handlePostClick = (postId) => {
@@ -17,7 +17,9 @@ function Study() {
       <div className='componentDisplay'>
   {id ? <ListOfMem /> : <FilterBox />}        
           {id ? (
-            <div className='Inpost'><InPost {...getPostById(id)} /> </div>
+            <div className='Inpost'>
+              <InPost {...getPostById(id)} comments={getCommentsByPostId("1")} />
+            </div>
           ) : (
             <div  className='Posts'  >
             <div key={getPostById("2").id} onClick={() => handlePostClick(getPostById("2").id)}>
@@ -35,6 +37,10 @@ function Study() {
 
   function getPostById(id) {
     return Post.find((post) => post.id.toString() === id);
+  }
+
+  function getCommentsByPostId(id) {
+    return Comment.filter((comment) => comment.id && comment.id.toString() === id);
   }
   
 export default Study;

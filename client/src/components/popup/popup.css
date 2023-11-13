@@ -60,6 +60,7 @@
     border: 1px solid #000;
     background: #0DD321;
     color: #FFF;
+    cursor: pointer;
   }
   .cancelButtonModal {
     /* min-width: 223px; */

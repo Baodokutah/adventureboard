@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import  { useEffect } from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -90,10 +91,16 @@ function FilterBox_Group() {
 
 export default function FilterBox() {
   const location = useLocation();
-  
+  const currentPage = location.pathname.includes('ctxh') ? 'ctxh' : location.pathname.includes('study') ? 'study' : 'default';
+  // alert(currentPage);
+
+  useEffect(() => {
+    localStorage.setItem('currentPage', currentPage);
+  }, [currentPage]);
+
   return (
     <div id='filterBox' className='filter'>
-      <Link to='/create' className='link'>
+      <Link to={{ pathname: '/create', state: { page: currentPage } }} className='link'>
         <div className='createPost'>
           <h2 style={{ color: 'white' }}>Tạo bài viết</h2>
         </div>

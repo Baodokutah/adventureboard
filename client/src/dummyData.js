@@ -18,3 +18,12 @@ export const Post = [
       content: "🔥 Cần gấp 3 bạn đồng hành cho nhóm bài tập lớn lớp CN01! Đề tài: 'Phương pháp tính toán hiệu quả trong thực tế.' \n💡 Tuyển: Bạn nào có tư duy logic tốt, thích thách thức, và sẵn lòng đối mặt với một đề tài thực tế. \n🎯 Mục tiêu: Điểm A+ và một mùa thi không đuối sức. \n🤝 Hãy nhanh tay inbox hoặc comment ngay để cùng tạo nên kỳ tích! Hoặc liên hệ với mình qua Fb: https://www.facebook.com/@Bietongthuongko"
     }
 ];
+export const Comment = [
+    {
+      id: 1,
+      avatar: "https://media.discordapp.net/attachments/1067775825048510534/1084508310272737420/IMG_0260.jpg?ex=6550f892&is=653e8392&hm=1b9ba1880c4a665705a7908585f3cdddbfda9683f832cf94d51e1e0ef7b326d9&=&width=447&height=662",
+      author: "Kao Gia Bỉm",
+      timestamp: "Today at 5:42PM",
+      text: "Cho em hỏi mình làm cả 2 ca thì được tổng là 1 ngày CTXH đúng không ạ?",
+    }
+];
