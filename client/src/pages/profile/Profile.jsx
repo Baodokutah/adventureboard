@@ -1,16 +1,16 @@
-import Profile_card from "../../components/profile_card/Profile_card"
+import ProfileCard from "../../components/profile_card/ProfileCard"
 import "./profile.css"
-import Posts from "../../components/post/Post"
+import { PostTitle } from '../../components/post/Post';
+import { Post } from '../../dummyData';
 
 export default function Profile() {
   return (
     <div className="profile">
-    <div>
-    <Profile_card />
-    </div>
-    <div>
-<h1>Post here</h1>
+    <ProfileCard className="ProfileCard"/>
+    <div className="Posts">
+    <PostTitle title={Post[0].title} tags={Post[0].tags} content={Post[0].content}/>
     </div>
     </div>
   )
 }
+

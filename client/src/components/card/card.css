@@ -6,7 +6,6 @@
     align-items: center;
     gap: 4vw;
     height: 85vh;
-
 }
 
 .ctxh{
@@ -105,3 +104,27 @@
     text-decoration: none; /* Remove underline */
     /* Add any other custom styles you need */
   }
+
+
+  @media screen and (max-width: 768px) {
+    .card {
+      flex-direction: column;
+      margin-top: 20vh; 
+    }
+  
+    .ctxh, .study {
+      width: 90%;
+      height: auto;
+      margin-bottom: 2vh;
+    }
+  
+    .ctxh h1, .study h1, .ctxh h2, .study h2, .ctxh p, .study p {
+      font-size: smaller;
+    }
+  
+    .ctxh button, .study button {
+      width: 60vw;
+      font-size: smaller;
+    }
+  }
+  
