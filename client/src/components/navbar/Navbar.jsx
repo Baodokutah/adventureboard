@@ -3,20 +3,19 @@ import "./navbar.css";
 import { Link } from "react-router-dom";
 import { styled } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
-import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import Input from '@mui/joy/Input';
 import Avatar from '@mui/material/Avatar';
 import clsx from 'clsx';
 import { useSwitch } from '@mui/base/useSwitch';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from "../../context/AuthContext";
-
+import Noti from "../noti/Noti";
 function MUISwitch(props) {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const isCtxh = location.pathname === '/ctxh';
-  const isStudy = location.pathname === '/study';
+  const isCtxh = location.pathname.startsWith('/ctxh');
+  const isStudy = location.pathname.startsWith('/study');
 
   const handleChange = (event) => {
     navigate(event.target.checked ? '/study' : '/ctxh');
@@ -144,6 +143,7 @@ export function withLocation(Component) {
 class Navbar extends Component{
     state = {
         clicked: false,
+        notificationAnchorEl: null, // State to hold the anchor for the notifications popover
       };
    
       static contextType = AuthContext;
@@ -157,9 +157,14 @@ handleLogin = () => {
     this.context.setLoggedIn(true);
   };
 
+  setNotificationAnchorEl = (anchorEl) => {
+    this.setState({ notificationAnchorEl: anchorEl });
+  };
 
 render(){
   const { location } = this.props;
+  const { notificationAnchorEl } = this.state;
+
 return (
     <>
         <nav className={this.state.isLoggedIn ? "logged" : "nav"}>
@@ -182,20 +187,31 @@ return (
                         variant="outlined"
                     />
                     </li>
-                    <li><SearchIcon /></li>
-                    <li><NotificationsActiveIcon/></li>
+                    <li><SearchIcon   fontSize="large"  /></li>
+                    <li>
+                      <Noti 
+                      anchorEl={notificationAnchorEl} 
+                      setAnchorEl={this.setNotificationAnchorEl} 
+                    />
+                    </li>
                     <li><Link to="/profile">    
                     <Avatar
                       alt="Avatar"
+                      fontSize="large" 
                       src={process.env.PUBLIC_URL +'/assets/avatar/avatar.png'}
                         />
                       </Link></li>
                     </>
             ) : (
                     <div id="navhome" >
-                    <li><NotificationsActiveIcon/></li>
+                    <li>
+                    <Noti 
+              anchorEl={notificationAnchorEl} 
+              setAnchorEl={this.setNotificationAnchorEl} 
+                    />                    </li>
                     <li><Link to="/profile">
                     <Avatar
+                      fontSize="large" 
                       alt="Avatar"
                       src={process.env.PUBLIC_URL +'/assets/avatar/avatar.png'}
                         />

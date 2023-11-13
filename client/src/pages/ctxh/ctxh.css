@@ -7,21 +7,4 @@
   overflow: auto;
 }
 
-.Posts > :first-child {
-  margin-top: 60px !important;
- }
- .Posts > :last-child {
-   margin-bottom: 60px !important; 
- }
 
- .Posts {
-   width: 100%;
-   max-height: 90vh; /* Adjust the value as needed */
-   overflow-y: auto;
- }
-
- .Inpost{
-   margin-left: 100px;
-   margin-top: 30px;
-   width: 70vw;
- }
