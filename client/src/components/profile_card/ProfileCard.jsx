@@ -1,8 +1,8 @@
 import Avatar from '@mui/material/Avatar';
-import "./profile_card.css"
+import "./profileCard.css"
 
 
-export default function Profile_card() {
+export default function ProfileCard() {
   return (
     <div className='pcard'>
     <Avatar

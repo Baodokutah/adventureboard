@@ -3,6 +3,7 @@
     border-radius: 30px;
     width: 104px;
     height: 23px;
+    /* padding: 0.2em 0.25em; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -17,8 +18,17 @@
     border-radius: 11px;
     padding: 10px;
     min-height: 17.67%;
-    gap: 38.4%;
-    flex-wrap: wrap;
+    gap: 15px;
+    width: 100%; 
+    margin-top: 5vh;
+    margin-left: 8vw !important;
+    box-sizing: border-box; 
+    /* border: 1px black solid; */
+    /* flex-wrap: wrap; */
+}
+
+.postTitleBox:hover{
+  cursor: pointer;
 }
 
 .nullTitleBox{
@@ -31,11 +41,11 @@
 .PostDisplay{
     display: flex;
     flex-direction: column;
-    margin-top: 4.75%;
-    margin-left: 5.2%;
     min-width: 66.52%;
-    height: 587px;
+    /* height: 587px; */
     gap: 3.4%;
+    width: 70vw; /* Adjusted from min-width */
+    max-width: 100%; /* Add a max-width to contain within the viewport */
     /* flex-wrap: wrap; */
 }
 

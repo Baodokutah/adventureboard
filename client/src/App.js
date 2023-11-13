@@ -6,6 +6,7 @@ import Profile from "./pages/profile/Profile";
 import Navbar from "./components/navbar/Navbar";
 import CreatePost from "./pages/createPost/createPost";
 import { AuthProvider } from "./context/AuthContext";
+// import InPost from "./components/post/Post";
 
 function App() {
   return (
@@ -14,8 +15,12 @@ function App() {
     <Navbar />
         <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/ctxh" element={<CTXH />} />
-        <Route path="/study" element={<Study />} />
+        <Route path="/ctxh" element={<CTXH />}>
+        <Route path="/ctxh/post/:id" element={<Study />} />
+        </Route>
+        <Route path="/study" element={<Study />}>
+          <Route path="/study/post/:id" element={<Study />} />
+        </Route>
         <Route path="/create" element={<CreatePost />} />
         <Route path="/profile" element={<Profile />} />
 
