@@ -49,7 +49,9 @@
     border-radius: 30px;
     border: 1px solid #000;
     background: #FFF;
-    /* justify-content: center; */
+    justify-content: center;
+    align-items: center;
+    font-size: 100%;
 }
 
 .postButton{
