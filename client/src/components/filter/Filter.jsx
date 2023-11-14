@@ -12,12 +12,30 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import './filter.css'
 
+export var newTags = [];
+
 function FilterBoxCTXH() {
+  const [ctxhTags, setCtxhTags] = useState({tags:[]});
+
   const [selectedTag, setSelectedTag] = useState({});
   const handleClickTag = (tag) => {
     setSelectedTag(prevState => ({...prevState, [tag]: !prevState[tag]}));
+
+    setCtxhTags((ctxhTags) => {
+      // Check if the newTag already exists in the tags array
+      const tagExists = ctxhTags.tags.includes(tag);
+
+      // If it exists, remove it; otherwise, add it
+      const updatedTags = tagExists
+        ? ctxhTags.tags.filter((element) => element !== tag)
+        : [...ctxhTags.tags, tag];
+
+      return { ...ctxhTags, tags: updatedTags };
+    });
+
   };
 
+  useEffect(() => {console.log(ctxhTags)}, [ctxhTags]);
   // Custom styles for the chip
   const chipStyle = {
     width: '104px', // Fixed width for each chip
@@ -33,9 +51,9 @@ function FilterBoxCTXH() {
     gap: '8px', // Space between chips
     marginBottom: '16px', // Space below each row of chips
     marginRight: '40px',
-    fontWeight: 'bold', 
+    fontWeight: 'bold',
   };
-
+  newTags = ctxhTags.tags;
   return (
     <div className='filterBigBox' >
 
@@ -43,62 +61,62 @@ function FilterBoxCTXH() {
 
       <h3>Cơ sở</h3>
       <div style={chipContainerStyle}>
-        <Chip 
-          label="Cơ sở 1" 
-          clickable 
-          color={selectedTag["Cơ sở 1"] ? "primary" : "default"} 
-          onClick={() => handleClickTag("Cơ sở 1")} 
-          style={chipStyle} 
+        <Chip
+          label="Cơ sở 1"
+          clickable
+          color={selectedTag["Cơ sở 1"] ? "primary" : "default"}
+          onClick={() => handleClickTag("Cơ sở 1")}
+          style={chipStyle}
         />
-        <Chip 
-          label="Cơ sở 2" 
-          clickable 
-          color={selectedTag["Cơ sở 2"] ? "secondary" : "default"} 
-          onClick={() => handleClickTag("Cơ sở 2")} 
-          style={chipStyle} 
+        <Chip
+          label="Cơ sở 2"
+          clickable
+          color={selectedTag["Cơ sở 2"] ? "secondary" : "default"}
+          onClick={() => handleClickTag("Cơ sở 2")}
+          style={chipStyle}
         />
       </div>
 
       <h3>Số ngày CTXH</h3>
       <div style={chipContainerStyle}>
-        <Chip 
-          label="≤ 1 ngày" 
-          clickable 
-          color={selectedTag["≤ 1 ngày"] ? "error" : "default"} 
-          onClick={() => handleClickTag("≤ 1 ngày")} 
-          style={chipStyle} 
+        <Chip
+          label="≤ 1 ngày"
+          clickable
+          color={selectedTag["≤ 1 ngày"] ? "error" : "default"}
+          onClick={() => handleClickTag("≤ 1 ngày")}
+          style={chipStyle}
         />
-        <Chip 
-          label="> 1 ngày" 
-          clickable 
-          color={selectedTag["> 1 ngày"] ? "info" : "default"} 
-          onClick={() => handleClickTag("> 1 ngày")} 
-          style={chipStyle} 
+        <Chip
+          label="> 1 ngày"
+          clickable
+          color={selectedTag["> 1 ngày"] ? "info" : "default"}
+          onClick={() => handleClickTag("> 1 ngày")}
+          style={chipStyle}
         />
       </div>
 
       <h3>Thời gian</h3>
       <div style={chipContainerStyle}>
-        <Chip 
-          label="Sáng" 
-          clickable 
-          color={selectedTag["Sáng"] ? "success" : "default"} 
-          onClick={() => handleClickTag("Sáng")} 
-          style={chipStyle} 
+        <Chip
+          label="Sáng"
+          clickable
+          color={selectedTag["Sáng"] ? "success" : "default"}
+          onClick={() => handleClickTag("Sáng")}
+          style={chipStyle}
         />
-        <Chip 
-          label="Chiều" 
-          clickable 
-          color={selectedTag["Chiều"] ? "warning" : "default"} 
-          onClick={() => handleClickTag("Chiều")} 
-          style={chipStyle} 
+        <Chip
+          label="Chiều"
+          clickable
+          color={selectedTag["Chiều"] ? "warning" : "default"}
+          onClick={() => handleClickTag("Chiều")}
+          style={chipStyle}
         />
-        <Chip 
-          label="Tối" 
-          clickable 
-          color={selectedTag["Tối"] ? "primary" : "default"} 
-          onClick={() => handleClickTag("Tối")} 
-          style={chipStyle} 
+        <Chip
+          label="Tối"
+          clickable
+          color={selectedTag["Tối"] ? "primary" : "default"}
+          onClick={() => handleClickTag("Tối")}
+          style={chipStyle}
         />
       </div>
 
@@ -108,18 +126,58 @@ function FilterBoxCTXH() {
 
 
 function FilterBoxGroup() {
+  const [studyTags, setStudyTags] = useState([{type:"subjectCode", tags : []}, {type:"classCode", tags : []}]);
+
   const [chips, setChips] = useState([]);
   const [inputValue, setInputValue] = useState('');
+
+  useEffect(() => {console.log(studyTags)}, [studyTags]);
 
   const handleAddChip = () => {
     if (inputValue.trim()) {
       setChips([...chips, inputValue]);
+
+      const tag = {type:"classCode", value: inputValue}
+      setStudyTags((studyTags) => {
+          return studyTags.map((tag) => {
+            if (tag.type === 'classCode') {
+              // If the tag has the same type, update the tags array
+              return { ...tag, tags: [...tag.tags, inputValue] };
+            }
+            // Otherwise, keep the tag unchanged
+            return tag;
+          });
+        });
+
       setInputValue('');
     }
   };
   const handleDeleteChip = (chipToDelete) => {
     setChips((chips) => chips.filter((chip) => chip !== chipToDelete));
+
+    setStudyTags((studyTags) => {
+      return studyTags.map((tag) => {
+        if (tag.type === 'classCode') {
+          // If the tag has the same type, update the tags array
+          return { ...tag, tags: tag.tags.filter((tagValue) => tagValue !== chipToDelete) };
+        }
+        // Otherwise, keep the tag unchanged
+        return tag;
+      });
+    });
   };
+
+  const [subjectSelect, setSubjectSelect] = useState('');
+  // console.log(page);
+  const handleSelectSubject = (event) => {
+      setSubjectSelect(event.target.value);
+      const tag = {type:"subjectCode", tags: [event.target.value]};
+      const filteredTags = studyTags.filter((tag) => tag.type !== 'subjectCode');
+      setStudyTags([...filteredTags,tag]);
+      // console.log(tag);
+  }
+  // lul merger lien tuc
+  newTags = studyTags.flatMap((tag) => tag.tags);
 
   return (
       <div className='filterBigBox'>
@@ -133,14 +191,16 @@ function FilterBoxGroup() {
                 id="simple-select-class-code"
                 label=""
                 sx={{
-                  width: '159px', 
+                  width: '159px',
                   height: '23px',
                   borderRadius:30,
                 }}
+                value={subjectSelect}
+                onChange={handleSelectSubject}
               >
-                <MenuItem value={1}>MT2003</MenuItem>
-                <MenuItem value={2}>MT2013</MenuItem>
-                <MenuItem value={3}>CO2014</MenuItem>
+                <MenuItem value='MT2003'>MT2003</MenuItem>
+                <MenuItem value='MT2013'>MT2013</MenuItem>
+                <MenuItem value='CO2014'>CO2014</MenuItem>
               </Select>
             </FormControl>
           </div>
@@ -161,11 +221,11 @@ function FilterBoxGroup() {
   onClick={handleAddChip}
   style={{
     marginRight: '-20px',
-    cursor: 'pointer', 
+    cursor: 'pointer',
   }}
 >
   <AddIcon />
-</IconButton>   
+</IconButton>
         </InputAdornment>
     ),
     style: {
@@ -195,7 +255,7 @@ function FilterBoxGroup() {
               borderRadius: '15px',
               maxWidth: '80px',
               color: '#FFFFFF',
-              fontWeight: 'bold', 
+              fontWeight: 'bold',
             }}
           />
         ))}
