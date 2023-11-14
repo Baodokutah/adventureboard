@@ -46,10 +46,10 @@
     gap: 2.8%;
 }
 
-.filterBigBox h3{
-    /* margin-left: 9%; */
-    /* position: relative; */
-}
+/* .filterBigBox h3{
+    /* margin-left: 9%; 
+    /* position: relative; 
+}*/
 
 .filterBigBox > *:not(:first-child) {
     /* margin-bottom: 3.29%; Add margin-bottom-LEFT to all children except the 1st one */

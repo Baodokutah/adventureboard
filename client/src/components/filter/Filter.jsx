@@ -1,46 +1,126 @@
 import React, {useState} from 'react';
 import  { useEffect } from 'react';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import Chip from '@mui/material/Chip';
 import { Link, useLocation } from 'react-router-dom';
-
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import AddIcon from '@mui/icons-material/Add';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
 import './filter.css'
 
-function FilterBox_CTXH() {
-  const [Selected, setSelected] = useState(false);
-  const handleClickTag = () => {
-    setSelected(!Selected);
+function FilterBoxCTXH() {
+  const [selectedTag, setSelectedTag] = useState({});
+  const handleClickTag = (tag) => {
+    setSelectedTag(prevState => ({...prevState, [tag]: !prevState[tag]}));
+  };
+
+  // Custom styles for the chip
+  const chipStyle = {
+    width: '104px', // Fixed width for each chip
+    height: '23px', // Fixed height for each chip
+    margin: '4px 4px 4px 0', // Margin to space out the chips
+    fontSize: '0.75rem', // Adjust font size as needed
+  };
+
+  // Custom styles for the container of the chips
+  const chipContainerStyle = {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(2, 1fr)', // Two columns layout
+    gap: '8px', // Space between chips
+    marginBottom: '16px', // Space below each row of chips
+    marginRight: '40px',
+    fontWeight: 'bold', 
   };
 
   return (
-  <div className='filterBigBox'>
+    <div className='filterBigBox' >
 
-    <div className='filterBox'><h1>Bộ lọc</h1></div>
+      <div className='filterBox'><h1>Bộ lọc</h1></div>
 
       <h3>Cơ sở</h3>
-        <div className='filterTagBox'>
-          <button>Cơ sở 1</button>
-          <button>Cơ sở 2</button>
-        </div>
+      <div style={chipContainerStyle}>
+        <Chip 
+          label="Cơ sở 1" 
+          clickable 
+          color={selectedTag["Cơ sở 1"] ? "primary" : "default"} 
+          onClick={() => handleClickTag("Cơ sở 1")} 
+          style={chipStyle} 
+        />
+        <Chip 
+          label="Cơ sở 2" 
+          clickable 
+          color={selectedTag["Cơ sở 2"] ? "secondary" : "default"} 
+          onClick={() => handleClickTag("Cơ sở 2")} 
+          style={chipStyle} 
+        />
+      </div>
 
       <h3>Số ngày CTXH</h3>
-        <div className='filterTagBox'>
-          <button>&le; 1 ngày</button>
-          <button>&gt; 1 ngày</button>
-        </div>
-      <h3>Thời gian</h3>
-      <div className='filterTagBox'>
-        <button>Sáng</button>
-        <button>Chiều</button>
-        <button>Tối</button>
+      <div style={chipContainerStyle}>
+        <Chip 
+          label="≤ 1 ngày" 
+          clickable 
+          color={selectedTag["≤ 1 ngày"] ? "error" : "default"} 
+          onClick={() => handleClickTag("≤ 1 ngày")} 
+          style={chipStyle} 
+        />
+        <Chip 
+          label="> 1 ngày" 
+          clickable 
+          color={selectedTag["> 1 ngày"] ? "info" : "default"} 
+          onClick={() => handleClickTag("> 1 ngày")} 
+          style={chipStyle} 
+        />
       </div>
-  </div>
+
+      <h3>Thời gian</h3>
+      <div style={chipContainerStyle}>
+        <Chip 
+          label="Sáng" 
+          clickable 
+          color={selectedTag["Sáng"] ? "success" : "default"} 
+          onClick={() => handleClickTag("Sáng")} 
+          style={chipStyle} 
+        />
+        <Chip 
+          label="Chiều" 
+          clickable 
+          color={selectedTag["Chiều"] ? "warning" : "default"} 
+          onClick={() => handleClickTag("Chiều")} 
+          style={chipStyle} 
+        />
+        <Chip 
+          label="Tối" 
+          clickable 
+          color={selectedTag["Tối"] ? "primary" : "default"} 
+          onClick={() => handleClickTag("Tối")} 
+          style={chipStyle} 
+        />
+      </div>
+
+    </div>
   );
 }
 
-function FilterBox_Group() {
+
+function FilterBoxGroup() {
+  const [chips, setChips] = useState([]);
+  const [inputValue, setInputValue] = useState('');
+
+  const handleAddChip = () => {
+    if (inputValue.trim()) {
+      setChips([...chips, inputValue]);
+      setInputValue('');
+    }
+  };
+  const handleDeleteChip = (chipToDelete) => {
+    setChips((chips) => chips.filter((chip) => chip !== chipToDelete));
+  };
+
   return (
       <div className='filterBigBox'>
       <div className='filterBox'><h1>Bộ lọc</h1></div>
@@ -53,8 +133,8 @@ function FilterBox_Group() {
                 id="simple-select-class-code"
                 label=""
                 sx={{
-                  width: '159px', // Set the desired width
-                  height: '23px', // Set the desired height
+                  width: '159px', 
+                  height: '23px',
                   borderRadius:30,
                 }}
               >
@@ -65,27 +145,62 @@ function FilterBox_Group() {
             </FormControl>
           </div>
 
-          <h3>Nhóm lớp</h3>
-          <div className='tagBox_Study'>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label"></InputLabel>
-              <Select
-                labelId="simple-select-class-code-label"
-                id="simple-select-class-code"
-                label=""
-                sx={{
-                  width: '159px', // Set the desired width
-                  height: '23px', // Set the desired height
-                  borderRadius:30,
-                }}
-              >
-                <MenuItem value={1}>CN</MenuItem>
-                <MenuItem value={2}>CC</MenuItem>
-                <MenuItem value={3}>LA</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
+         <h3>Nhóm lớp</h3>
+         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+         <TextField
+  value={inputValue}
+  onChange={(e) => setInputValue(e.target.value)}
+  placeholder="Nhập lớp"
+  variant="outlined"
+  fullWidth
+  InputProps={{
+    endAdornment: (
+      <InputAdornment position="end">
+<IconButton
+  aria-label="add"
+  onClick={handleAddChip}
+  style={{
+    marginRight: '-20px',
+    cursor: 'pointer', 
+  }}
+>
+  <AddIcon />
+</IconButton>   
+        </InputAdornment>
+    ),
+    style: {
+      borderRadius: '20px',
+      width: '159px',
+      height: '23px',
+    },
+  }}
+  sx={{
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderRadius: '20px',
+      },
+    },
+  }}
+/>
+
       </div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+        {chips.map((chip, index) => (
+          <Chip
+            key={index}
+            label={chip}
+            onDelete={() => handleDeleteChip(chip)}
+            style={{
+              backgroundColor: '#9C00B6',
+              borderRadius: '15px',
+              maxWidth: '80px',
+              color: '#FFFFFF',
+              fontWeight: 'bold', 
+            }}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -105,7 +220,7 @@ export default function FilterBox() {
           <h2 style={{ color: 'white' }}>Tạo bài viết</h2>
         </div>
       </Link>
-        {location.pathname==='/ctxh' ? (<FilterBox_CTXH/>) : location.pathname==='/study' ? (<FilterBox_Group/>) : (<></>)}
+        {location.pathname==='/ctxh' ? (<FilterBoxCTXH/>) : location.pathname==='/study' ? (<FilterBoxGroup/>) : (<></>)}
     </div>
   );
 }
