@@ -12,6 +12,8 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@untitled-ui/icons-react": "^0.1.1",
+    "date-fns": "^2.30.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.17.0",
@@ -20,7 +22,9 @@
     "reactjs-popup": "^2.0.6",
     "semantic-ui-css": "^2.5.0",
     "semantic-ui-react": "^2.1.4",
+    "simplebar-react": "^3.2.4",
     "slick-carousel": "^1.8.1",
+    "untitled-ui": "^0.1.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
