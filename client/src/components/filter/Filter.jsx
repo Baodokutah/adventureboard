@@ -1,15 +1,7 @@
-import React, {useState} from 'react';
-import  { useEffect } from 'react';
-import Chip from '@mui/material/Chip';
+import React, {useState, useEffect} from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import TextField from '@mui/material/TextField';
+import { Chip, FormControl, InputLabel, Select, MenuItem, TextField, InputAdornment, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import InputAdornment from '@mui/material/InputAdornment';
-import IconButton from '@mui/material/IconButton';
 import './filter.css'
 
 function FilterBoxCTXH() {

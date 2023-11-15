@@ -9,7 +9,8 @@ import clsx from 'clsx';
 import { useSwitch } from '@mui/base/useSwitch';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from "../../context/AuthContext";
-import Noti from "../noti/Noti";
+// import Noti from "../noti/Noti";
+import { NotificationsButton } from "../notifications-button";
 function MUISwitch(props) {
 
   const navigate = useNavigate();
@@ -143,7 +144,6 @@ export function withLocation(Component) {
 class Navbar extends Component{
     state = {
         clicked: false,
-        notificationAnchorEl: null, // State to hold the anchor for the notifications popover
       };
    
       static contextType = AuthContext;
@@ -157,9 +157,7 @@ handleLogin = () => {
     this.context.setLoggedIn(true);
   };
 
-  setNotificationAnchorEl = (anchorEl) => {
-    this.setState({ notificationAnchorEl: anchorEl });
-  };
+
 
 render(){
   const { location } = this.props;
@@ -189,10 +187,7 @@ return (
                     </li>
                     <li><SearchIcon   fontSize="large"  /></li>
                     <li>
-                      <Noti 
-                      anchorEl={notificationAnchorEl} 
-                      setAnchorEl={this.setNotificationAnchorEl} 
-                    />
+                  <NotificationsButton/>
                     </li>
                     <li><Link to="/profile">    
                     <Avatar
@@ -205,10 +200,8 @@ return (
             ) : (
                     <div id="navhome" >
                     <li>
-                    <Noti 
-              anchorEl={notificationAnchorEl} 
-              setAnchorEl={this.setNotificationAnchorEl} 
-                    />                    </li>
+                   <NotificationsButton />               
+                    </li>
                     <li><Link to="/profile">
                     <Avatar
                       fontSize="large" 
