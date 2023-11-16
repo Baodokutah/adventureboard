@@ -1,20 +1,15 @@
-// import Navbar from "../../components/navbar/Navbar";
+import { useContext } from "react";
+import { AuthContext } from "../../context/auth/firebase-context";
 import Carousel from "../../components/carousel/Carousel";
 import Card from "../../components/card/Card";
-import { AuthContext } from "../../context/AuthContext";
-import { useContext } from "react";
 
 function Home() {
-    const { loggedIn } = useContext(AuthContext);
-    if (loggedIn) return (
-        <>
-            <Card />
-        </>
-      )
+    const { isAuthenticated } = useContext(AuthContext);
+    if (isAuthenticated) return (
+        <Card />
+    )
     else return (
-        <>
         <Carousel />
-        </>
     );
 }
 

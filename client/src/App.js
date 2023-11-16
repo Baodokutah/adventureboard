@@ -5,10 +5,11 @@ import Study from "./pages/study/Study";
 import Profile from "./pages/profile/Profile";
 import Navbar from "./components/navbar/Navbar";
 import CreatePost from "./pages/createPost/createPost";
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider } from "./context/auth/firebase-context";
 // import InPost from "./components/post/Post";
 
 function App() {
+
   return (
     <>
 <AuthProvider>

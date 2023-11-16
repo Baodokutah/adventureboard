@@ -4,13 +4,14 @@ import { Link } from "react-router-dom";
 import { styled } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import Input from '@mui/joy/Input';
-import Avatar from '@mui/material/Avatar';
 import clsx from 'clsx';
 import { useSwitch } from '@mui/base/useSwitch';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { AuthContext } from "../../context/AuthContext";
-// import Noti from "../noti/Noti";
+import { AuthContext } from "../../context/auth/firebase-context";
 import { NotificationsButton } from "../notifications-button";
+import { AccountButton } from "../account-button";
+import { withAuth } from "../../hooks/use-auth";
+
 function MUISwitch(props) {
 
   const navigate = useNavigate();
@@ -151,25 +152,26 @@ class Navbar extends Component{
 handleClick = () => {
     this.setState({clicked: !this.state.clicked})
 }
-handleLogin = () => {
+handleLogin = async () => {
     // This is where you might have actual login logic in a real application.
     // For now, we'll just update the state to simulate a login.
-    this.context.setLoggedIn(true);
+    const { signInWithGoogle } = this.props;
+    await signInWithGoogle();
   };
 
 
 
 render(){
   const { location } = this.props;
-  const { notificationAnchorEl } = this.state;
+  const { isAuthenticated } = this.context;
 
 return (
     <>
-        <nav className={this.state.isLoggedIn ? "logged" : "nav"}>
+      <nav className={isAuthenticated ? "logged" : "nav"}>
             <Link to="/">
                 <img src={process.env.PUBLIC_URL + '/assets/logo/logo.svg'} alt="logo" style={{width: '75px', height: '75px'}} />
             </Link>
-            {this.context.loggedIn  ? (
+            {isAuthenticated  ? (
                 <div>
                 <ul id="navbar" className={this.state.clicked ? "#navbar active" : "#navbar"}>
                 {location.pathname !== "/"  ? (
@@ -189,26 +191,32 @@ return (
                     <li>
                   <NotificationsButton/>
                     </li>
-                    <li><Link to="/profile">    
+                    <li>
+                    {/* <Link to="/profile">    
                     <Avatar
                       alt="Avatar"
                       fontSize="large" 
                       src={process.env.PUBLIC_URL +'/assets/avatar/avatar.png'}
                         />
-                      </Link></li>
+                      </Link> */}
+                      <AccountButton />
+                      </li>
                     </>
             ) : (
                     <div id="navhome" >
                     <li>
                    <NotificationsButton />               
                     </li>
-                    <li><Link to="/profile">
+                    <li>
+                    {/* <Link to="/profile">
                     <Avatar
                       fontSize="large" 
                       alt="Avatar"
                       src={process.env.PUBLIC_URL +'/assets/avatar/avatar.png'}
                         />
-                    </Link></li>
+                    </Link> */}
+                    <AccountButton />
+                    </li>
                     </div>
             )}
                 </ul>
@@ -220,7 +228,7 @@ return (
                     <li><Link to="/">Trang chủ</Link></li>
                     <li><Link to="ctxh">CTXH</Link></li>
                     <li><Link to="study">Nhóm môn học</Link></li>
-                    <li><Link to="/"  onClick={this.handleLogin}><span className="login">Đăng nhập</span></Link></li>
+                    <li><div onClick={this.handleLogin}><span className="login">Đăng nhập</span></div></li>
                 </ul>
             </div>
             )}
@@ -235,4 +243,4 @@ return (
 }
 }
 
-export default withLocation(Navbar);
+export default withLocation(withAuth(Navbar));

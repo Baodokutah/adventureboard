@@ -82,10 +82,12 @@ Input {
     color: white;
     border-radius: 30px;
     padding: 5px 15px;
+    font-weight: bold;
 }
 
 .login:hover {
     background-color: #c24135; 
+    cursor: pointer;
 }
 
 

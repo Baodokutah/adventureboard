@@ -3,7 +3,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../../context/AuthContext";
+import { AuthContext } from "../../context/auth/firebase-context";
  import { useContext } from "react";
 
 function SamplePrevArrow(props) {
@@ -22,7 +22,7 @@ function SampleNextArrow(props) {
 
  const CarouselComponent = () => {
 
-    const { setLoggedIn } = useContext(AuthContext); // Use the context
+    const {  signInWithGoogle } = useContext(AuthContext);
 
      const settings = {
          dots: true,
@@ -34,10 +34,9 @@ function SampleNextArrow(props) {
          slidesToShow: 1,
          slidesToScroll: 1
      };
-     const handleLogin = () => {
-        setLoggedIn(true); // Set loggedIn to true
-    };
-
+     const handleLogin = async () => {
+        await signInWithGoogle();
+      };
      return (
          <Slider {...settings}>
              <div>
