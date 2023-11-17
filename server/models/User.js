@@ -1,10 +1,4 @@
 const mongoose = require('mongoose');
-const AutoIncrement = require('mongoose-sequence')(mongoose);
-
-mongoose.connect(process.env.MONGO_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -23,8 +17,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: ""
   },
+  notification: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Notification',
+  }]
 });
-
-UserSchema.plugin(AutoIncrement, { inc_field: 'uid' });
 
 module.exports = mongoose.model("User", UserSchema);

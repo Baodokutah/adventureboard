@@ -1,13 +1,16 @@
 const express = require('express');
-const app = express();
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const helmet = require('helmet');
+const cors = require('cors');
+
+const app = express();
 const port = 6969;
+const db = require('./db')
 const userRoute = require('./routes/users');
 const authRoute = require('./routes/auth');
-
+const postRoute = require('./routes/postRoute')
 
 dotenv.config();
 
@@ -25,8 +28,16 @@ mongoose.connect(process.env.MONGO_URL, {
 
 //middleware
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(helmet());
 app.use(morgan('tiny'));
+app.use(cors());
+
+db.connect();
+
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`)
+});
 
 app.get('/', (req, res) => {
   res.send('Welcome to homepage')
@@ -34,9 +45,3 @@ app.get('/', (req, res) => {
 
 app.use('/api/users', userRoute);
 app.use('/api/auth', authRoute);
-
-
-
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`)
-});

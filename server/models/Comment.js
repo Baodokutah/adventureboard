@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 const CommentSchema = new mongoose.Schema({
   author: {
-    type: Number,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
     required: true,
   },
   content: {
@@ -11,6 +12,15 @@ const CommentSchema = new mongoose.Schema({
     min: 1,
     max: 200,
   },
+  date: {
+    type: Date,
+    required: true,
+    default: Date.now
+  },
+  replied: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Comment',
+  }
 }, {timestamps: true});
 
-module.exports = mongoose.model("User", CommentSchema);
+module.exports = mongoose.model("Comment", CommentSchema);
