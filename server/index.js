@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
 const app = express();
 const port = 6969;
@@ -43,5 +44,5 @@ app.get('/', (req, res) => {
   res.send('Welcome to homepage')
 });
 
-app.use('/api/users', userRoute);
+app.use('/api/user', userRoute);
 app.use('/api/auth', authRoute);
