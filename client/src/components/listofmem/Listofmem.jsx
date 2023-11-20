@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-
+import { Button } from '@mui/material';
 import './listofmem.css'
 
 export default function ListOfMem() {
@@ -16,11 +16,26 @@ export default function ListOfMem() {
           {buttonClickedJoin ? <h2 className='joinedButton'>ĐÃ THAM GIA</h2> : <h2 style={{ color: 'black' }}>THAM GIA</h2>}
         </button>
         <div className='listOfMemBigBox'>
-
-        <div className='memberBox'><h1>Danh sách</h1></div>
-            <div>
-                <h4>Số lượng</h4>
-            </div>
+          <div className='memberBox'><h1>Danh sách</h1></div>
+              <div>
+                  <h4>Số lượng: 4/10</h4>
+              </div>
+              <Button
+                sx={{border:"1px solid black",
+                    borderRadius: 11,
+                    width: '15.5vw',
+                    height: '8vh',
+                    top:'71vh',
+                    left:'0.75vw',
+                    position:"absolute",
+                    color:'black',
+                    fontFamily:"Noto Sans",
+                    fontSize:'2.5vh',
+                    fontWeight: 700 }}
+                    variant="Gửi thông báo"
+                    >
+                    Gửi thông báo
+              </Button>
         </div>
     </div>
   );

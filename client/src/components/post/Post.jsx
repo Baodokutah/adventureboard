@@ -1,5 +1,5 @@
 import React from 'react';
-
+import TextField from '@mui/material/TextField';
 import './post.css';
 
 export function InPost({ title, tags, content, comments}) {
@@ -16,7 +16,15 @@ export function InPost({ title, tags, content, comments}) {
       <div className='content'><pre>{content}</pre></div>
       <div className='cmt'>
         <div className='cmtInput'>
-          <input className='commentInput'></input>
+          <TextField
+                id="PostDesc"
+                label=""
+                multiline
+                rows={1}
+                defaultValue=""
+                type='string'
+                sx={{width:'70dvw'}}
+            />
           <img alt="cmt" src='https://www.svgrepo.com/show/453320/comment.svg' />
         </div>
         <div className="ui comments">
