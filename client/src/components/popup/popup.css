@@ -38,8 +38,8 @@
   }
 
   .modalContainerFilter{
-    width: 19.167%;
-    height: 71.3%;
+    width: 19dvw;
+    height: 71vh;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -69,15 +69,15 @@
   }
 
   img {
-    width: 31.69%;
+    width: 12svw;
     object-fit: cover;
   }
 
   .confirmButtonModal {
     /* min-width: 223px; */
     /* min-height: 55px; */
-    height: 12.35%;
-    width: 36.8%;
+    height: 7svh;
+    width: 15dvw;
     display: flex;
     align-items: center;
     text-align: center;
@@ -91,8 +91,8 @@
   .cancelButtonModal {
     /* min-width: 223px; */
     /* min-height: 55px; */
-    height: 12.35%;
-    width: 36.8%;
+    height: 7svh;
+    width: 15dvw;
     display: flex;
     align-items: center;
     text-align: center;
