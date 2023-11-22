@@ -11,6 +11,7 @@ import { AuthContext } from "../../context/auth/firebase-context";
 import { NotificationsButton } from "../notifications-button";
 import { AccountButton } from "../account-button";
 import { withAuth } from "../../hooks/use-auth";
+import Skeleton from '@mui/material/Skeleton';
 
 function MUISwitch(props) {
 
@@ -163,7 +164,17 @@ handleLogin = async () => {
 
 render(){
   const { location } = this.props;
-  const { isAuthenticated } = this.context;
+  const { isAuthenticated, isLoading } = this.context;
+
+  if (isLoading) {
+    return (
+      <nav>
+        <Skeleton variant="text" />
+        <Skeleton variant="circular" width={40} height={40} />
+        <Skeleton variant="rectangular" height={50} />
+      </nav>
+    );
+  }
 
 return (
     <>

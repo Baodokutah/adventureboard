@@ -1,4 +1,5 @@
 import React from 'react';
+import { Comment } from '../comment.js';
 
 import './post.css';
 
@@ -7,20 +8,20 @@ export function InPost({ title, tags, content, comments}) {
     <div className='postContentDisplay'>
       <h3>{title}</h3>
       <div style={{ display: 'flex', flexDirection: 'row', gap: '25px' }}>
-        {tags.map((tag, index) => (
+        {tags && tags.map((tag, index) => (
           <div key={index} className='tag'>
             {tag}
           </div>
         ))}
       </div>
-      <div className='content'><pre>{content}</pre></div>
+      <div className='content'>{content}</div>
       <div className='cmt'>
         <div className='cmtInput'>
           <input className='commentInput'></input>
           <img alt="cmt" src='https://www.svgrepo.com/show/453320/comment.svg' />
         </div>
         <div className="ui comments">
-          {comments.map((comment) => (
+          {comments && comments.map((comment) => (
             <Comment key={comment.id} {...comment} />
           ))}
         </div>
@@ -48,25 +49,4 @@ export function PostTitle({ title = null, tags}) {
       </div>
     );
   }
-}
-
-
-export function Comment({ id, avatar, author, timestamp, text }) {
-  return (
-    <div className="comment">
-      <div className="avatar">
-        <img alt="avatar" src={avatar} />
-      </div>
-      <div className="content">
-        <a className="author">{author}</a>
-        <div className="metadata">
-          <div>{timestamp}</div>
-        </div>
-        <div className="text">{text}</div>
-        <div className="actions">
-          <a className="">Trả lời</a>
-        </div>
-      </div>
-    </div>
-  );
 }
