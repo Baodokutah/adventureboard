@@ -50,3 +50,4 @@ app.get('/', (req, res) => {
 app.use('/api/user', userRoute);
 app.use('/api/auth', authRoute);
 app.use('/api/comment', commentRoute);
+app.use('/api/post', postRoute);

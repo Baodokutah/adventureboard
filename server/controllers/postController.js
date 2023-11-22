@@ -3,90 +3,106 @@ const Post = require("../models/Post");
 const User = require("../models/User");
 const Comment = require("../models/Comment");
 
-function getAllCTXHPost(req,res){
-    Post.find({ type: 'CTXH' }).populate('author').then(
-        (CTXHposts) => {
-            res.status(200).json({
-                success: true,
-                message: 'A list of CTXHposts',
-                Post: CTXHposts,
-            })
+// Post query
+async function getAllCTXHPost(req,res){
+    try {
+        CTXHposts = await Post.find(
+            { types: 'CTXH' },
+            { title: 1, author: 1, tags: 1, date: 1}
+        ).populate({
+            path: 'author',
+            select: 'name'
+        });
+        res.status(200).json({
+            success: true,
+            message: 'A list of CTXHposts',
+            Posts: CTXHposts,
         })
-        .catch((error) => {
-            res.status(500).json({
-                success: false,
-                message: 'Server error.Please try again',
-                error: error.message,
-            })
-})
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            error: err.message,
+        })
+    }
 }
 
-function getAllBTLPost(req,res){
-    Post.find({ type: 'Group' }).populate('author').then(
-        (CTXHposts) => {
-            res.status(200).json({
-                success: true,
-                message: 'A list of CTXHposts',
-                Post: CTXHposts,
-            })
+async function getAllGroupPost(req,res){
+    try {
+        CTXHposts = await Post.find(
+            { types: 'Group' },
+            { title: 1, author: 1, tags: 1, date: 1}
+        ).populate({
+            path: 'author',
+            select: 'name'
+        });
+        res.status(200).json({
+            success: true,
+            message: 'A list of Groupposts',
+            Posts: CTXHposts,
         })
-        .catch((error) => {
-            res.status(500).json({
-                success: false,
-                message: 'Server error.Please try again',
-                error: error.message,
-            })
-})
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            error: err.message,
+        })
+    }
 }
-// // http method: GET
-function getPostById(req, res) {
-    Post.findById(req.params.id)
-        .populate('author')
-        .populate('joined_users.users')
-        .populate({ 
+
+async function getPostById(req, res) {
+    try {
+        posts = await Post.findById(req.params.pid)
+        .populate({
+            path: 'author',
+            select: '-token' 
+        }).populate({
+            path: 'joined_users',
+            select: '-token'
+        }).populate({
             path: 'comments',
-            populate: {
-                path: 'author'
-            }
-          })
-        .then((post)=>{
-            if(!post){
-                return res.status(404).json({message: 'No post found', postId: req.params.postId});
-            }
-            res.status(200).json({
-                success: true,
-                message: 'Post found',
-                Services: post
-            })
+            populate: [
+                { path: 'author', select: '-token' }, 
+                { path: 'replied', populate: { path: 'author', select: '-token' } }
+            ]
         })
-        .catch((error)=>{
-            res.status(500).json({
-                success: false,
-                message: 'Server error',
-                error: error.message,
-            })
+        
+        res.status(200).json({
+            success: true,
+            message: 'Got post',
+            Post: posts,
+        });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            error: err.message,
         })
+    }
 }
 
+// Post creation and modify
+async function createPost(req, res) {
+    try {
+        postOwner = await User.findOne({ token: req.body.token });
+        post = await Post.create({
+            types: req.body.type,
+            author: postOwner._id,
+            title: req.body.title,
+            content: req.body.content,
+            tags: req.body.tags
+        });
 
-// // http method: POST
-function createPost(req,res) {
-    const newPost = new Post(req.body);
-    newPost.save()
-        .then((savedPost)=> {
-            res.status(201).json({
-                success: true,
-                message: 'Post have been created',
-                newPost: savedPost
-            })
+        res.status(200).json({
+            success: true,
+            message: 'Post successfully created',
+            Post: post._id,
+        });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            error: err.message,
         })
-        .catch((err)=> {
-            res.status(500).json({
-                success: false,
-                message: 'Can not create Post',
-            })
-        })
+    }
 }
+
 // // http method: PUT
 function updatePost(req,res) {
     Post.findByIdAndUpdate(req.params.id,req.body, {new:true})
@@ -114,4 +130,4 @@ function deletePost(req, res) {
         })
 }
 
-module.exports = {getAllCTXHPost,getAllBTLPost,getPostById}
+module.exports = {getAllCTXHPost, getAllGroupPost, getPostById, createPost}

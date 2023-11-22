@@ -22,7 +22,13 @@ async function getUserInfo(req, res) {
 async function getUserPosts(req, res) {
     try {
         UserInfo = await User.findById(req.params.uid, {mail: 0, notification: 0, token: 0});
-        UserPosts = await Post.find({ author: UserInfo._id }, {content: 0, joined_users: 0, comments: 0});
+        UserPosts = await Post.find(
+            { author: UserInfo._id },
+            {content: 0, joined_users: 0, comments: 0}
+        ).populate({
+            path: 'author',
+            select: 'name'
+        });
         res.status(200).json({
             success: true,
             message: 'Found user with posts',
