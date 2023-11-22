@@ -23,18 +23,20 @@ const initialState = {
   isAuthenticated: false,
   isInitialized: false,
   user: null,
-  error: null
+  error: null,
+  isLoading: true // Added isLoading to initialState
 };
 
 const reducer = (state, action) => {
   if (action.type === 'AUTH_STATE_CHANGED') {
-    const { isAuthenticated, user } = action.payload;
+    const { isAuthenticated, user, isLoading } = action.payload;
 
     return {
       ...state,
       isAuthenticated,
       isInitialized: true,
-      user
+      user,
+      isLoading // Added isLoading to the state
     };
   }
 
@@ -66,7 +68,8 @@ export const AuthProvider = (props) => {
               avatar: user.photoURL || undefined,
               email: user.email,
               name: user.displayName || 'John Doe'
-            }
+            },
+            isLoading: false // Added isLoading to the payload
           }
         });
       } else {
@@ -79,7 +82,8 @@ export const AuthProvider = (props) => {
           payload: {
             isAuthenticated: false,
             user: null,
-            error: 'Invalid email domain. Only "@hcmut.edu.vn" is allowed.'
+            error: 'Invalid email domain. Only "@hcmut.edu.vn" is allowed.',
+            isLoading: false // Added isLoading to the payload
           }
         });
         setOpen(true);
@@ -89,7 +93,8 @@ export const AuthProvider = (props) => {
         type: ActionType.AUTH_STATE_CHANGED,
         payload: {
           isAuthenticated: false,
-          user: null
+          user: null,
+          isLoading: false // Added isLoading to the payload
         }
       });
     }

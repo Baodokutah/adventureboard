@@ -1,0 +1,14 @@
+.post{
+    background-color: #f3f3f3; /* Modify the color as needed */
+    display: flex;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    overflow: auto; 
+}
+
+.postContentDisplay{
+    margin-left: 100px;
+    margin-top: 30px;
+    width: 72vw;
+  }

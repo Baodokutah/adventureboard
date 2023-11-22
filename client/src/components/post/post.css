@@ -72,7 +72,7 @@
     display: flex;
     flex-direction: column;
     min-height: 80.16%;
-    gap: 1.4vh;
+    gap: 2vh;
     background-color: white;
     padding: 16px;
     white-space: pre-wrap;
@@ -80,8 +80,11 @@
 }
 
 .cmt{
-    width: 95%;
-    min-height: 51.62%;
+  margin-top: 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+
 }
 
 .commentInput{
@@ -109,8 +112,6 @@
 
 .cmt .cmtInput {
   display: flex;
-  width: 91%;
-  max-height: 65px;
   gap: 2%;
 }
 

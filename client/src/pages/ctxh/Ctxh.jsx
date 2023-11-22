@@ -37,4 +37,3 @@ function getCommentsByPostId(id) {
 // alert(getCommentsByPostId('1'));
 
 export default CTXH;
-
