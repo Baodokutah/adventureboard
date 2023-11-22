@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Chip, FormControl, InputLabel, Select, MenuItem, TextField, InputAdornment, IconButton } from '@mui/material';
+import { Chip, FormControl, InputLabel, Select, MenuItem, TextField, InputAdornment, IconButton, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import './filter.css'
 
@@ -27,7 +27,7 @@ function FilterBoxCTXH() {
 
   };
 
-  useEffect(() => {console.log(ctxhTags)}, [ctxhTags]);
+  useEffect(() => {}, [ctxhTags]);
   // Custom styles for the chip
   const chipStyle = {
     width: '104px', // Fixed width for each chip
@@ -268,9 +268,22 @@ export default function FilterBox() {
   return (
     <div id='filterBox' className='filter'>
       <Link to={{ pathname: '/create', state: { page: currentPage } }} className='link'>
-        <div className='createPost'>
+        {/* <div className='createPost'>
           <h2 style={{ color: 'white' }}>Tạo bài viết</h2>
-        </div>
+        </div> */}
+          <Button sx={{
+            borderRadius:30,
+            border:"2px solid black",
+            bgcolor: "#8B5A2B",
+            width: '15.5vw',
+            height: '8vh',
+            color:"white",
+            fontWeight:700,
+            fontSize:"2.7vh",
+            marginTop:2.3475,
+            marginLeft:1.6}}>
+              Tạo bài viết
+          </Button>
       </Link>
         {location.pathname==='/ctxh' ? (<FilterBoxCTXH/>) : location.pathname==='/study' ? (<FilterBoxGroup/>) : (<></>)}
     </div>

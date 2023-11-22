@@ -26,6 +26,7 @@ router.get('/', (req, res) => {
     })
 });
 
-router.get('/:id', userCtl.getUserPosts);
+router.get('/:uid', userCtl.getUserPosts);
+router.get('/:token', userCtl.getUserInfo);
 
 module.exports = router;

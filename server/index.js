@@ -9,9 +9,13 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = 6969;
 const db = require('./db')
+
+// routes
 const userRoute = require('./routes/userRoute');
 const authRoute = require('./routes/authRoute');
-const postRoute = require('./routes/postRoute')
+const postRoute = require('./routes/postRoute');
+const commentRoute = require('./routes/commentRoute');
+const notiRoute = require('./routes/notiRoute');
 
 dotenv.config();
 
@@ -46,3 +50,6 @@ app.get('/', (req, res) => {
 
 app.use('/api/user', userRoute);
 app.use('/api/auth', authRoute);
+app.use('/api/comment', commentRoute);
+app.use('/api/post', postRoute);
+app.use('/api/noti', notiRoute);
