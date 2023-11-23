@@ -1,5 +1,6 @@
 import React from 'react';
 import { Comment } from '../comment.js';
+import { TextField } from '@mui/material';
 import './post.css';
 
 export function InPost({ title, tags, content, comments}) {
