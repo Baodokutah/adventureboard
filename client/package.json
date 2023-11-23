@@ -28,6 +28,7 @@
     "semantic-ui-react": "^2.1.4",
     "simplebar-react": "^3.2.4",
     "slick-carousel": "^1.8.1",
+    "styled-components": "^6.1.1",
     "untitled-ui": "^0.1.0",
     "web-vitals": "^2.1.4"
   },
