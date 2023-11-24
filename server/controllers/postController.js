@@ -1,6 +1,7 @@
-const { models } = require("mongoose");
+const { models, isValidObjectId } = require("mongoose");
 const Post = require("../models/Post");
 const User = require("../models/User");
+const Notification = require("../models/Notification");
 const Comment = require("../models/Comment");
 
 function getAllCTXHPost(req,res){
@@ -114,4 +115,4 @@ function deletePost(req, res) {
         })
 }
 
-module.exports = {getAllCTXHPost,getAllBTLPost,getPostById}
+module.exports = {getAllCTXHPost, getAllGroupPost, getPostById, createPost, updatePost, deletePost}

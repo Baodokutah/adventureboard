@@ -6,4 +6,6 @@ router.get('/CTXH/',postCtl.getAllCTXHPost)
 router.get('/BTL/',postCtl.getAllBTLPost)
 router.get('/post/:id', postCtl.getPostById)
 
+router.post('/removeMem', postCtl.removeMem);
+
 module.exports = router
