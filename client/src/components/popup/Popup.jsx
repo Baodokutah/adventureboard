@@ -14,7 +14,7 @@ import IconButton from '@mui/material/IconButton';
 
 import './popup.css'
 
-export function Success({open, onClose, action, page, imgSrc}){
+export function Success({open, onClose,onCloseFrame, action, page, imgSrc}){
     const navigate = useNavigate();
     if (!open) return null;
     return(
@@ -29,7 +29,14 @@ export function Success({open, onClose, action, page, imgSrc}){
             <div className='contentModal'>
                 <h1>{action}</h1>
             </div>
-                <p className='confirmButtonModal' onClick={() => {navigate('/' + page)}}>
+                <p className='confirmButtonModal' onClick={() => {
+                              if (page) {
+                                navigate('/' + page);
+                              }
+                              else {
+                              onClose(); 
+                              onCloseFrame();}
+                            }}>
                     Xác nhận
                 </p>
             </div>

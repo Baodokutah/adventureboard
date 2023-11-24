@@ -1,5 +1,6 @@
 import styled from "styled-components";
-
+import { Success } from "../popup/Popup";
+import { useState } from "react";
 const XcNhn = styled.p`
   margin-block-start: 0;
   margin-block-end: 5px;
@@ -95,12 +96,15 @@ const ConfirmPcNotiRoot = styled.div`
   font-family: "Noto Sans";
 `;
 
-const ConfirmPCNoti = ({ onClose, onCloseFrame }) => {
+const ConfirmPCNoti = ({ onClose, onConfirm, onCloseFrame }) => {
+
+
     const handleConfirm = () => {
     // handle confirm action here
     console.log('Confirmed');
+    onConfirm();
     onClose();
-    onCloseFrame();
+
   };
 
   const handleReturn = () => {

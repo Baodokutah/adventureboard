@@ -3,6 +3,7 @@ import ConfirmPCNoti from "./ConfirmPCNoti";
 import PortalPopup from "./PortalPopUp";
 import styled from "styled-components";
 import { Button } from '@mui/material';
+import { Success } from "../popup/Popup";
 
 const GroupChild = styled.div`
   position: absolute;
@@ -83,8 +84,10 @@ const GroupParentRoot = styled.div`
   font-family: "Noto Sans";
 `;
 
-const Frame = ({ onCloseFrame }) => { 
+const Frame = ({onCloseFrame}) => { 
     const [isConfirmPCNotiOpen, setConfirmPCNotiOpen] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
+    const currentPage = localStorage.getItem('currentPage') || '404';
 
   const openConfirmPCNoti = useCallback(() => {
     setConfirmPCNotiOpen(true);
@@ -143,9 +146,24 @@ const Frame = ({ onCloseFrame }) => {
           placement="Centered"
           onOutsideClick={closeConfirmPCNoti}
         >
-          <ConfirmPCNoti onClose={closeConfirmPCNoti} onCloseFrame={onCloseFrame} /> 
-        </PortalPopup>
+      <ConfirmPCNoti onClose={closeConfirmPCNoti} onConfirm={() => setShowSuccess(true)} onCloseFrame={onCloseFrame} />        
+      </PortalPopup>
       )}
+      {showSuccess && 
+        <PortalPopup
+          overlayColor="rgba(113, 113, 113, 0.3)"
+          placement="Centered"
+          // onOutsideClick={setShowSuccess(false)}
+        >
+      <Success 
+          open={showSuccess} 
+          onClose={() => setShowSuccess(false)}
+          onCloseFrame={onCloseFrame}
+          action='Gửi thông báo thành công!'
+          imgSrc={"https://www.svgrepo.com/show/522783/check-circle.svg"}
+
+       />
+             </PortalPopup>}
     </>
   );
 };
