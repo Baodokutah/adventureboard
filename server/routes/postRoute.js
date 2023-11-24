@@ -10,4 +10,6 @@ router.get('/:pid', postCtl.getPostById);
 router.post('/create', postCtl.createPost);
 router.post('/delete', postCtl.deletePost);
 
+router.post('/removeMem', postCtl.removeMem);
+
 module.exports = router

@@ -1,6 +1,7 @@
-const { models } = require("mongoose");
+const { models, isValidObjectId } = require("mongoose");
 const Post = require("../models/Post");
 const User = require("../models/User");
+const Notification = require("../models/Notification");
 const Comment = require("../models/Comment");
 
 // Post query
@@ -221,4 +222,102 @@ async function deletePost(req, res) {
     }
 }
 
-module.exports = {getAllCTXHPost, getAllGroupPost, getPostById, createPost, updatePost, deletePost}
+// Remove member
+async function removeMem(req, res) {
+    try {
+        if (!req.body.pid || !isValidObjectId(req.body.pid) || !req.body.token || !req.body.uid || !isValidObjectId(req.body.uid)) {
+            return res.status(400).json({
+                success: false,
+                message: "Bad Request"    
+            })
+        }
+
+        let PostInfo;
+        try {
+            PostInfo = await Post.findById(req.body.pid, { joined_users: 1, author: 1 });
+            if (!PostInfo)
+                return res.status(404).json({
+                    success: false,
+                    message: 'Post doesn\'t exist!'
+                });
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: 'Internal Server Error'
+            });
+        }
+
+        let UserInfo;
+        try {
+            UserInfo = await User.findOne({ token: req.body.token }, { _id: 1, name: 1 });
+            if (!UserInfo)
+                return res.status(404).json({
+                    success: false,
+                    message: 'Invalid token!'
+                });
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: 'Internal Server Error'
+            });
+        }
+        
+        if (UserInfo._id == req.body.uid) {
+            if (!PostInfo.joined_users.includes( req.body.uid )) {
+                res.status(404).json({
+                    success: false,
+                    message: 'You haven\'t joined this post yet!'
+                })
+            }
+            else {
+                await Post.findByIdAndUpdate(req.body.pid, { $pull: { joined_users: req.body.uid }})
+                noti = await Notification.create({
+                    success: true,
+                    content: "You have left the post!",
+                    post: req.body.pid
+                })
+                await User.findByIdAndUpdate(req.body.uid, { $push: { notification: noti._id }})
+                res.status(200).json({
+                    success: true,
+                    message: "Leave post success!"
+                })
+            }
+        }
+        else if (UserInfo._id.toString() != PostInfo.author.toString() ) {
+            res.status(403).json({
+                success: false,
+                message: "Forbidden"
+            })
+        }
+        else {
+            if (!PostInfo.joined_users.includes( req.body.uid )) {
+                res.status(404).json({
+                    success: false,
+                    message: 'Member doesn\'t exist!'
+                })
+            }
+            else {
+                await Post.findByIdAndUpdate(req.body.pid, { $pull: { joined_users: req.body.uid }})
+                noti = await Notification.create({
+                    success: true,
+                    content: `User ${UserInfo.name} have removed you from the post!`,
+                    post: req.body.pid
+                })
+
+                await User.findByIdAndUpdate(req.body.uid, { $push: { notification: noti._id }})
+                res.status(200).json({
+                    success: true,
+                    message: "Remove member success!"
+                })
+            }
+        }
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Internal Server Error'
+        })
+    }
+};
+
+module.exports = {getAllCTXHPost, getAllGroupPost, getPostById, createPost, updatePost, deletePost, removeMem }
