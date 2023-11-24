@@ -4,115 +4,320 @@ const User = require("../models/User");
 const Notification = require("../models/Notification");
 const Comment = require("../models/Comment");
 
-function getAllCTXHPost(req,res){
-    Post.find({ type: 'CTXH' }).populate('author').then(
-        (CTXHposts) => {
-            res.status(200).json({
-                success: true,
-                message: 'A list of CTXHposts',
-                Post: CTXHposts,
-            })
+// Post query
+async function getAllCTXHPost(req,res){
+    try {
+        CTXHposts = await Post.find(
+            { types: 'CTXH' },
+            { title: 1, author: 1, tags: 1, date: 1}
+        ).populate({
+            path: 'author',
+            select: 'name'
+        });
+        return res.status(200).json({
+            success: true,
+            message: 'A list of CTXHposts',
+            Posts: CTXHposts,
         })
-        .catch((error) => {
-            res.status(500).json({
-                success: false,
-                message: 'Server error.Please try again',
-                error: error.message,
-            })
-})
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            error: err.message,
+        })
+    }
 }
 
-function getAllBTLPost(req,res){
-    Post.find({ type: 'Group' }).populate('author').then(
-        (CTXHposts) => {
-            res.status(200).json({
-                success: true,
-                message: 'A list of CTXHposts',
-                Post: CTXHposts,
-            })
+async function getAllGroupPost(req,res){
+    try {
+        Groupposts = await Post.find(
+            { types: 'Group' },
+            { title: 1, author: 1, tags: 1, date: 1}
+        ).populate({
+            path: 'author',
+            select: 'name'
+        });
+        return res.status(200).json({
+            success: true,
+            message: 'A list of Groupposts',
+            Posts: Groupposts,
         })
-        .catch((error) => {
-            res.status(500).json({
-                success: false,
-                message: 'Server error.Please try again',
-                error: error.message,
-            })
-})
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            error: err.message,
+        })
+    }
 }
-// // http method: GET
-function getPostById(req, res) {
-    Post.findById(req.params.id)
-        .populate('author')
-        .populate('joined_users.users')
-        .populate({ 
+
+async function getPostById(req, res) {
+    try {
+        post = await Post.findById(req.params.pid)
+        .populate({
+            path: 'author',
+            select: '-token' 
+        }).populate({
+            path: 'joined_users',
+            select: '-token'
+        }).populate({
             path: 'comments',
-            populate: {
-                path: 'author'
-            }
-          })
-        .then((post)=>{
-            if(!post){
-                return res.status(404).json({message: 'No post found', postId: req.params.postId});
-            }
-            res.status(200).json({
-                success: true,
-                message: 'Post found',
-                Services: post
-            })
+            populate: [
+                { path: 'author', select: '-token' }, 
+                { path: 'replied', populate: { path: 'author', select: '-token' } }
+            ]
         })
-        .catch((error)=>{
+        
+        if(!post)
+            return res.status(404).json({
+                success: false,
+                message: "Post Not Found"    
+            })
+        
+        return res.status(200).json({
+            success: true,
+            message: 'Got post',
+            Post: post,
+        });
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            error: err.message,
+        })
+    }
+}
+
+async function getPostFromSearch(req, res) {
+
+}
+
+// Post creation and modify
+async function createPost(req, res) {
+    if (!req.body.type || !req.body.token || !req.body.title)
+        return res.status(400).json({
+            success: false,
+            message: "Bad Request"    
+        })
+    if (req.body.title == "")
+        return res.status(400).json({
+            success: false,
+            message: "Post title can't be empty"
+        })
+    if (req.body.type != "CTXH" && req.body.type != "Group")
+        return res.status(400).json({
+            success: false,
+            message: "Invalid Type"
+        })
+    try {
+        postOwner = await User.findOne({ token: req.body.token });
+        if(!postOwner)
+            return res.status(404).json({
+                success: false,
+                message: "Invalid Token"    
+            })
+
+        post = await Post.create({
+            types: req.body.type,
+            author: postOwner._id,
+            title: req.body.title,
+            content: req.body.content,
+            tags: req.body.tags
+        });
+
+        return res.status(200).json({
+            success: true,
+            message: 'Post successfully created',
+            Post: post._id,
+        });
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            error: err.message,
+        })
+    }
+}
+
+async function updatePost(req,res) {
+    if (!req.body.token || !req.body.title)
+        return res.status(400).json({
+            success: false,
+            message: "Bad Request"    
+        })
+    if (req.body.title == "")
+        return res.status(400).json({
+            success: false,
+            message: "Post title can't be empty"
+        })
+    try {
+        post = await Post.findById(req.body.pid).populate('author', 'token');
+        if(!post)
+            return res.status(404).json({
+                success: false,
+                message: "Post Not Found"    
+            })
+        if(post.author.token != req.body.token)
+            return res.status(401).json({
+                success: false,
+                message: "Not Post Owner"    
+            })
+
+        await Post.findByIdAndUpdate(req.body.pid, {
+            title: req.body.title,
+            content: req.body.content,
+            tags: req.body.tags
+        })
+        return res.status(200).json({
+            success: true,
+            message: 'Post successfully updated',
+            Post: post._id,
+        });
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            error: err.message,
+        })
+    }
+}
+async function deletePost(req, res) {
+    try {
+        if(!req.body.pid || !req.body.token)
+        return res.status(404).json({success:false,message:'Bad request'
+        })
+        let postInfo;
+        let userInfo;
+        try {
+            postInfo = await Post.findById(req.body.pid)
+        } catch (error) {
+            return res.status(500).json({success:false,message:'Post does not exist'})
+        }
+
+        try {
+            userInfo = await User.findOne({token: req.body.token})
+        } catch (error) {
+            return res.status(500).json({success:false,message:'User does not exist'})
+        }
+        console.log(userInfo)
+        console.log(postInfo)
+        if(userInfo._id.toString != postInfo.author._id.toString){
+            return res.status(404).json({success:false,message: 'This is not user\'s Post'})
+        }
+
+        try {
+            await Comment.findByIdAndDelete({ $in: postInfo.comments })
+        } catch (error) {
+            return res.status(500).json({success:false,message:'Remove comment failed'})
+        }
+
+        try {
+            await Post.findByIdAndDelete(req.body.pid)
+        } catch (error) {
+            return res.status(500).json({success:false,message: 'Delete post failed'})
+        }
+
+        return res.status(200).json({success:true,message: 'Successfully deleted post'})
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Internal Server Error',
+        })
+    }
+}
+
+// Remove member
+async function removeMem(req, res) {
+    try {
+        if (!req.body.pid || !isValidObjectId(req.body.pid) || !req.body.token || !req.body.uid || !isValidObjectId(req.body.uid)) {
+            return res.status(400).json({
+                success: false,
+                message: "Bad Request"    
+            })
+        }
+
+        let PostInfo;
+        try {
+            PostInfo = await Post.findById(req.body.pid, { joined_users: 1, author: 1 });
+            if (!PostInfo)
+                return res.status(404).json({
+                    success: false,
+                    message: 'Post doesn\'t exist!'
+                });
+        } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Server error',
-                error: error.message,
-            })
-        })
-}
+                message: 'Internal Server Error'
+            });
+        }
 
-
-// // http method: POST
-function createPost(req,res) {
-    const newPost = new Post(req.body);
-    newPost.save()
-        .then((savedPost)=> {
-            res.status(201).json({
-                success: true,
-                message: 'Post have been created',
-                newPost: savedPost
-            })
-        })
-        .catch((err)=> {
+        let UserInfo;
+        try {
+            UserInfo = await User.findOne({ token: req.body.token }, { _id: 1, name: 1 });
+            if (!UserInfo)
+                return res.status(404).json({
+                    success: false,
+                    message: 'Invalid token!'
+                });
+        } catch (error) {
             res.status(500).json({
                 success: false,
-                message: 'Can not create Post',
+                message: 'Internal Server Error'
+            });
+        }
+        
+        if (UserInfo._id == req.body.uid) {
+            if (!PostInfo.joined_users.includes( req.body.uid )) {
+                res.status(404).json({
+                    success: false,
+                    message: 'You haven\'t joined this post yet!'
+                })
+            }
+            else {
+                await Post.findByIdAndUpdate(req.body.pid, { $pull: { joined_users: req.body.uid }})
+                noti = await Notification.create({
+                    success: true,
+                    content: "You have left the post!",
+                    post: req.body.pid
+                })
+                await User.findByIdAndUpdate(req.body.uid, { $push: { notification: noti._id }})
+                res.status(200).json({
+                    success: true,
+                    message: "Leave post success!"
+                })
+            }
+        }
+        else if (UserInfo._id.toString() != PostInfo.author.toString() ) {
+            res.status(403).json({
+                success: false,
+                message: "Forbidden"
             })
-        })
-}
-// // http method: PUT
-function updatePost(req,res) {
-    Post.findByIdAndUpdate(req.params.id,req.body, {new:true})
-        .then((post) => {
-            if(!post){
-                return res.status(404).json({success:false,message:'Can not find service', updatePost: post});
+        }
+        else {
+            if (!PostInfo.joined_users.includes( req.body.uid )) {
+                res.status(404).json({
+                    success: false,
+                    message: 'Member doesn\'t exist!'
+                })
             }
-            res.status(200).json({success:true,message:'Post has been updated',})
-        })
-        .catch((err) => {
-            res.status(500).json({success:false,message:'Error updating Service',})
-        })
-}
-// // http method: DELETE
-function deletePost(req, res) {
-    Post.findByIdAndDelete(req.params.id)
-        .then((post) =>{
-            if(!post){
-                return res.status(404).json({success:false,message:'Post not found',ServiceId:service});
-            }
-            res.status(204).json({success:true,message:'Post have been deleted',})
-        })
-        .catch((err) => {
-            res.status(500).json({success:false,message:'Post error',err:err.message});
-        })
-}
+            else {
+                await Post.findByIdAndUpdate(req.body.pid, { $pull: { joined_users: req.body.uid }})
+                noti = await Notification.create({
+                    success: true,
+                    content: `User ${UserInfo.name} have removed you from the post!`,
+                    post: req.body.pid
+                })
 
-module.exports = {getAllCTXHPost, getAllGroupPost, getPostById, createPost, updatePost, deletePost}
+                await User.findByIdAndUpdate(req.body.uid, { $push: { notification: noti._id }})
+                res.status(200).json({
+                    success: true,
+                    message: "Remove member success!"
+                })
+            }
+        }
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Internal Server Error'
+        })
+    }
+};
+
+module.exports = {getAllCTXHPost, getAllGroupPost, getPostById, createPost, updatePost, deletePost, removeMem }
