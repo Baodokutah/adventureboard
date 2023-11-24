@@ -84,6 +84,10 @@ async function getPostById(req, res) {
     }
 }
 
+async function getPostFromSearch(req, res) {
+
+}
+
 // Post creation and modify
 async function createPost(req, res) {
     if (!req.body.type || !req.body.token || !req.body.title)
@@ -171,18 +175,50 @@ async function updatePost(req,res) {
         })
     }
 }
-// // http method: DELETE
-function deletePost(req, res) {
-    Post.findByIdAndDelete(req.params.id)
-        .then((post) =>{
-            if(!post){
-                return res.status(404).json({success:false,message:'Post not found',ServiceId:service});
-            }
-            res.status(204).json({success:true,message:'Post have been deleted',})
+async function deletePost(req, res) {
+    try {
+        if(!req.body.pid || !req.body.token)
+        return res.status(404).json({success:false,message:'Bad request'
         })
-        .catch((err) => {
-            res.status(500).json({success:false,message:'Post error',err:err.message});
+        let postInfo;
+        let userInfo;
+        try {
+            postInfo = await Post.findById(req.body.pid)
+        } catch (error) {
+            return res.status(500).json({success:false,message:'Post does not exist'})
+        }
+
+        try {
+            userInfo = await User.findOne({token: req.body.token})
+        } catch (error) {
+            return res.status(500).json({success:false,message:'User does not exist'})
+        }
+        console.log(userInfo)
+        console.log(postInfo)
+        if(userInfo._id.toString != postInfo.author._id.toString){
+            return res.status(404).json({success:false,message: 'This is not user\'s Post'})
+        }
+
+        try {
+            await Comment.findByIdAndDelete({ $in: postInfo.comments })
+        } catch (error) {
+            return res.status(500).json({success:false,message:'Remove comment failed'})
+        }
+
+        try {
+            await Post.findByIdAndDelete(req.body.pid)
+        } catch (error) {
+            return res.status(500).json({success:false,message: 'Delete post failed'})
+        }
+
+        return res.status(200).json({success:true,message: 'Successfully deleted post'})
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Internal Server Error',
         })
+    }
 }
 
-module.exports = {getAllCTXHPost, getAllGroupPost, getPostById, createPost, updatePost}
+module.exports = {getAllCTXHPost, getAllGroupPost, getPostById, createPost, updatePost, deletePost}

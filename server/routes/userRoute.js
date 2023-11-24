@@ -10,6 +10,10 @@ const Notification = require("../models/Notification");
 //controllers
 const userCtl = require('../controllers/userController');
 
+router.get('/:uid', userCtl.getUserPosts);
+router.get('/:token', userCtl.getUserInfo);
+
+// testing purpose only
 router.get('/', (req, res) => {
     User.find({ name: 'Kao Gia Bỉm' }, {'_id': 0, 'notification': 0}).then((users) => {
         res.status(200).json({
@@ -25,8 +29,5 @@ router.get('/', (req, res) => {
         })
     })
 });
-
-router.get('/:uid', userCtl.getUserPosts);
-router.get('/:token', userCtl.getUserInfo);
 
 module.exports = router;

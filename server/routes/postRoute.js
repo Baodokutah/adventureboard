@@ -8,5 +8,6 @@ router.get('/Group/',postCtl.getAllGroupPost);
 router.get('/:pid', postCtl.getPostById);
 
 router.post('/create', postCtl.createPost);
+router.post('/delete', postCtl.deletePost);
 
 module.exports = router
