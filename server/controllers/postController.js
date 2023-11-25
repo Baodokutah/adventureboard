@@ -261,7 +261,7 @@ async function deletePost(req, res) {
 };
 
 // Join post
-async function join(req, res) {
+async function joinPost(req, res) {
     try {
         if (!req.body.pid || !isValidObjectId(req.body.pid) || !req.body.token) {
             return res.status(400).json({
@@ -272,7 +272,7 @@ async function join(req, res) {
         
         let PostInfo;
         try {
-            PostInfo = await Post.findById(req.body.pid, { joined_users: 1, author: 1 });
+            PostInfo = await Post.findById(req.body.pid, { joined_users: 1, author: 1, maxuser });
             if (!PostInfo) {
                 return res.status(404).json({
                     success: false,
@@ -280,7 +280,7 @@ async function join(req, res) {
                 });
             }
         } catch (error) {
-            res.status(500).json({
+            return res.status(500).json({
                 success: false,
                 message: 'Internal Server Error'
             });
@@ -296,16 +296,22 @@ async function join(req, res) {
                 });
             }
         } catch (error) {
-            res.status(500).json({
+            return res.status(500).json({
                 success: false,
                 message: 'Internal Server Error'
             });
         }
 
         if (PostInfo.joined_users.includes( UserInfo._id )) {
-            res.status(400).json({
+            return res.status(400).json({
                 success: false,
                 message: 'You have joined this post'
+            })
+        }
+        else if (PostInfo.joined_users.length == PostInfo.maxuser) {
+            return res.status(400).json({
+                success: false,
+                message: 'Member limit exceed!'
             })
         }
         else {
@@ -317,14 +323,14 @@ async function join(req, res) {
                 post: req.body.pid
             })
             await User.findByIdAndUpdate(PostInfo.author, { $push: { notification: noti } })
-            res.status(200).json({
+            return res.status(200).json({
                 success: true,
                 message: "Join post success!"
             })
         }
 
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: 'Internal Server Error'
         })
@@ -350,7 +356,7 @@ async function removeMem(req, res) {
                     message: 'Post doesn\'t exist!'
                 });
         } catch (error) {
-            res.status(500).json({
+            return res.status(500).json({
                 success: false,
                 message: 'Internal Server Error'
             });
@@ -365,7 +371,7 @@ async function removeMem(req, res) {
                     message: 'Invalid token!'
                 });
         } catch (error) {
-            res.status(500).json({
+            return res.status(500).json({
                 success: false,
                 message: 'Internal Server Error'
             });
@@ -373,7 +379,7 @@ async function removeMem(req, res) {
         
         if (UserInfo._id == req.body.uid) {
             if (!PostInfo.joined_users.includes( req.body.uid )) {
-                res.status(404).json({
+                return res.status(404).json({
                     success: false,
                     message: 'You haven\'t joined this post yet!'
                 })
@@ -386,21 +392,21 @@ async function removeMem(req, res) {
                     post: req.body.pid
                 })
                 await User.findByIdAndUpdate(req.body.uid, { $push: { notification: noti._id }})
-                res.status(200).json({
+                return res.status(200).json({
                     success: true,
                     message: "Leave post success!"
                 })
             }
         }
         else if (UserInfo._id.toString() != PostInfo.author.toString() ) {
-            res.status(403).json({
+            return res.status(403).json({
                 success: false,
                 message: "Forbidden"
             })
         }
         else {
             if (!PostInfo.joined_users.includes( req.body.uid )) {
-                res.status(404).json({
+                return res.status(404).json({
                     success: false,
                     message: 'Member doesn\'t exist!'
                 })
@@ -414,7 +420,7 @@ async function removeMem(req, res) {
                 })
 
                 await User.findByIdAndUpdate(req.body.uid, { $push: { notification: noti._id }})
-                res.status(200).json({
+                return res.status(200).json({
                     success: true,
                     message: "Remove member success!"
                 })
@@ -422,11 +428,11 @@ async function removeMem(req, res) {
         }
 
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: 'Internal Server Error'
         })
     }
 };
 
-module.exports = { getAllCTXHPost, getAllGroupPost, getPostById, getPostFromSearch, createPost, updatePost, deletePost, join, removeMem }
+module.exports = { getAllCTXHPost, getAllGroupPost, getPostById, getPostFromSearch, createPost, updatePost, deletePost, joinPost, removeMem }

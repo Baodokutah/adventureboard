@@ -22,7 +22,7 @@ async function sendNoti(req, res) {
                 });
             }
         } catch (error) {
-            res.status(500).json({
+            return res.status(500).json({
                 success: false,
                 message: 'Internal Server Error'
             });
@@ -43,19 +43,19 @@ async function sendNoti(req, res) {
             PostInfo.joined_users.forEach(async userID => {
                 await User.findByIdAndUpdate(userID, { $push: { notification: noti._id } })
             })
-            res.status(200).json({
+            return res.status(200).json({
                 success: true,
                 message: "Send notification success!"
             })
         }
         else {
-            res.status(403).json({
+            return res.status(403).json({
                 success: false,
                 message: 'Invalid token!'
             });
         }
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: 'Internal Server Error'
         })
@@ -80,21 +80,19 @@ async function removeNoti(req, res) {
                         message: 'Notification doesn\'t exist!'
                     });
         } catch (error) {
-            console.error(error)
-            res.status(500).json({
+            return res.status(500).json({
                 success: false,
                 message: 'Internal Server Error'
             });
         }
 
         await User.findOneAndUpdate({ token: req.body.token }, { $pull: { notification: req.body.nid }})
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             message: "Remove notification success!"
         })
     } catch (error) {
-        console.error(error)
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: 'Internal Server Error'
         })
