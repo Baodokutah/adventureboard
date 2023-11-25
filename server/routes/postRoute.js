@@ -8,6 +8,7 @@ router.get('/Group/',postCtl.getAllGroupPost);
 router.get('/:pid', postCtl.getPostById);
 
 router.post('/create', postCtl.createPost);
+router.post('/update', postCtl.updatePost);
 router.post('/delete', postCtl.deletePost);
 router.post('/:type/search', postCtl.getPostFromSearch);
 router.post('/join', postCtl.join);
