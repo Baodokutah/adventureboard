@@ -85,7 +85,38 @@ async function getPostById(req, res) {
 }
 
 async function getPostFromSearch(req, res) {
-
+    if (req.params.type != "CTXH" && req.params.type != "Group")
+        return res.status(400).json({
+            success: false,
+            message: "Invalid Type"
+        });
+        try {
+            keywords = (req.body.keyword ? req.body.keyword : "");
+            tag = (Array.isArray(req.body.tags) ? req.body.tags : []);
+            posts = await Post.find(
+                {
+                    types: req.params.type,
+                    tags: { $all: tag },
+                    title: { $regex: keywords, $options: 'i' }
+                },
+                { title: 1, author: 1, tags: 1, date: 1}
+            ).populate({
+                path: 'author',
+                select: 'name'
+            });
+            return res.status(200).json({
+                success: true,
+                message: 'A list of Searched posts',
+                Posts: posts,
+                tags: tag,
+                keyword: keywords
+            })
+        } catch (err) {
+            return res.status(500).json({
+                success: false,
+                error: err.message,
+            })
+        }
 }
 
 // Post creation and modify
@@ -221,4 +252,4 @@ async function deletePost(req, res) {
     }
 }
 
-module.exports = {getAllCTXHPost, getAllGroupPost, getPostById, createPost, updatePost, deletePost}
+module.exports = {getAllCTXHPost, getAllGroupPost, getPostById, getPostFromSearch, createPost, updatePost, deletePost}
