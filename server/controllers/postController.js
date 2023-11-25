@@ -137,6 +137,11 @@ async function createPost(req, res) {
             success: false,
             message: "Invalid Type"
         })
+    if (req.body.maxuser < 1)
+        return res.status(400).json({
+            success: false,
+            message: "Invalid Number of Allowed Users"
+        })
     try {
         postOwner = await User.findOne({ token: req.body.token });
         if(!postOwner)
@@ -375,7 +380,7 @@ async function removeMem(req, res) {
                 await Post.findByIdAndUpdate(req.body.pid, { $pull: { joined_users: req.body.uid }})
                 noti = await Notification.create({
                     success: true,
-                    content: "You have left the post!",
+                    content: "Bạn đã rời khỏi nhóm!",
                     post: req.body.pid
                 })
                 await User.findByIdAndUpdate(req.body.uid, { $push: { notification: noti._id }})
@@ -402,7 +407,7 @@ async function removeMem(req, res) {
                 await Post.findByIdAndUpdate(req.body.pid, { $pull: { joined_users: req.body.uid }})
                 noti = await Notification.create({
                     success: true,
-                    content: `User ${UserInfo.name} have removed you from the post!`,
+                    content: `${UserInfo.name} đã xóa bạn khỏi nhóm của họ`,
                     post: req.body.pid
                 })
 
