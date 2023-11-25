@@ -155,7 +155,8 @@ async function createPost(req, res) {
             author: postOwner._id,
             title: req.body.title,
             content: req.body.content,
-            tags: req.body.tags
+            tags: req.body.tags,
+            maxuser: req.body.maxuser
         });
 
         return res.status(200).json({
