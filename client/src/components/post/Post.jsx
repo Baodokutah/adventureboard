@@ -3,10 +3,11 @@ import { Comment } from '../comment.js';
 import { TextField } from '@mui/material';
 import './post.css';
 
-export function InPost({ title, tags, content, comments}) {
+export function InPost({ title, tags, content, comments, author, date}) {
   return (
     <div className='postContentDisplay'>
-      <h3>{title}</h3>
+      <h5 style={{fontWeight: 'normal'}}>{author}・{date}</h5>
+      <h2>{title}</h2>
       <div style={{ display: 'flex', flexDirection: 'row', gap: '25px' }}>
         {tags && tags.map((tag, index) => (
           <div key={index} className='tag'>
@@ -38,7 +39,7 @@ export function InPost({ title, tags, content, comments}) {
   );
 }
 
-export function PostTitle({ title = null, tags}) {
+export function PostTitle({ title = null, tags, date, author}) {
   if (title == null) {
     return <div className='PostDisplay'><div className='nullTitleBox'></div></div>;
   } else {
@@ -46,12 +47,14 @@ export function PostTitle({ title = null, tags}) {
       <div className='PostDisplay'>
       <div className='postTitleBox'>
         <h3>{title}</h3>
-        <div style={{ display: 'flex', flexDirection: 'row', gap: '25px' }}>
+        <div style={{ display: 'flex', gap: '25px', justifyContent: 'flex-start'}}>
           {tags.map((tag, index) => (
             <div key={index} className='tag'>
               {tag}
             </div>
+            
           ))}
+          <h4 style={{fontWeight: 'normal', marginLeft: 'auto'}}>{author}・{date}</h4>
         </div>
       </div>
       </div>

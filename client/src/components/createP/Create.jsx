@@ -1,7 +1,6 @@
 import './create.css'
-import {Confirm, Success, Filter, newTags} from '../popup/Popup';
+import { Success, Filter, newTags} from '../popup/Popup';
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -10,7 +9,6 @@ function Create()
 {
     const [openModal, setOpenModal] = useState(false);
     const [openFilter, setOpenFilter] = useState(false);
-    const location = useLocation();
     const currentPage = localStorage.getItem('currentPage') || '404';
     return(
         <div className="create">
@@ -25,6 +23,7 @@ function Create()
             autoComplete="off"
             >
             <TextField
+                required
                 id="PostTilte"
                 label="Tiêu đề"
                 multiline
@@ -76,7 +75,7 @@ function Create()
                         shrink: true,
                     }}
                     inputProps={{
-                        min: 0, // Set the minimum value to 0
+                        min: 1, // Set the minimum value to 0
                     }}
                     size='small'
                     sx={{
