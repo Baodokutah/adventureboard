@@ -11,7 +11,7 @@ const Notification = require("../models/Notification");
 const userCtl = require('../controllers/userController');
 
 router.get('/:uid', userCtl.getUserPosts);
-router.get('/:token', userCtl.getUserInfo);
+router.post('/login', userCtl.getUserInfo);
 
 // testing purpose only
 router.get('/', (req, res) => {
