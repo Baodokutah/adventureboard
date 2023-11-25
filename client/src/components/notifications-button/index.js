@@ -49,7 +49,7 @@ export const NotificationsButton = () => {
             color="error"
             badgeContent={unread}
           >
-            <SvgIcon>
+            <SvgIcon style={{fontSize:'xx-large'}}>
               <Bell01Icon />
             </SvgIcon>
           </Badge>

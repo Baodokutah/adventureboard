@@ -1,6 +1,10 @@
 import React from 'react';
 import { Comment } from '../comment.js';
-import { TextField } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import Input from '@mui/material/Input';
+import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import FormControl from '@mui/material/FormControl';
 import './post.css';
 
 export function InPost({ title, tags, content, comments, author, date}) {
@@ -8,6 +12,14 @@ export function InPost({ title, tags, content, comments, author, date}) {
     <div className='postContentDisplay'>
       <h5 style={{fontWeight: 'normal'}}>{author}・{date}</h5>
       <h2>{title}</h2>
+      <div className='imgLoc'>
+        <IconButton aria-label='toggle visibility'>
+          <img alt='editButt' style={{width:'45px', height:'45px'}} src={process.env.PUBLIC_URL + '/assets/edit-svgrepo-com.svg'}/>
+        </IconButton>
+        <IconButton aria-label='toggle visibility'>
+          <img alt='editButt' style={{width:'48px', height:'48px'}} src={process.env.PUBLIC_URL + '/assets/delete-svgrepo-com.svg'}/>
+        </IconButton>
+      </div>
       <div style={{ display: 'flex', flexDirection: 'row', gap: '25px' }}>
         {tags && tags.map((tag, index) => (
           <div key={index} className='tag'>
@@ -18,16 +30,21 @@ export function InPost({ title, tags, content, comments, author, date}) {
       <div className='content'>{content}</div>
       <div className='cmt'>
         <div className='cmtInput'>
-          <TextField
-                id="PostDesc"
-                label=""
-                multiline
-                rows={1}
-                defaultValue=""
-                type='string'
-                sx={{width:'70dvw'}}
-            />
-          <img alt="cmt" src='https://www.svgrepo.com/show/453320/comment.svg' />
+        <FormControl sx={{ m: 1, width: '100ch' }} variant="standard">
+          <InputLabel htmlFor="standard-adornment-password">Bình luận</InputLabel>
+          <Input
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  sx={{right:'-0.48vw', position:'relative'}}
+                  aria-label="toggle visibility"
+                >
+                  <img style={{ width: '30px', height: '30px' }} alt='sendButt' src={process.env.PUBLIC_URL + '/assets/send-alt-1-svgrepo-com.svg'} />
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+          </FormControl>
         </div>
         <div className="ui comments">
           {comments && comments.map((comment) => (
@@ -52,7 +69,7 @@ export function PostTitle({ title = null, tags, date, author}) {
             <div key={index} className='tag'>
               {tag}
             </div>
-            
+
           ))}
           <h4 style={{fontWeight: 'normal', marginLeft: 'auto'}}>{author}・{date}</h4>
         </div>
