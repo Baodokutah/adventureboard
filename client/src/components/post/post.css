@@ -42,9 +42,9 @@
 .PostDisplay{
     display: flex;
     flex-direction: column;
-    min-width: 66.52%;
+    min-width: 66.52vw;
     /* height: 587px; */
-    gap: 3.4%;
+    gap: 3.4vh;
     width: 70vw; /* Adjusted from min-width */
     max-width: 100%; /* Add a max-width to contain within the viewport */
     /* flex-wrap: wrap; */
@@ -61,23 +61,30 @@
 }
 
 .inPostDisplay{
-    top: 2.34%;
-    left: 5.2%;
+    top: 2.34vh;
+    left: 5.2vw;
     position: relative;
-    width: 74.5%;
-    min-height: 80%;
+    width: 74.5vw;
+    min-height: 80vh;
     white-space: pre-wrap;
 }
 
 .postContentDisplay{
     display: flex;
     flex-direction: column;
-    min-height: 80.16%;
+    min-height: 81vh;
     gap: 2vh;
     background-color: white;
     padding: 16px;
     white-space: pre-wrap;
     border-radius: 11px;
+}
+
+.postContentDisplay .imgLoc{
+  right: 10ch;
+  position: absolute;
+  gap: 0ch;
+  display: flex;
 }
 
 .cmt{

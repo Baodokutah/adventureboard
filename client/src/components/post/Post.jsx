@@ -12,6 +12,14 @@ export function InPost({ title, tags, content, comments, author, date}) {
     <div className='postContentDisplay'>
       <h5 style={{fontWeight: 'normal'}}>{author}・{date}</h5>
       <h2>{title}</h2>
+      <div className='imgLoc'>
+        <IconButton aria-label='toggle visibility'>
+          <img alt='editButt' style={{width:'45px', height:'45px'}} src={process.env.PUBLIC_URL + '/assets/edit-svgrepo-com.svg'}/>
+        </IconButton>
+        <IconButton aria-label='toggle visibility'>
+          <img alt='editButt' style={{width:'48px', height:'48px'}} src={process.env.PUBLIC_URL + '/assets/delete-svgrepo-com.svg'}/>
+        </IconButton>
+      </div>
       <div style={{ display: 'flex', flexDirection: 'row', gap: '25px' }}>
         {tags && tags.map((tag, index) => (
           <div key={index} className='tag'>
