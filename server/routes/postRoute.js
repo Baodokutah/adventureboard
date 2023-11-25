@@ -10,6 +10,7 @@ router.get('/:pid', postCtl.getPostById);
 router.post('/create', postCtl.createPost);
 router.post('/delete', postCtl.deletePost);
 router.post('/:type/search', postCtl.getPostFromSearch);
+router.post('/join', postCtl.join);
 
 router.post('/removeMem', postCtl.removeMem);
 

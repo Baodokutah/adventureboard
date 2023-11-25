@@ -251,7 +251,78 @@ async function deletePost(req, res) {
             message: 'Internal Server Error',
         })
     }
-}
+};
+
+// Join post
+async function join(req, res) {
+    try {
+        if (!req.body.pid || !isValidObjectId(req.body.pid) || !req.body.token) {
+            return res.status(400).json({
+                success: false,
+                message: "Bad Request"    
+            })
+        }
+        
+        let PostInfo;
+        try {
+            PostInfo = await Post.findById(req.body.pid, { joined_users: 1, author: 1 });
+            if (!PostInfo) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'Post doesn\'t exist!'
+                });
+            }
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: 'Internal Server Error'
+            });
+        }
+
+        let UserInfo;
+        try{
+            UserInfo = await User.findOne({ token: req.body.token }, { _id: 1 })
+            if (!UserInfo) {
+                return res.status(403).json({
+                    success: false,
+                    message: 'Invalid token!'
+                });
+            }
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: 'Internal Server Error'
+            });
+        }
+
+        if (PostInfo.joined_users.includes( UserInfo._id )) {
+            res.status(400).json({
+                success: false,
+                message: 'You have joined this post'
+            })
+        }
+        else {
+            await Post.findByIdAndUpdate(req.body.pid, { $push: { joined_users: UserInfo._id } })
+            user_join = await User.findById(UserInfo._id, { name: 1 })
+            noti = await Notification.create({
+                success: true,
+                content: `User ${user_join.name} have joined your post!`,
+                post: req.body.pid
+            })
+            await User.findByIdAndUpdate(PostInfo.author, { $push: { notification: noti } })
+            res.status(200).json({
+                success: true,
+                message: "Join post success!"
+            })
+        }
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Internal Server Error'
+        })
+    }
+};
 
 // Remove member
 async function removeMem(req, res) {
@@ -351,4 +422,4 @@ async function removeMem(req, res) {
     }
 };
 
-module.exports = { getAllCTXHPost, getAllGroupPost, getPostById, getPostFromSearch, createPost, updatePost, deletePost, removeMem }
+module.exports = { getAllCTXHPost, getAllGroupPost, getPostById, getPostFromSearch, createPost, updatePost, deletePost, join, removeMem }
