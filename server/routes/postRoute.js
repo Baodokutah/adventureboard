@@ -11,4 +11,6 @@ router.post('/create', postCtl.createPost);
 router.post('/delete', postCtl.deletePost);
 router.post('/:type/search', postCtl.getPostFromSearch);
 
+router.post('/removeMem', postCtl.removeMem);
+
 module.exports = router
