@@ -1,4 +1,5 @@
 const mongoose  = require("mongoose");
+const Int32 = require("mongoose-int32").loadType(mongoose);
 
 const PostSchema = new mongoose.Schema({
     types: {
@@ -30,7 +31,7 @@ const PostSchema = new mongoose.Schema({
         ref: 'User'
     }],
     maxuser: {
-        type: Number,
+        type: Int32,
         required: true,
     },
     comments: [{

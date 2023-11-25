@@ -1,4 +1,5 @@
 const { models, isValidObjectId } = require("mongoose");
+const Int32 = require("mongoose-int32").loadType(mongoose);
 const Post = require("../models/Post");
 const User = require("../models/User");
 const Notification = require("../models/Notification");
