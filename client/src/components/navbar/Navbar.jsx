@@ -12,6 +12,7 @@ import { NotificationsButton } from "../notifications-button";
 import { AccountButton } from "../account-button";
 import { withAuth } from "../../hooks/use-auth";
 import Skeleton from '@mui/material/Skeleton';
+import IconButton from '@mui/material/IconButton';
 
 function MUISwitch(props) {
 
@@ -23,7 +24,7 @@ function MUISwitch(props) {
   const handleChange = (event) => {
     navigate(event.target.checked ? '/study' : '/ctxh');
   };
-  
+
   const { getInputProps } = useSwitch({
     ...props,
     onChange: handleChange,
@@ -147,7 +148,7 @@ class Navbar extends Component{
     state = {
         clicked: false,
       };
-   
+
       static contextType = AuthContext;
 
 handleClick = () => {
@@ -198,15 +199,21 @@ return (
                         variant="outlined"
                     />
                     </li>
-                    <li><SearchIcon   fontSize="large"  /></li>
+                      <li>
+                      <IconButton
+                        aria-label="toggle visibility"
+                      >
+                        <SearchIcon fontSize="large" />
+                      </IconButton>
+                      </li>
                     <li>
                   <NotificationsButton/>
                     </li>
                     <li>
-                    {/* <Link to="/profile">    
+                    {/* <Link to="/profile">
                     <Avatar
                       alt="Avatar"
-                      fontSize="large" 
+                      fontSize="large"
                       src={process.env.PUBLIC_URL +'/assets/avatar/avatar.png'}
                         />
                       </Link> */}
@@ -216,12 +223,12 @@ return (
             ) : (
                     <div id="navhome" >
                     <li>
-                   <NotificationsButton />               
+                      <NotificationsButton />
                     </li>
                     <li>
                     {/* <Link to="/profile">
                     <Avatar
-                      fontSize="large" 
+                      fontSize="large"
                       alt="Avatar"
                       src={process.env.PUBLIC_URL +'/assets/avatar/avatar.png'}
                         />
