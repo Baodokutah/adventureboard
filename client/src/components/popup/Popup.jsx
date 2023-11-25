@@ -4,7 +4,6 @@ import  { useEffect } from 'react';
 import Chip from '@mui/material/Chip';
 // import { Link, useLocation } from 'react-router-dom';
 import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
@@ -25,7 +24,7 @@ export function Success({open, onClose,onCloseFrame, action, page, imgSrc}){
           }}
           className='modalContainer'
         >
-            <img src={imgSrc} />
+            <img alt='model' src={imgSrc} />
             <div className='contentModal'>
                 <h1>{action}</h1>
             </div>
@@ -55,7 +54,7 @@ export function Confirm({open, onClose, action, page, imgSrc}){
         }}
         className='modalContainer'
         >
-            <img src={imgSrc}/>
+            <img  alt='random bullshjt' src={imgSrc}/>
             <div className='contentModal'>
                 <h1>Xác nhận {action}</h1>
             </div>
@@ -87,7 +86,6 @@ export function Filter({open, onClose, page}){
     setAllTags((allTags) => {
         return allTags.map((tag1) => {
           if (tag1.type === 'ctxhCode' ) {
-            const elementsToCheck = [tag];
             const isElementPresent = tag1.tags.includes(tag);
             // If the element is not present, add it to the tags array
             if (!isElementPresent) {
@@ -128,7 +126,6 @@ export function Filter({open, onClose, page}){
       if (inputValue.trim()) {
         setChips([...chips, inputValue]);
 
-        const tag = {type:"classCode", value: inputValue}
         setAllTags((allTags) => {
             return allTags.map((tag) => {
               if (tag.type === 'classCode') {
@@ -185,7 +182,7 @@ export function Filter({open, onClose, page}){
             }}
             className='modalContainerFilter filterBigBox'
             >
-            <div className='filterBox' onClick={onClose}><h1>X</h1></div>
+            <div className='filterBox' onClick={onClose}><h1 style={{cursor: 'pointer'}}>X</h1></div>
 
             <h3>Cơ sở</h3>
             <div style={chipContainerStyle}>
@@ -262,7 +259,7 @@ export function Filter({open, onClose, page}){
             }}
             className='modalContainerFilter filterBigBox'
             >
-        <div className='filterBox' onClick={onClose}><h1>X</h1></div>
+        <div className='filterBox' onClick={onClose}><h1 style={{cursor: 'pointer'}}>X</h1></div>
             <h3>Mã môn</h3>
             <div className='tagBox_Study'>
               <FormControl fullWidth>
