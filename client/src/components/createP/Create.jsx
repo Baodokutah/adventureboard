@@ -4,12 +4,37 @@ import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import axios from 'axios';
 
 function Create()
 {
+
     const [openModal, setOpenModal] = useState(false);
     const [openFilter, setOpenFilter] = useState(false);
     const currentPage = localStorage.getItem('currentPage') || '404';
+
+    // Define states for each input field
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [tags, setTags] = useState([]);
+    const [quantity, setQuantity] = useState(0);
+
+    const handleSubmit = async () => {
+        const postData = {
+            type: quantity,
+            title: title,
+            content: description,
+            tags: tags
+        };
+
+        try {
+            const response = await axios.post('http://your-backend-endpoint.com', postData);
+            console.log(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     return(
         <div className="create">
             <Box
@@ -24,11 +49,12 @@ function Create()
             >
             <TextField
                 required
-                id="PostTilte"
+                id="PostTitle"
                 label="Tiêu đề"
                 multiline
                 rows={1}
-                defaultValue=""
+                value={title} // Set the value to the state
+                onChange={(e) => setTitle(e.target.value)} // Update the state when input changes
                 type='string'
                 color="info"
                 sx={{width:'70dvw'}}
@@ -38,7 +64,8 @@ function Create()
                 label="Mô tả (không bắt buộc)"
                 multiline
                 rows={11}
-                defaultValue=""
+                value={description} // Set the value to the state
+                onChange={(e) => setDescription(e.target.value)} // Update the state when input changes
                 type='string'
                 sx={{width:'70dvw'}}
             />
@@ -71,6 +98,8 @@ function Create()
                 <TextField
                     id="NumOfMemPost"
                     type="number"
+                    value={quantity} // Set the value to the state
+                    onChange={(e) => setQuantity(e.target.value)} // Update the state when input changes
                     InputLabelProps={{
                         shrink: true,
                     }}
@@ -103,7 +132,10 @@ function Create()
                     fontSize: '2.2vh'
                     }}
                     variant="Đăng"
-                    onClick={() => setOpenModal(true)}>
+                    onClick={() => {
+                        setOpenModal(true);
+                        handleSubmit();
+                    }}>
                     Đăng
                 </Button>
                 <Success

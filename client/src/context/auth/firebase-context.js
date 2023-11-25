@@ -55,10 +55,30 @@ export const AuthProvider = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [open, setOpen] = useState(false);
 
-  const handleAuthStateChanged = useCallback((user) => {
+  const handleAuthStateChanged = useCallback(async (user) => {
     if (user) {
+      await user.reload();
+
       // Check if the email ends with "@hcmut.edu.vn"
       if (user.email.endsWith("@hcmut.edu.vn")) {
+        // Send user data to backend
+        const response = await fetch('http://localhost:6969/api/user/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: user.displayName,
+            mail: user.email,
+            avatar: user.photoURL ,
+            token: user.uid ,
+          }),
+        });
+
+        const data = await response.json();
+        // Handle response data...
+        console.log(data);
+
         dispatch({
           type: ActionType.AUTH_STATE_CHANGED,
           payload: {
