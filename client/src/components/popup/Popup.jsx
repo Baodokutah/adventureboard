@@ -1,8 +1,6 @@
 import {useNavigate } from 'react-router-dom';
 import React, {useState} from 'react';
-import  { useEffect } from 'react';
 import Chip from '@mui/material/Chip';
-// import { Link, useLocation } from 'react-router-dom';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -71,10 +69,7 @@ export function Confirm({open, onClose, action, page, imgSrc}){
     );
 }
 
-export var newTags = [];
-
-export function Filter({open, onClose, page}){
-    //all tags to send
+export function Filter({open, onClose, page, tags, setTags}){
     const [allTags, setAllTags] = useState([{type:"subjectCode", tags : []}, {type:"classCode", tags : []}
                                             , {type:"ctxhCode", tags : []}]);
 
@@ -82,39 +77,35 @@ export function Filter({open, onClose, page}){
     //ctxh
     const handleClickTag = (tag) => {
     setSelectedTag(prevState => ({...prevState, [tag]: !prevState[tag]}));
-    //   console.log(tag);
     setAllTags((allTags) => {
-        return allTags.map((tag1) => {
+        const updatedTags = allTags.map((tag1) => {
           if (tag1.type === 'ctxhCode' ) {
             const isElementPresent = tag1.tags.includes(tag);
-            // If the element is not present, add it to the tags array
             if (!isElementPresent) {
                 return { ...tag1, tags: [...tag1.tags, tag] };
             } else {
-                // If the element is already present, remove it from the tags array
                 return { ...tag1, tags: tag1.tags.filter((element) => element !== tag) };
             }
           }
-          // Otherwise, keep the tag unchanged
           return tag1;
         });
+        setTags(updatedTags.flatMap((tag) => tag.tags));
+        return updatedTags;
       });
     };
 
-    // Custom styles for the chip
     const chipStyle = {
-      width: '104px', // Fixed width for each chip
-      height: '23px', // Fixed height for each chip
-      margin: '4px 4px 4px 0', // Margin to space out the chips
-      fontSize: '0.75rem', // Adjust font size as needed
+      width: '104px',
+      height: '23px',
+      margin: '4px 4px 4px 0',
+      fontSize: '0.75rem',
     };
 
-    // Custom styles for the container of the chips
     const chipContainerStyle = {
       display: 'grid',
-      gridTemplateColumns: 'repeat(2, 1fr)', // Two columns layout
-      gap: '8px', // Space between chips
-      marginBottom: '16px', // Space below each row of chips
+      gridTemplateColumns: 'repeat(2, 1fr)',
+      gap: '8px',
+      marginBottom: '16px',
       marginRight: '40px',
       fontWeight: 'bold',
     };
@@ -125,50 +116,41 @@ export function Filter({open, onClose, page}){
     const handleAddChip = () => {
       if (inputValue.trim()) {
         setChips([...chips, inputValue]);
-
         setAllTags((allTags) => {
-            return allTags.map((tag) => {
+            const updatedTags = allTags.map((tag) => {
               if (tag.type === 'classCode') {
-                // If the tag has the same type, update the tags array
                 return { ...tag, tags: [...tag.tags, inputValue] };
               }
-              // Otherwise, keep the tag unchanged
               return tag;
             });
+            setTags(updatedTags.flatMap((tag) => tag.tags));
+            return updatedTags;
           });
         setInputValue('');
       }
     };
     const handleDeleteChip = (chipToDelete) => {
       setChips((chips) => chips.filter((chip) => chip !== chipToDelete));
-    //   setAllTags((allTags) => allTags.filter((tag) => tag.value !== chipToDelete));
-
       setAllTags((allTags) => {
-        return allTags.map((tag) => {
+        const updatedTags = allTags.map((tag) => {
           if (tag.type === 'classCode') {
-            // If the tag has the same type, update the tags array
             return { ...tag, tags: tag.tags.filter((tagValue) => tagValue !== chipToDelete) };
           }
-          // Otherwise, keep the tag unchanged
           return tag;
         });
+        setTags(updatedTags.flatMap((tag) => tag.tags));
+        return updatedTags;
       });
     };
 
-    const [subjectSelect, setSubjectSelect] = useState('');
-    // console.log(page);
-    //use eff
-    useEffect(() => {}, [allTags]);
-    ///////
+    const [subjectSelect, setSubjectSelect] = useState({});
     const handleSelectSubject = (event) => {
         setSubjectSelect(event.target.value);
         const tag = {type:"subjectCode", tags: [event.target.value]};
         const filteredTags = allTags.filter((tag) => tag.type !== 'subjectCode');
         setAllTags([...filteredTags,tag]);
+        setTags([...filteredTags,tag].flatMap((tag) => tag.tags));
     }
-    //lul merger lien tuc
-    newTags = allTags.flatMap((tag) => tag.tags);
-    // console.log(newTags);
 
     if (!open) return null;
 
@@ -263,7 +245,6 @@ export function Filter({open, onClose, page}){
             <h3>Mã môn</h3>
             <div className='tagBox_Study'>
               <FormControl fullWidth>
-                {/* <InputLabel id="demo-simple-select-label"></InputLabel> */}
                 <Select
                 placeholder='Chọn mã môn học'
                   labelId="simple-select-class-code-label"
@@ -345,14 +326,3 @@ export function Filter({open, onClose, page}){
     );
 }
 }
-
-
-// function PopupButton({open, onClose, action, page}){
-//     console.log('pepedump')
-//     if (!open) return null;
-//     return(
-//         <Success open={open} onClose={onClose} action={action} page={page}/>
-//     );
-//   };
-
-// export default PopupButton

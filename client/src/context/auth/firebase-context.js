@@ -77,13 +77,17 @@ export const AuthProvider = (props) => {
 
         const data = await response.json();
         // Handle response data...
-        console.log(data);
+        let userId;
+        if (data && data.User) {
+          userId = data.User._id;
+        }
 
         dispatch({
           type: ActionType.AUTH_STATE_CHANGED,
           payload: {
             isAuthenticated: true,
             user: {
+              _id: userId || '69',
               id: user.uid || '0',
               avatar: user.photoURL || undefined,
               email: user.email,

@@ -3,9 +3,8 @@ import { formatDistanceToNowStrict } from 'date-fns';
 import { Avatar, Box, Link, Stack, Typography } from '@mui/material';
 
 export const Comment = (props) => {
-  const { id, avatar: authorAvatar, author: authorName, timestamp: createdAt, text: message, ...other } = props;
-
-  const ago = formatDistanceToNowStrict(createdAt);
+  const { _id: id, author, content: message, date: createdAt, ...other } = props;
+  const ago = formatDistanceToNowStrict(new Date(createdAt));
 
   return (
     <Stack
@@ -15,8 +14,8 @@ export const Comment = (props) => {
       {...other}>
       <Avatar
         component="a"
-        href="#"
-        src={authorAvatar}
+        href={`/user/${author._id}`}
+        src={author.avatar}
       />
         <Stack
       alignItems="flex-start"
@@ -38,11 +37,11 @@ export const Comment = (props) => {
         >
           <Link
             color="text.primary"
-            href="#"
+            href={`/user/${author._id}`}
             underline="hover" 
             variant="subtitle2"
           >
-            {authorName}
+            {author.name}
           </Link>
           <Box sx={{ flexGrow: 1 }} />
           <Typography
@@ -76,9 +75,8 @@ export const Comment = (props) => {
 };
 
 Comment.propTypes = {
-  id: PropTypes.number.isRequired,
-  avatar: PropTypes.string.isRequired,
-  author: PropTypes.string.isRequired,
-  timestamp: PropTypes.number.isRequired,
-  text: PropTypes.string.isRequired
+  _id: PropTypes.string.isRequired,
+  author: PropTypes.object.isRequired,
+  content: PropTypes.string.isRequired,
+  date: PropTypes.string.isRequired
 };

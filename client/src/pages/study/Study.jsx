@@ -13,6 +13,11 @@ function Study() {
     const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
     const [postContent, setPostContent] = useState('');
+    const [triggerUpdate, setTriggerUpdate] = useState(false);
+
+    const handleNewComment = () => {
+      setTriggerUpdate(!triggerUpdate);
+    };
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -39,7 +44,7 @@ function Study() {
           if (id) {
             fetchPostContent();
           }
-        }, [id]);
+        }, [id, triggerUpdate]);
       
 
 
@@ -64,7 +69,7 @@ function Study() {
             {id ? (
                 
               <div className='Inpost'>
-                <InPost {...getPostById(id)} content={postContent.content} date={readableDate} author={postContent && postContent.author ? postContent.author.name : ''} comments={getCommentsByPostId("1")} />
+              <InPost {...getPostById(id)} title={postContent.title} postId={id} content={postContent.content} date={readableDate} author={postContent && postContent.author ? postContent.author.name : ''} comments={postContent.comments} onNewComment={handleNewComment}/>
               </div>
              ) : (
                 <div className='Posts'>
