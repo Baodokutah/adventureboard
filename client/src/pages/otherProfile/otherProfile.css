@@ -1,0 +1,32 @@
+.profile {
+    background-color: #f3f3f3; /* Modify the color as needed */
+    display: flex;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    overflow: hidden;
+
+}
+
+
+
+Avatar {
+    height: 12px;
+}
+
+.pcard {
+    margin-top: 8vh;
+    margin-left: 3vw;
+}
+
+.profile > :first-child {
+    margin-top: 60px ;
+   }
+
+.PostDisplay {
+    width: 65vw;
+}
+
+.Posts {
+    width: 100%;
+  }

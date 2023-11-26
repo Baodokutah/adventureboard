@@ -1,34 +1,36 @@
 import './create.css'
-import { Success, Filter, newTags} from '../popup/Popup';
+import { Success, Filter } from '../popup/Popup';
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import axios from 'axios';
-
-function Create()
+import { useMockedUser } from '../../hooks/use-mocked-user';
+function Create({ tags, setTags })
 {
 
     const [openModal, setOpenModal] = useState(false);
     const [openFilter, setOpenFilter] = useState(false);
     const currentPage = localStorage.getItem('currentPage') || '404';
-
     // Define states for each input field
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [tags, setTags] = useState([]);
     const [quantity, setQuantity] = useState(0);
 
+    const user = useMockedUser();
+
     const handleSubmit = async () => {
+
         const postData = {
-            type: quantity,
+            type: (currentPage === 'study') ? 'Group' : 'CTXH',
             title: title,
             content: description,
-            tags: tags
+            tags: tags,
+            maxuser: quantity,
+            token: user.id, 
         };
-
         try {
-            const response = await axios.post('http://your-backend-endpoint.com', postData);
+            const response = await axios.post('http://localhost:6969/api/post/create', postData);
             console.log(response.data);
         } catch (error) {
             console.error(error);
@@ -72,12 +74,11 @@ function Create()
             </Box>
 
             <div style={{display:"flex", flexDirection:"row", gap:'1.7%'}}>
-                {newTags.map((tags, index) => (
+                {tags.map((tag, index) => (
                     <div key={index}  className='tag' style={{width: "7.88%", height: "3.36%"}}>
-                        {tags}
+                        {tag}
                     </div>
                 ))}
-                {/* <button onClick={() => setOpenFilter(true)} className='addTagButton'>+</button> */}
                 <Button
                 sx={{border:"1px solid black",
                     borderRadius: 11,
@@ -92,6 +93,8 @@ function Create()
                 open={openFilter}
                 onClose={() => setOpenFilter(false)}
                 page={currentPage}
+                tags={tags}
+                setTags={setTags}
                 />
             </div>
             <div className='quantity'>Số lượng:
@@ -99,7 +102,7 @@ function Create()
                     id="NumOfMemPost"
                     type="number"
                     value={quantity} // Set the value to the state
-                    onChange={(e) => setQuantity(e.target.value)} // Update the state when input changes
+                    onChange={(e) => setQuantity(parseInt(e.target.value))} // Update the state when input changes
                     InputLabelProps={{
                         shrink: true,
                     }}
@@ -116,9 +119,6 @@ function Create()
                 />
             </div>
             <div>
-                {/* <button onClick={() => setOpenModal(true)} className='postButton'>
-                    Đăng
-                </button> */}
                 <Button
                 sx={{border:"1px solid black",
                     borderRadius: 11,
@@ -146,7 +146,6 @@ function Create()
                 imgSrc={"https://www.svgrepo.com/show/522783/check-circle.svg"}
                 />
             </div>
-        <Filter/>
         </div>
     );
 }

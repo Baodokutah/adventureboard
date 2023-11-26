@@ -55,7 +55,6 @@ async function getPostById(req, res) {
         post = await Post.findById(req.params.pid)
         .populate({
             path: 'author',
-            select: '-token' 
         }).populate({
             path: 'joined_users',
             select: '-token'

@@ -8,9 +8,9 @@ import Navbar from "./components/navbar/Navbar";
 import CreatePost from "./pages/createPost/createPost";
 import { AuthProvider } from "./context/auth/firebase-context";
 // import InPost from "./components/post/Post";
+import OtherProfile from "./pages/otherProfile/otherProfile";
 
 function App() {
-
   return (
     <>
       <AuthProvider>
@@ -24,7 +24,8 @@ function App() {
             <Route path="/study/post/:id" element={<PostPage />} />
           </Route>
           <Route path="/create" element={<CreatePost />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<Profile/>   }/>       
+          <Route path="/user/:id" element={<OtherProfile/>}/>
         </Routes>
       </AuthProvider>
     </>
@@ -32,4 +33,3 @@ function App() {
 }
 
 export default App;
-

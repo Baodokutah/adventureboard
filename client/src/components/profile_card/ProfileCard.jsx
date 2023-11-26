@@ -1,10 +1,8 @@
 import Avatar from '@mui/material/Avatar';
 import "./profileCard.css"
-import { useMockedUser } from '../../hooks/use-mocked-user';
 import Skeleton from '@mui/material/Skeleton';
 
-export default function ProfileCard() {
-  const user = useMockedUser();
+export default function ProfileCard({user}) {
   if (!user) {
     return (
       <div>
@@ -13,7 +11,6 @@ export default function ProfileCard() {
       </div>
     );  
   }
-
   return (
     <div className='pcard'>
     <Avatar

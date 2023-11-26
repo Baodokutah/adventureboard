@@ -56,7 +56,8 @@ export default function Card() {
                     bgcolor: '#e3b598', // Change this to your desired hover color
                   },
                   fontFamily:"Noto Sans",
-                  bottom:"1.5ch"
+                  bottom:"1.5ch",
+                  whiteSpace: 'nowrap' // Add this lin
                 }}
                 variant="contained"
                 startIcon={<SchoolIcon style={{fontSize:"xx-large"}}/>}

@@ -1,13 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Comment } from '../comment.js';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
+import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
+import SendIcon from '@mui/icons-material/Send';
+import { useMockedUser } from '../../hooks/use-mocked-user.js';
 import './post.css';
+import axios from 'axios'; 
 
-export function InPost({ title, tags, content, comments, author, date}) {
+export function InPost({ title, tags, content, comments, author, date, postId, onNewComment}) {
+  const [comment, setComment] = useState(''); // Add this state variable
+
+  const user = useMockedUser()
+  const handleCommentSubmit = async () => {
+    const commentData = {
+      token: user.id,
+      content: comment,
+      pid: postId,
+    };
+  
+    try {
+      const response = await axios.post('http://localhost:6969/api/comment/create', commentData);
+      console.log(response.data);
+      setComment(''); 
+      onNewComment();
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <div className='postContentDisplay'>
       <h5 style={{fontWeight: 'normal'}}>{author}・{date}</h5>
@@ -33,6 +58,10 @@ export function InPost({ title, tags, content, comments, author, date}) {
         <FormControl sx={{ m: 1, width: '100ch' }} variant="standard">
           <InputLabel htmlFor="standard-adornment-password">Bình luận</InputLabel>
           <Input
+            multiline
+            required
+            value={comment} // Set the value to the state
+            onChange={(e) => setComment(e.target.value)} // Update the state when input changes
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
@@ -46,11 +75,28 @@ export function InPost({ title, tags, content, comments, author, date}) {
           />
           </FormControl>
         </div>
-        <div className="ui comments">
-          {comments && comments.map((comment) => (
-            <Comment key={comment.id} {...comment} />
-          ))}
+        {/* Display the buttons when the comment input field is not empty */}
+        {comment && (
+                <div>
+          <Button 
+            onClick={() => setComment('')} variant="outlined" startIcon={<DeleteIcon />} 
+            sx={{ borderRadius: 50, width: '80px', height: '30px', marginRight: '10px' }}
+          >
+            Hủy
+          </Button>
+          <Button 
+            onClick={handleCommentSubmit} variant="contained" endIcon={<SendIcon/>}
+            sx={{ borderRadius: 50, width: '80px', height: '30px' }}
+          >
+            Đăng
+          </Button>
         </div>
+        )}
+        <div className="ui comments">
+            {comments && comments.map((comment) => (
+              <Comment key={comment._id} {...comment} />
+            ))}
+          </div>
       </div>
     </div>
   );

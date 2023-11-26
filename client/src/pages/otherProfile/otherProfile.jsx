@@ -3,13 +3,14 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import ProfileCard from "../../components/profile_card/ProfileCard";
-import "./profile.css";
+import "./otherProfile.css";
 import { PostTitle } from '../../components/post/Post';
-import { useMockedUser } from '../../hooks/use-mocked-user';
+import { useParams } from 'react-router-dom';
 
-export default function Profile() {
-  const user = useMockedUser();
-  const id = user._id;
+export default function OtherProfile() {
+    const { id } = useParams();
+
+  console.log(id);
   const [userData, setUserData] = useState(null);
   const [userPosts, setUserPosts] = useState([]);
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ export default function Profile() {
 
     fetchUserData();
   }, [id]);
+
 
   if (!userData) {
     return <div>Loading...</div>;
