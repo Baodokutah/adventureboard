@@ -19,18 +19,6 @@ const notiRoute = require('./routes/notiRoute');
 
 dotenv.config();
 
-mongoose.connect(process.env.MONGO_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-  .then(() => {
-    console.log('Successfully connected to MongoDB');
-  })
-  .catch((err) => {
-    console.error('Failed to connect to MongoDB', err);
-  });
-
-
 //middleware
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }))

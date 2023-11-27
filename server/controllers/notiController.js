@@ -21,10 +21,10 @@ async function sendNoti(req, res) {
                     message: 'Post doesn\'t exist!'
                 });
             }
-        } catch (error) {
+        } catch (err) {
             return res.status(500).json({
                 success: false,
-                message: 'Internal Server Error'
+                message: err.message
             });
         }
 
@@ -54,10 +54,10 @@ async function sendNoti(req, res) {
                 message: 'Invalid token!'
             });
         }
-    } catch (error) {
+    } catch (err) {
         return res.status(500).json({
             success: false,
-            message: 'Internal Server Error'
+            message: err.message
         })
     }
 };
@@ -79,10 +79,10 @@ async function removeNoti(req, res) {
                         success: false,
                         message: 'Notification doesn\'t exist!'
                     });
-        } catch (error) {
+        } catch (err) {
             return res.status(500).json({
                 success: false,
-                message: 'Internal Server Error'
+                message: err.message
             });
         }
 
@@ -91,10 +91,10 @@ async function removeNoti(req, res) {
             success: true,
             message: "Remove notification success!"
         })
-    } catch (error) {
+    } catch (err) {
         return res.status(500).json({
             success: false,
-            message: 'Internal Server Error'
+            message: err.message
         })
     }
 };
