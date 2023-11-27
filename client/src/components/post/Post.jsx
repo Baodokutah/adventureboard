@@ -10,7 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
 import { useMockedUser } from '../../hooks/use-mocked-user.js';
 import './post.css';
-import axios from 'axios'; 
+import axios from 'axios';
 
 export function InPost({ title, tags, content, comments, author, date, postId, onNewComment}) {
   const [comment, setComment] = useState(''); // Add this state variable
@@ -22,11 +22,11 @@ export function InPost({ title, tags, content, comments, author, date, postId, o
       content: comment,
       pid: postId,
     };
-  
+
     try {
       const response = await axios.post('http://localhost:6969/api/comment/create', commentData);
       console.log(response.data);
-      setComment(''); 
+      setComment('');
       onNewComment();
 
     } catch (error) {
@@ -64,12 +64,15 @@ export function InPost({ title, tags, content, comments, author, date, postId, o
             onChange={(e) => setComment(e.target.value)} // Update the state when input changes
             endAdornment={
               <InputAdornment position="end">
-                <IconButton
-                  sx={{right:'-0.48vw', position:'relative'}}
-                  aria-label="toggle visibility"
-                >
-                  <img style={{ width: '30px', height: '30px' }} alt='sendButt' src={process.env.PUBLIC_URL + '/assets/send-alt-1-svgrepo-com.svg'} />
-                </IconButton>
+                  <IconButton
+                    sx={{
+                      right:'-0.48vw',
+                      position:'relative'
+                    }}
+                    aria-label="toggle visibility"
+                  >
+                    <img style={{ width: '30px', height: '30px' }} alt='sendButt' src={process.env.PUBLIC_URL + '/assets/comment-material-2-svgrepo-com.svg'} />
+                  </IconButton>
               </InputAdornment>
             }
           />
@@ -78,13 +81,13 @@ export function InPost({ title, tags, content, comments, author, date, postId, o
         {/* Display the buttons when the comment input field is not empty */}
         {comment && (
                 <div>
-          <Button 
-            onClick={() => setComment('')} variant="outlined" startIcon={<DeleteIcon />} 
+          <Button
+            onClick={() => setComment('')} variant="outlined" startIcon={<DeleteIcon />}
             sx={{ borderRadius: 50, width: '80px', height: '30px', marginRight: '10px' }}
           >
             Hủy
           </Button>
-          <Button 
+          <Button
             onClick={handleCommentSubmit} variant="contained" endIcon={<SendIcon/>}
             sx={{ borderRadius: 50, width: '80px', height: '30px' }}
           >
