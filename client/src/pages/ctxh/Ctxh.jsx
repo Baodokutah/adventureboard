@@ -78,7 +78,7 @@ const filteredPosts = posts.filter((post) =>
 
     return (
         <div className='componentDisplay'>
-            {id ? <ListOfMem userN={'getUserNameHere'} maxMem={10}/> : <FilterBox onTagsChange={handleTagsChange} />}
+            {id ? <ListOfMem userN={'getUserNameHere'} maxMem={10} currPage={`post/${id}`}/> : <FilterBox onTagsChange={handleTagsChange} />}
             {id ? (
 
               <div className='Inpost'>

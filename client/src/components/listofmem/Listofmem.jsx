@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@mui/material';
 import Frame from '../send-noti/Frame';
+import { Confirm } from '../popup/Popup';
 import './listofmem.css';
 
-export default function ListOfMem({userN, maxMem}) {
+export default function ListOfMem({userN, maxMem, currPage}) {
+  const [openModal, setOpenModal] = useState(false);
   const [buttonClickedJoin, setButtonClickedJoin] = useState(false);
   const [isFrameOpen, setFrameOpen] = useState(false);
   const [memberList, setMemberList] = useState(['Py Xẹt Mờ Píp In Sì Tồ','b','c','d','e','f','g','h','p']);
@@ -52,7 +54,7 @@ export default function ListOfMem({userN, maxMem}) {
     return false;
   }
 
-  useEffect(() => {console.log(memberList)}, [memberList])
+  useEffect(() => {}, [memberList])
 
   return (
     <div id='listofmember' className='member'>
@@ -74,13 +76,22 @@ export default function ListOfMem({userN, maxMem}) {
                 <Button
                 variant='X'
                 onClick={() => {
-                  handleDeleteMem(mem)
+                  // handleDeleteMem(mem)
+                  setOpenModal(true)
+                  // console.log(openModal)
                 }}
                 sx={{borderRadius:"0%", height: '2ch', width: '1ch'}}
                 >
                 X
                 </Button>
               ) : null}
+              <Confirm
+                open={openModal}
+                onClose={() => {setOpenModal(false)}}
+                action={`xóa thành viên ${mem} ra khỏi nhóm`}
+                imgSrc={process.env.PUBLIC_URL + "/assets/button-circle-round-delete-x-svgrepo-com.svg"}
+                onConfirm={() => handleDeleteMem(mem)}
+              />
             </div>
           ))}
         </div>
