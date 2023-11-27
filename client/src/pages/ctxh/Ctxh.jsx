@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import FilterBox from '../../components/filter/Filter';
 import { PostTitle, InPost } from '../../components/post/Post';
-import { Comment } from '../../dummyData';
 import { useNavigate, useParams } from 'react-router-dom';
 import ListOfMem from '../../components/listofmem/Listofmem';
 import { format } from 'date-fns';
 import "./ctxh.css"
+import { useContext } from 'react';
+import { SearchContext } from '../../context/search-context';
 
 function CTXH() {
     const { id } = useParams(); 
@@ -14,9 +15,15 @@ function CTXH() {
     const [posts, setPosts] = useState([]);
     const [postContent, setPostContent] = useState('');
     const [triggerUpdate, setTriggerUpdate] = useState(false);
+    const [selectedTags, setSelectedTags] = useState([]);
+    const { searchQuery = '' } = useContext(SearchContext);
 
     const handleNewComment = () => {
       setTriggerUpdate(!triggerUpdate);
+    };
+
+    const handleTagsChange = (tags) => {
+      setSelectedTags(tags);
     };
 
     useEffect(() => {
@@ -31,27 +38,24 @@ function CTXH() {
         fetchPosts();
     }, []);
 
-        useEffect(() => {
-          const fetchPostContent = async () => {
-            try {
-              const response = await axios.get(`http://localhost:6969/api/post/${id}`);
-              setPostContent(response.data.Post);
-            } catch (error) {
-              console.error('Failed to fetch post content:', error);
-            }
-          };
+    useEffect(() => {
+      const fetchPostContent = async () => {
+        try {
+          const response = await axios.get(`http://localhost:6969/api/post/${id}`);
+          setPostContent(response.data.Post);
+        } catch (error) {
+          console.error('Failed to fetch post content:', error);
+        }
+      };
 
-          if (id) {
-            fetchPostContent();
-          }
-        }, [id, triggerUpdate]);
-      
-
-
+      if (id) {
+        fetchPostContent();
+      }
+    }, [id, triggerUpdate]);
 
     function getPostById(id) {
       return posts.find((post) => post._id === id);
-  }
+    }
 
     const handlePostClick = (postId) => {
         navigate(`/ctxh/post/${postId}`);
@@ -61,11 +65,20 @@ function CTXH() {
     if (postContent.date) {
       date = new Date(postContent.date);
       readableDate = format(date, 'dd-MM-yyyy HH:mm:ss');
-  }
+    }
+    
+const filteredPosts = posts.filter((post) =>
+  selectedTags.every((tag) => post.tags.includes(tag)) &&
+  (post.title?.toLowerCase().includes(String(searchQuery).toLowerCase()) ||
+  post.content?.toLowerCase().includes(String(searchQuery).toLowerCase()))
+);
+
+  console.log(posts.map(post => post.title));
+
 
     return (
         <div className='componentDisplay'>
-            {id ? <ListOfMem /> : <FilterBox />}        
+            {id ? <ListOfMem /> : <FilterBox onTagsChange={handleTagsChange} />}        
             {id ? (
                 
               <div className='Inpost'>
@@ -73,7 +86,7 @@ function CTXH() {
               </div>
              ) : (
                 <div className='Posts'>
-                    {posts.map((post) => {
+                  {filteredPosts.sort((a, b) => new Date(b.date) - new Date(a.date)).map((post) => {
                       const date = new Date(post.date);
                       const readableDate = format(date, 'dd-MM-yyyy');                      
                       return (
@@ -89,9 +102,5 @@ function CTXH() {
 }
 
 
-
-function getCommentsByPostId(id) {
-    return Comment.filter((comment) => comment.id && comment.id.toString() === id);
-}
 
 export default CTXH;

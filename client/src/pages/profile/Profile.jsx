@@ -6,10 +6,11 @@ import ProfileCard from "../../components/profile_card/ProfileCard";
 import "./profile.css";
 import { PostTitle } from '../../components/post/Post';
 import { useMockedUser } from '../../hooks/use-mocked-user';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function Profile() {
   const user = useMockedUser();
-  const id = user._id;
+  const id = user?._id;
   const [userData, setUserData] = useState(null);
   const [userPosts, setUserPosts] = useState([]);
   const navigate = useNavigate();
@@ -28,10 +29,12 @@ export default function Profile() {
   }, [id]);
 
   if (!userData) {
-    return <div>Loading...</div>;
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </div>
+    );
   }
-
-
 
   const handlePostClick = (postId) => {
     navigate(`/study/post/${postId}`);
@@ -41,7 +44,7 @@ export default function Profile() {
     <div className="profile">
     <ProfileCard user={userData} className="ProfileCard"/>
     <div className="Posts">
-    {userPosts.map((post) => {
+    {userPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((post) => {
                       const date = new Date(post.date);
                       const readableDate = format(date, 'dd-MM-yyyy');                      
                       return (

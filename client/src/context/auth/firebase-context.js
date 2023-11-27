@@ -1,4 +1,4 @@
-import { createContext, useCallback, useEffect, useReducer } from 'react';
+import { createContext, useCallback, useEffect, useReducer, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   getAuth,
@@ -11,7 +11,6 @@ import { firebaseApp } from '../../libs/firebase';
 import { Issuer } from '../../utils/auth';
 import Dialog from '@mui/material/Dialog';
 import Alert from '@mui/material/Alert';
-import { useState } from 'react';
 
 const auth = getAuth(firebaseApp);
 var ActionType;
@@ -54,6 +53,7 @@ export const AuthProvider = (props) => {
   const { children } = props;
   const [state, dispatch] = useReducer(reducer, initialState);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleAuthStateChanged = useCallback(async (user) => {
     if (user) {
@@ -77,6 +77,7 @@ export const AuthProvider = (props) => {
 
         const data = await response.json();
         // Handle response data...
+        console.log(data);
         let userId;
         if (data && data.User) {
           userId = data.User._id;
@@ -129,9 +130,15 @@ export const AuthProvider = (props) => {
     []);
 
   const signInWithGoogle = useCallback(async () => {
+    setLoading(true);
     const provider = new GoogleAuthProvider();
-
-    await signInWithPopup(auth, provider);
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   const _signOut = useCallback(async () => {
@@ -144,7 +151,8 @@ export const AuthProvider = (props) => {
         ...state,
         issuer: Issuer.Firebase,
         signInWithGoogle,
-        signOut: _signOut
+        signOut: _signOut,
+        loading
       }}
     >
      <Dialog

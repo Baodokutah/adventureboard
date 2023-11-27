@@ -1,9 +1,8 @@
-import { Component } from "react";
+import { Component, useContext } from "react";
 import "./navbar.css";
 import { Link } from "react-router-dom";
 import { styled } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
-import Input from '@mui/joy/Input';
 import clsx from 'clsx';
 import { useSwitch } from '@mui/base/useSwitch';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -13,7 +12,10 @@ import { AccountButton } from "../account-button";
 import { withAuth } from "../../hooks/use-auth";
 import Skeleton from '@mui/material/Skeleton';
 import IconButton from '@mui/material/IconButton';
+import { SearchContext, PostTitleContext, StudyPostTitleContext } from '../../context/search-context'; 
+import Autocomplete from '@mui/joy/Autocomplete';
 
+// Your Navbar component code...
 function MUISwitch(props) {
 
   const navigate = useNavigate();
@@ -141,7 +143,16 @@ export function withLocation(Component) {
   }
 }
 
+export function withPostTitles(Component) {
+  return function WrappedComponent(props) {
+    const location = useLocation();
+    const postTitles = useContext(
+      location.pathname.startsWith('/study') ? StudyPostTitleContext : PostTitleContext
+    );
 
+    return <Component {...props} postTitles={postTitles} />;
+  };
+}
 
 
 class Navbar extends Component{
@@ -150,22 +161,24 @@ class Navbar extends Component{
       };
 
       static contextType = AuthContext;
+      // static contextType = SearchContext;
 
 handleClick = () => {
     this.setState({clicked: !this.state.clicked})
 }
 handleLogin = async () => {
-    // This is where you might have actual login logic in a real application.
-    // For now, we'll just update the state to simulate a login.
     const { signInWithGoogle } = this.props;
     await signInWithGoogle();
   };
 
-
+  handleSearch = (event, newInputValue, setSearchQuery) => {
+    setSearchQuery(newInputValue);
+  };
 
 render(){
-  const { location } = this.props;
-  const { isAuthenticated, isLoading } = this.context;
+  const { location, postTitles = [] } = this.props;
+  const {  isLoading, loading } = this.context;
+  console.log(this.props.postTitles); // Add this line
 
   if (isLoading) {
     return (
@@ -178,87 +191,87 @@ render(){
   }
 
 return (
-    <>
-      <nav className={isAuthenticated ? "logged" : "nav"}>
-            <Link to="/">
-                <img src={process.env.PUBLIC_URL + '/assets/logo/logo.svg'} alt="logo" style={{width: '75px', height: '75px'}} />
-            </Link>
-            {isAuthenticated  ? (
-                <div>
-                <ul id="navbar" className={this.state.clicked ? "#navbar active" : "#navbar"}>
-                {location.pathname !== "/"  ? (
-                  <>
-                    <li id="switch">
-                      <MUISwitch  defaultChecked />
-                    </li>
-                    <li>
-                    <Input
+    <AuthContext.Consumer>
+        {authContext => (
+          <SearchContext.Consumer>
+            {searchContext => (
+              <>
+                <nav className={authContext.isAuthenticated ? "logged" : "nav"}>
+                  <Link to="/">
+                      <img src={process.env.PUBLIC_URL + '/assets/logo/logo.svg'} alt="logo" style={{width: '75px', height: '75px'}} />
+                  </Link>
+                  {authContext.isAuthenticated  ? (
+                      <div>
+                      <ul id="navbar" className={this.state.clicked ? "#navbar active" : "#navbar"}>
+                      {location.pathname !== "/"  ? (
+                        <>
+                          <li id="switch">
+                            <MUISwitch  defaultChecked />
+                          </li>
+                          <li>
+                          <Autocomplete
+                              id="autocomplete-input"
+                              options={postTitles || []}
+                              freeSolo
+                              inputValue={searchContext.searchQuery}
+                              color="neutral"
+                              placeholder="Tìm kiếm bài đăng"
+                              variant="outlined"
+                              onInputChange={(event, newInputValue) => {
+                this.handleSearch(event, newInputValue, searchContext.setSearchQuery);
+              }}                              
+                            />
+                          </li>
+                          <li>
+                          <IconButton
+                            aria-label="toggle visibility"
+                          >
+                            <SearchIcon fontSize="large" />
+                          </IconButton>
+                          </li>
+                          <li>
+                        <NotificationsButton/>
+                          </li>
+                          <li>
+                          <AccountButton />
+                          </li>
+                          </>
+                  ) : (
+                          <div id="navhome" >
+                          <li>
+                            <NotificationsButton />
+                          </li>
+                          <li>
+                          <AccountButton />
+                          </li>
+                          </div>
+                  )}
+                      </ul>
+                  </div>
+                  )
+                  : (
+                  <div>
+                      <ul id="navbar" className={this.state.clicked ? "#navbar active" : "#navbar"}>
+                          <li><Link to="/">Trang chủ</Link></li>
+                          <li><Link to="ctxh">CTXH</Link></li>
+                          <li><Link to="study">Nhóm môn học</Link></li>
+                          <li><div onClick={this.handleLogin} disabled={loading}><span className="login">Đăng nhập</span></div></li>
+                      </ul>
+                  </div>
+                  )}
 
-                        color="neutral"
-                        placeholder="Tìm kiếm bài đăng"
-                        variant="outlined"
-                    />
-                    </li>
-                      <li>
-                      <IconButton
-                        aria-label="toggle visibility"
-                      >
-                        <SearchIcon fontSize="large" />
-                      </IconButton>
-                      </li>
-                    <li>
-                  <NotificationsButton/>
-                    </li>
-                    <li>
-                    {/* <Link to="/profile">
-                    <Avatar
-                      alt="Avatar"
-                      fontSize="large"
-                      src={process.env.PUBLIC_URL +'/assets/avatar/avatar.png'}
-                        />
-                      </Link> */}
-                      <AccountButton />
-                      </li>
-                    </>
-            ) : (
-                    <div id="navhome" >
-                    <li>
-                      <NotificationsButton />
-                    </li>
-                    <li>
-                    {/* <Link to="/profile">
-                    <Avatar
-                      fontSize="large"
-                      alt="Avatar"
-                      src={process.env.PUBLIC_URL +'/assets/avatar/avatar.png'}
-                        />
-                    </Link> */}
-                    <AccountButton />
-                    </li>
-                    </div>
-            )}
-                </ul>
-            </div>
-            )
-            : (
-            <div>
-                <ul id="navbar" className={this.state.clicked ? "#navbar active" : "#navbar"}>
-                    <li><Link to="/">Trang chủ</Link></li>
-                    <li><Link to="ctxh">CTXH</Link></li>
-                    <li><Link to="study">Nhóm môn học</Link></li>
-                    <li><div onClick={this.handleLogin}><span className="login">Đăng nhập</span></div></li>
-                </ul>
-            </div>
-            )}
+                  <div className="mobile" onClick={this.handleClick}>
+                  <i id="bar" className={this.state.clicked ? "fas fa-times" : "fas fa-bars"}></i>
+                  </div>
 
-            <div className="mobile" onClick={this.handleClick}>
-            <i id="bar" className={this.state.clicked ? "fas fa-times" : "fas fa-bars"}></i>
-            </div>
-
-        </nav>
-    </>
+              </nav>
+          </>
+          )}
+        </SearchContext.Consumer>
+      )}
+    </AuthContext.Consumer>
 );
 }
 }
 
-export default withLocation(withAuth(Navbar));
+export default withLocation(withAuth(withPostTitles(Navbar)));
