@@ -17,7 +17,6 @@ function CTXH() {
     const [triggerUpdate, setTriggerUpdate] = useState(false);
     const [selectedTags, setSelectedTags] = useState([]);
     const { searchQuery = '' } = useContext(SearchContext);
-
     const handleNewComment = () => {
       setTriggerUpdate(!triggerUpdate);
     };
@@ -78,7 +77,7 @@ const filteredPosts = posts.filter((post) =>
 
     return (
         <div className='componentDisplay'>
-            {id ? <ListOfMem userN={'getUserNameHere'} maxMem={10} currPage={`post/${id}`}/> : <FilterBox onTagsChange={handleTagsChange} />}
+            {id ? <ListOfMem postId={postContent._id} author={postContent.author}  maxMem={postContent.maxuser} member={postContent.joined_users} currPage={`post/${id}`}/> : <FilterBox onTagsChange={handleTagsChange} />}
             {id ? (
 
               <div className='Inpost'>

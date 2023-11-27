@@ -80,7 +80,7 @@ function Study() {
     return (
       <StudyPostTitleContext.Provider value={posts.map(post => post.title)}>
         <div className='componentDisplay'>
-            {id ? <ListOfMem /> : <FilterBox onTagsChange={handleTagsChange} />}        
+            {id ?  <ListOfMem  maxMem={postContent.maxuser}/>: <FilterBox onTagsChange={handleTagsChange} />}        
             {id ? (
               <div className='Inpost'>
                 <InPost {...getPostById(id)} title={postContent.title} postId={id} content={postContent.content} date={readableDate} author={postContent && postContent.author ? postContent.author.name : ''} comments={postContent.comments} onNewComment={handleNewComment}/>

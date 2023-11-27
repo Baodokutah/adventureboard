@@ -2,15 +2,58 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@mui/material';
 import Frame from '../send-noti/Frame';
 import { Confirm } from '../popup/Popup';
+import { useMockedUser } from '../../hooks/use-mocked-user';
+import axios from 'axios';
 import './listofmem.css';
 
-export default function ListOfMem({userN, maxMem, currPage}) {
+export default function ListOfMem({maxMem, member, author, postId,currPage}) {
   const [openModal, setOpenModal] = useState(false);
   const [buttonClickedJoin, setButtonClickedJoin] = useState(false);
   const [isFrameOpen, setFrameOpen] = useState(false);
   const [memberList, setMemberList] = useState(['Py Xẹt Mờ Píp In Sì Tồ','b','c','d','e','f','g','h','p']);
   const [count, setCount] = useState(0);
+  const user = useMockedUser();
+  console.log(member)
 
+  useEffect(() => {
+    setMemberList(member || []);
+  }, [member]);  
+  
+  const joinPost = async () => {
+    try {
+      const response = await axios.post('http://localhost:6969/api/post/join', {
+        pid: postId,
+        token: user.id
+      });
+  
+      if (response.data.success) {
+        console.log('Join post success!');
+      } else {
+        console.log('Failed to join post:', response.data.message);
+      }
+    } catch (error) {
+      console.error('Failed to send request:', error);
+    }
+  };
+
+  const removeMember = async () => {
+    try {
+      const response = await axios.post('http://localhost:6969/api/post/removeMem', {
+        pid: postId,
+        uid: user._id,
+        token: user.id
+      });
+  
+      if (response.data.success) {
+        console.log('Remove member success!');
+      } else {
+        console.log('Failed to remove member:', response.data.message);
+      }
+    } catch (error) {
+      console.error('Failed to send request:', error);
+    }
+  };
+  
   const toggleFrame = () => {
     setFrameOpen(!isFrameOpen);
   };
@@ -28,18 +71,18 @@ export default function ListOfMem({userN, maxMem, currPage}) {
       setMemberList([...memberList, mem]);
       setCount(count + 1)
       setButtonClickedJoin(true);
+      joinPost();
     }
   }
 
   const handleDeleteMem = (mem) => {
-    console.log(memberList)
     if(memberList.includes(mem))
     {
       setMemberList(memberList.filter(ele => ele !== mem));
       setCount(count - 1)
       if(buttonClickedJoin) setButtonClickedJoin(false);
+      removeMember();
     }
-    console.log(memberList);
   }
 
   //check auth
@@ -50,9 +93,9 @@ export default function ListOfMem({userN, maxMem, currPage}) {
 
   //check Mem
   const isMem = (id) => {
-    if(id === userN) return true;
+    if(user && id === user._id) return true;
     return false;
-  }
+  };
 
   useEffect(() => {}, [memberList])
 
@@ -60,7 +103,7 @@ export default function ListOfMem({userN, maxMem, currPage}) {
     <div id='listofmember' className='member'>
       <button className={`joinButton ${buttonClickedJoin ? 'clicked' : ''}`}
       onClick={() => {
-        {!buttonClickedJoin ? handleSetMember(userN) :handleDeleteMem(userN)}
+        {!buttonClickedJoin ? handleSetMember(user.name) :handleDeleteMem(user.name)}
       }}>
         {/* <h2 style={{ color: 'black' }}>THAM GIA</h2> */}
         {buttonClickedJoin ? <h2 className='joinedButton'>ĐÃ THAM GIA</h2> : <h2 style={{ color: 'black' }}>THAM GIA</h2>}
