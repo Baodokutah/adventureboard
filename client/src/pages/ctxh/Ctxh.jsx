@@ -72,7 +72,6 @@ const filteredPosts = posts.filter((post) =>
   post.content?.toLowerCase().includes(String(searchQuery).toLowerCase()))
 );
 
-  console.log(posts.map(post => post.title));
 
 
     return (

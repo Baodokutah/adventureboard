@@ -77,12 +77,17 @@ export const AuthProvider = (props) => {
 
         const data = await response.json();
         // Handle response data...
+
+        
         console.log(data);
         let userId;
         if (data && data.User) {
           userId = data.User._id;
         }
-
+        let notification;
+        if (data && data.User) {
+          notification = data.User.notification;
+        }
         dispatch({
           type: ActionType.AUTH_STATE_CHANGED,
           payload: {
@@ -92,7 +97,8 @@ export const AuthProvider = (props) => {
               id: user.uid || '0',
               avatar: user.photoURL || undefined,
               email: user.email,
-              name: user.displayName || 'John Doe'
+              name: user.displayName || 'John Doe',
+              noti: notification
             },
             isLoading: false // Added isLoading to the payload
           }
