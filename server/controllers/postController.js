@@ -271,7 +271,7 @@ async function joinPost(req, res) {
         
         let PostInfo;
         try {
-            PostInfo = await Post.findById(req.body.pid, { joined_users: 1, author: 1, maxuser });
+            PostInfo = await Post.findById(req.body.pid, { joined_users: 1, author: 1, maxuser: 1 });
             if (!PostInfo) {
                 return res.status(404).json({
                     success: false,
