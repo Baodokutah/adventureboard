@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import axios from 'axios';
 import { useMockedUser } from '../../hooks/use-mocked-user';
+
 function Create({ tags, setTags })
 {
 
@@ -15,7 +16,7 @@ function Create({ tags, setTags })
     // Define states for each input field
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [quantity, setQuantity] = useState(0);
+    const [quantity, setQuantity] = useState(1);
 
     const user = useMockedUser();
 

@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Chip, FormControl, InputLabel, Select, MenuItem, TextField, InputAdornment, IconButton, Button } from '@mui/material';
+import { Chip, FormControl, InputLabel, Select, MenuItem, TextField, InputAdornment, IconButton, Button, CircularProgress } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import './filter.css'
 
 export var newTags = [];
 
-function FilterBoxCTXH() {
+function FilterBoxCTXH({ onTagsChange }) {
   const [ctxhTags, setCtxhTags] = useState({tags:[]});
 
   const [selectedTag, setSelectedTag] = useState({});
@@ -21,6 +21,8 @@ function FilterBoxCTXH() {
       const updatedTags = tagExists
         ? ctxhTags.tags.filter((element) => element !== tag)
         : [...ctxhTags.tags, tag];
+
+      onTagsChange(updatedTags);
 
       return { ...ctxhTags, tags: updatedTags };
     });
@@ -117,24 +119,23 @@ function FilterBoxCTXH() {
 }
 
 
-function FilterBoxGroup() {
+function FilterBoxGroup({ onTagsChange }) {
   const [studyTags, setStudyTags] = useState([{type:"subjectCode", tags : []}, {type:"classCode", tags : []}]);
 
   const [chips, setChips] = useState([]);
   const [inputValue, setInputValue] = useState('');
 
-  useEffect(() => {console.log(studyTags)}, [studyTags]);
-
   const handleAddChip = () => {
     if (inputValue.trim()) {
       setChips([...chips, inputValue]);
 
-      const tag = {type:"classCode", value: inputValue}
       setStudyTags((studyTags) => {
           return studyTags.map((tag) => {
             if (tag.type === 'classCode') {
               // If the tag has the same type, update the tags array
-              return { ...tag, tags: [...tag.tags, inputValue] };
+              const updatedTags = [...tag.tags, inputValue];
+              onTagsChange(updatedTags);
+              return { ...tag, tags: updatedTags };
             }
             // Otherwise, keep the tag unchanged
             return tag;
@@ -151,7 +152,9 @@ function FilterBoxGroup() {
       return studyTags.map((tag) => {
         if (tag.type === 'classCode') {
           // If the tag has the same type, update the tags array
-          return { ...tag, tags: tag.tags.filter((tagValue) => tagValue !== chipToDelete) };
+          const updatedTags = tag.tags.filter((tagValue) => tagValue !== chipToDelete);
+          onTagsChange(updatedTags);
+          return { ...tag, tags: updatedTags };
         }
         // Otherwise, keep the tag unchanged
         return tag;
@@ -160,15 +163,24 @@ function FilterBoxGroup() {
   };
 
   const [subjectSelect, setSubjectSelect] = useState('');
-  // console.log(page);
+
   const handleSelectSubject = (event) => {
-      setSubjectSelect(event.target.value);
-      const tag = {type:"subjectCode", tags: [event.target.value]};
-      const filteredTags = studyTags.filter((tag) => tag.type !== 'subjectCode');
-      setStudyTags([...filteredTags,tag]);
-      // console.log(tag);
-  }
-  // lul merger lien tuc
+    setSubjectSelect(event.target.value);
+
+    setStudyTags((studyTags) => {
+      return studyTags.map((tag) => {
+        if (tag.type === 'subjectCode') {
+          // If the tag has the same type, update the tags array
+          const updatedTags = [event.target.value];
+          onTagsChange(updatedTags);
+          return { ...tag, tags: updatedTags };
+        }
+        // Otherwise, keep the tag unchanged
+        return tag;
+      });
+    });
+  };
+
   newTags = studyTags.flatMap((tag) => tag.tags);
 
   return (
@@ -256,7 +268,7 @@ function FilterBoxGroup() {
   );
 }
 
-export default function FilterBox() {
+export default function FilterBox({onTagsChange}) {
   const location = useLocation();
   const currentPage = location.pathname.includes('ctxh') ? 'ctxh' : location.pathname.includes('study') ? 'study' : 'default';
   // alert(currentPage);
@@ -285,7 +297,7 @@ export default function FilterBox() {
               Tạo bài viết
           </Button>
       </Link>
-        {location.pathname==='/ctxh' ? (<FilterBoxCTXH/>) : location.pathname==='/study' ? (<FilterBoxGroup/>) : (<></>)}
+        {location.pathname==='/ctxh' ? (<FilterBoxCTXH onTagsChange={onTagsChange} />) : location.pathname==='/study' ? (<FilterBoxGroup onTagsChange={onTagsChange} />) : (<></>)}
     </div>
   );
 }
