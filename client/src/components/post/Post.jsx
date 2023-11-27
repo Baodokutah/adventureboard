@@ -55,7 +55,7 @@ export function InPost({ title, tags, content, comments, author, date, postId, o
       <div className='content'>{content}</div>
       <div className='cmt'>
         <div className='cmtInput'>
-        <FormControl sx={{ m: 1, width: '100ch' }} variant="standard">
+        <FormControl sx={{ m: 1, width: '100ch', zIndex:1 }} variant="standard">
           <InputLabel htmlFor="standard-adornment-password">Bình luận</InputLabel>
           <Input
             multiline
