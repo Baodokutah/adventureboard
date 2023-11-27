@@ -2,22 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@mui/material';
 import Frame from '../send-noti/Frame';
 import { Confirm } from '../popup/Popup';
-import { useMockedUser } from '../../hooks/use-mocked-user';
+import {useMockedUser} from "../../hooks/use-mocked-user"
 import axios from 'axios';
 import './listofmem.css';
+import useIsMember from '../../hooks/use-ismember';
 
 export default function ListOfMem({maxMem, member, author, postId,currPage}) {
   const [openModal, setOpenModal] = useState(false);
-  const [buttonClickedJoin, setButtonClickedJoin] = useState(false);
   const [isFrameOpen, setFrameOpen] = useState(false);
-  const [memberList, setMemberList] = useState(['Py Xẹt Mờ Píp In Sì Tồ','b','c','d','e','f','g','h','p']);
+  const [memberList, setMemberList] = useState([]);
   const [count, setCount] = useState(0);
   const user = useMockedUser();
+  const { isMember, buttonClickedJoin } = useIsMember(user, memberList);
   console.log(member)
 
   useEffect(() => {
-    setMemberList(member || []);
-  }, [member]);  
+    setMemberList(member ? member.map(mem => mem.name) : []);
+  }, [member]);
   
   const joinPost = async () => {
     try {
@@ -70,7 +71,6 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
     {
       setMemberList([...memberList, mem]);
       setCount(count + 1)
-      setButtonClickedJoin(true);
       joinPost();
     }
   }
@@ -80,22 +80,15 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
     {
       setMemberList(memberList.filter(ele => ele !== mem));
       setCount(count - 1)
-      if(buttonClickedJoin) setButtonClickedJoin(false);
       removeMember();
     }
   }
 
   //check auth
-  const isAuth = (id) => {
-    if(id === '1') return true;
+  const isAuth = () => {
+    if((author && user) && author.id===user._id) return true;
     return false;
   }
-
-  //check Mem
-  const isMem = (id) => {
-    if(user && id === user._id) return true;
-    return false;
-  };
 
   useEffect(() => {}, [memberList])
 
@@ -115,7 +108,7 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
           {memberList.map((mem, idx) => (
             <div key={idx}>
               <h5>{mem}</h5>
-              {isAuth('0') || isMem(mem) ? (
+              {isAuth() || isMember ? (
                 <Button
                 variant='X'
                 onClick={() => {
@@ -163,4 +156,3 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
     </div>
   );
 }
-
