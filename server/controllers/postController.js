@@ -251,10 +251,10 @@ async function deletePost(req, res) {
 
         return res.status(200).json({success:true,message: 'Successfully deleted post'})
 
-    } catch (error) {
+    } catch (err) {
         res.status(500).json({
             success: false,
-            message: 'Internal Server Error',
+            message: err.message,
         })
     }
 };
@@ -278,10 +278,10 @@ async function joinPost(req, res) {
                     message: 'Post doesn\'t exist!'
                 });
             }
-        } catch (error) {
+        } catch (err) {
             return res.status(500).json({
                 success: false,
-                message: 'Internal Server Error'
+                message: err.message
             });
         }
 
@@ -294,10 +294,10 @@ async function joinPost(req, res) {
                     message: 'Invalid token!'
                 });
             }
-        } catch (error) {
+        } catch (err) {
             return res.status(500).json({
                 success: false,
-                message: 'Internal Server Error'
+                message: err.message
             });
         }
 
@@ -328,10 +328,10 @@ async function joinPost(req, res) {
             })
         }
 
-    } catch (error) {
+    } catch (err) {
         return res.status(500).json({
             success: false,
-            message: 'Internal Server Error'
+            message: err.message
         })
     }
 };
@@ -354,10 +354,10 @@ async function removeMem(req, res) {
                     success: false,
                     message: 'Post doesn\'t exist!'
                 });
-        } catch (error) {
+        } catch (err) {
             return res.status(500).json({
                 success: false,
-                message: 'Internal Server Error'
+                message: err.message
             });
         }
 
@@ -369,10 +369,10 @@ async function removeMem(req, res) {
                     success: false,
                     message: 'Invalid token!'
                 });
-        } catch (error) {
+        } catch (err) {
             return res.status(500).json({
                 success: false,
-                message: 'Internal Server Error'
+                message: err.message
             });
         }
         
@@ -426,10 +426,10 @@ async function removeMem(req, res) {
             }
         }
 
-    } catch (error) {
+    } catch (err) {
         return res.status(500).json({
             success: false,
-            message: 'Internal Server Error'
+            message: err.message
         })
     }
 };
