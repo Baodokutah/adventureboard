@@ -1,3 +1,8 @@
+@keyframes rainbow {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
 .tag{
     /* border: 1px solid black; */
     border-radius: 30px;

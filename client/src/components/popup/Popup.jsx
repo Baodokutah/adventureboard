@@ -31,7 +31,7 @@ export function Success({open, onClose,onCloseFrame, action, page, imgSrc}){
                                 navigate('/' + page);
                               }
                               else {
-                              onClose(); 
+                              onClose();
                               onCloseFrame();}
                             }}>
                     Xác nhận
@@ -52,9 +52,9 @@ export function Confirm({open, onClose, action, page, imgSrc}){
         }}
         className='modalContainer'
         >
-            <img  alt='random bullshjt' src={imgSrc}/>
+            <img alt='random bullshjt' src={imgSrc}/>
             <div className='contentModal'>
-                <h1>Xác nhận {action}</h1>
+                <h1>{action}</h1>
             </div>
             <div className='btnContainer'>
             <button className='cancelButtonModal' onClick={onClose}>

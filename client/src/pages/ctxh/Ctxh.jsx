@@ -10,7 +10,7 @@ import { useContext } from 'react';
 import { SearchContext } from '../../context/search-context';
 
 function CTXH() {
-    const { id } = useParams(); 
+    const { id } = useParams();
     const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
     const [postContent, setPostContent] = useState('');
@@ -66,7 +66,7 @@ function CTXH() {
       date = new Date(postContent.date);
       readableDate = format(date, 'dd-MM-yyyy HH:mm:ss');
     }
-    
+
 const filteredPosts = posts.filter((post) =>
   selectedTags.every((tag) => post.tags.includes(tag)) &&
   (post.title?.toLowerCase().includes(String(searchQuery).toLowerCase()) ||
@@ -78,9 +78,9 @@ const filteredPosts = posts.filter((post) =>
 
     return (
         <div className='componentDisplay'>
-            {id ? <ListOfMem /> : <FilterBox onTagsChange={handleTagsChange} />}        
+            {id ? <ListOfMem userN={'getUserNameHere'} maxMem={10}/> : <FilterBox onTagsChange={handleTagsChange} />}
             {id ? (
-                
+
               <div className='Inpost'>
                 <InPost {...getPostById(id)} title={postContent.title} postId={id} content={postContent.content} date={readableDate} author={postContent && postContent.author ? postContent.author.name : ''} comments={postContent.comments} onNewComment={handleNewComment}/>
               </div>
@@ -88,7 +88,7 @@ const filteredPosts = posts.filter((post) =>
                 <div className='Posts'>
                   {filteredPosts.sort((a, b) => new Date(b.date) - new Date(a.date)).map((post) => {
                       const date = new Date(post.date);
-                      const readableDate = format(date, 'dd-MM-yyyy');                      
+                      const readableDate = format(date, 'dd-MM-yyyy');
                       return (
                         <div key={post._id} onClick={() => handlePostClick(post._id)}>
                             <PostTitle title={post.title} tags={post.tags}  author={post.author.name} date={readableDate} />

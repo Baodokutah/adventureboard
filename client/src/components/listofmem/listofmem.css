@@ -59,6 +59,37 @@
     color: #ffffff;
 }
 
+.memberContainer{
+    align-items: center;
+    /* justify-content: center; */
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0;
+    gap: 0.5ch;
+}
+
+.memberContainer h4{
+    margin: 0;
+}
+
+.memberContainer h5{
+    margin: 0;
+    width: 100%;
+    flex-wrap: wrap;
+    margin-left: 1ch;
+    text-align: left;
+}
+
+
+.memberContainer div{
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
 .popup-container {
     position: fixed;
     top: 50%;
