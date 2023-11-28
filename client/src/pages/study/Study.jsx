@@ -30,7 +30,7 @@ function Study() {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await axios.get('http://localhost:6969/api/post/Group');
+                const response = await axios.get('/api/post/Group');
                 setPosts(response.data.Posts);
             } catch (error) {
                 console.error('Failed to fetch posts:', error);
@@ -42,7 +42,7 @@ function Study() {
     useEffect(() => {
       const fetchPostContent = async () => {
         try {
-          const response = await axios.get(`http://localhost:6969/api/post/${id}`);
+          const response = await axios.get(`/api/post/${id}`);
           setPostContent(response.data.Post);
         } catch (error) {
           console.error('Failed to fetch post content:', error);
@@ -75,7 +75,7 @@ function Study() {
     );
 
 
-
+console.log(postContent.author)
 
     return (
       <StudyPostTitleContext.Provider value={posts.map(post => post.title)}>

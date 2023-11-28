@@ -20,7 +20,7 @@ function App() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('http://localhost:6969/api/post/CTXH');
+        const response = await axios.get('/api/post/CTXH');
         setPostTitles(response.data.Posts.map(post => post.title));
       } catch (error) {
         console.error('Failed to fetch posts:', error);
@@ -32,7 +32,7 @@ function App() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('http://localhost:6969/api/post/Group');
+        const response = await axios.get('/api/post/Group');
         setStudyPostTitles(response.data.Posts.map(post => post.title));
       } catch (error) {
         console.error('Failed to fetch posts:', error);

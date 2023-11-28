@@ -5,6 +5,7 @@ export default function useIsMember(user, memberList) {
   const [buttonClickedJoin, setButtonClickedJoin] = useState(false);
 
   useEffect(() => {
+    console.log(isMember);
     if (user && memberList.includes(user.name)) {
       setIsMember(true);
       setButtonClickedJoin(true);

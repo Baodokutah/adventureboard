@@ -10,14 +10,13 @@ import { useParams } from 'react-router-dom';
 export default function OtherProfile() {
     const { id } = useParams();
 
-  console.log(id);
   const [userData, setUserData] = useState(null);
   const [userPosts, setUserPosts] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`http://localhost:6969/api/user/${id}`);
+        const response = await axios.get(`/api/user/${id}`);
         setUserData(response.data.User);
         setUserPosts(response.data.Posts);
       } catch (error) {

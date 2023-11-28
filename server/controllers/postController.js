@@ -156,7 +156,8 @@ async function createPost(req, res) {
             title: req.body.title,
             content: req.body.content,
             tags: req.body.tags,
-            maxuser: req.body.maxuser
+            maxuser: req.body.maxuser,
+            joined_users: (req.body.type == 'Group')? [postOwner._id]:[]
         });
 
         return res.status(200).json({

@@ -17,12 +17,12 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
   console.log(member)
 
   useEffect(() => {
-    setMemberList(member ? member.map(mem => mem.name) : []);
+    setMemberList(member ? member : []);
   }, [member]);
   
   const joinPost = async () => {
     try {
-      const response = await axios.post('http://localhost:6969/api/post/join', {
+      const response = await axios.post('/api/post/join', {
         pid: postId,
         token: user.id
       });
@@ -37,11 +37,11 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
     }
   };
 
-  const removeMember = async () => {
+  const removeMember = async (mem) => {
     try {
-      const response = await axios.post('http://localhost:6969/api/post/removeMem', {
+      const response = await axios.post('/api/post/removeMem', {
         pid: postId,
-        uid: user._id,
+        uid: mem._id,
         token: user.id
       });
   
@@ -80,13 +80,18 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
     {
       setMemberList(memberList.filter(ele => ele !== mem));
       setCount(count - 1)
-      removeMember();
+      removeMember(mem);
     }
   }
 
   //check auth
-  const isAuth = () => {
-    if((author && user) && author.id===user._id) return true;
+  const isAuth = () => {    
+    if((author && user) && author._id===user._id) return true;
+    return false;
+  }
+
+  const isMem = (mem) => {    
+    if((user) && mem===user.name) return true;
     return false;
   }
 
@@ -107,8 +112,9 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
           <h4>Số lượng: {memberList.length}/{maxMem}</h4>
           {memberList.map((mem, idx) => (
             <div key={idx}>
-              <h5>{mem}</h5>
-              {isAuth() || isMember ? (
+              <h5>{mem.name}</h5>
+              {console.log(isAuth())}
+              {isAuth() || isMem(mem.name) ? (
                 <Button
                 variant='X'
                 onClick={() => {
@@ -124,7 +130,7 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
               <Confirm
                 open={openModal}
                 onClose={() => {setOpenModal(false)}}
-                action={`xóa thành viên ${mem} ra khỏi nhóm`}
+                action={`xóa thành viên ${mem.name} ra khỏi nhóm`}
                 imgSrc={process.env.PUBLIC_URL + "/assets/button-circle-round-delete-x-svgrepo-com.svg"}
                 onConfirm={() => handleDeleteMem(mem)}
               />
@@ -151,7 +157,7 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
       </div>
       {isFrameOpen && (
     <div className="popup-container">
-    <Frame onCloseFrame={toggleFrame} />
+    <Frame user={user} postId={postId} onCloseFrame={toggleFrame} />
   </div>)}
     </div>
   );
