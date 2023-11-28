@@ -10,7 +10,6 @@ async function getUserInfo(req, res) {
             {token: 0}
         ).populate({
             path: 'notification',
-            select: 'post',
             populate: {
                 path: 'post',
                 select: 'author',

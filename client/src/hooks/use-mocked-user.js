@@ -10,7 +10,8 @@ export const useMockedUser = () => {
     id: user.id,
     avatar: user.avatar,
     name: user.name,
-    email: user.email
+    email: user.email,
+    noti: user.noti
   };
 
 };
