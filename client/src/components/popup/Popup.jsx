@@ -85,7 +85,9 @@ export function Success({ open, onClose, onCloseFrame, action, page, imgSrc }) {
       navigate('/' + page);
     } else {
       onClose();
-      // onCloseFrame();
+      if (onCloseFrame) {
+        onCloseFrame();
+      }    
     }
   };
 

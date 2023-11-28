@@ -64,7 +64,7 @@ async function sendNoti(req, res) {
 
 async function removeNoti(req, res) {
     try {
-        if (!req.body.nid || !isValidObjectId(req.body.nid) || !req.body.token) {
+        if (!req.body.nid || !req.body.token) {
             return res.status(400).json({
                 success: false,
                 message: "Bad Request"    
@@ -86,7 +86,7 @@ async function removeNoti(req, res) {
             });
         }
 
-        await User.findOneAndUpdate({ token: req.body.token }, { $pull: { notification: req.body.nid }})
+        await User.findOneAndUpdate({ token: req.body.token }, { $pull: { notification: { $in: req.body.nid }}})
         return res.status(200).json({
             success: true,
             message: "Remove notification success!"

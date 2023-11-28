@@ -138,7 +138,6 @@ const SwitchTrack = styled('span')(
 export function withLocation(Component) {
   return function WrappedComponent(props) {
     const location = useLocation();
-    console.log(location); // Thêm dòng này để kiểm tra giá trị của location
     return <Component {...props} location={location} />;
   }
 }
@@ -178,7 +177,6 @@ handleLogin = async () => {
 render(){
   const { location, postTitles = [] } = this.props;
   const {  isLoading, loading } = this.context;
-  console.log(this.props.postTitles); // Add this line
 
   if (isLoading) {
     return (

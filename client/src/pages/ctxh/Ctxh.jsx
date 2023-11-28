@@ -28,7 +28,7 @@ function CTXH() {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await axios.get('http://localhost:6969/api/post/CTXH');
+                const response = await axios.get('/api/post/CTXH');
                 setPosts(response.data.Posts);
             } catch (error) {
                 console.error('Failed to fetch posts:', error);
@@ -40,7 +40,7 @@ function CTXH() {
     useEffect(() => {
       const fetchPostContent = async () => {
         try {
-          const response = await axios.get(`http://localhost:6969/api/post/${id}`);
+          const response = await axios.get(`/api/post/${id}`);
           setPostContent(response.data.Post);
         } catch (error) {
           console.error('Failed to fetch post content:', error);
@@ -72,6 +72,7 @@ const filteredPosts = posts.filter((post) =>
   post.content?.toLowerCase().includes(String(searchQuery).toLowerCase()))
 );
 
+console.log(postContent.author)
 
 
     return (

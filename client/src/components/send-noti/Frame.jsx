@@ -84,10 +84,12 @@ const GroupParentRoot = styled.div`
   font-family: "Noto Sans";
 `;
 
-const Frame = ({onCloseFrame}) => { 
+const Frame = ({onCloseFrame, user, postId}) => { 
     const [isConfirmPCNotiOpen, setConfirmPCNotiOpen] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
-    const currentPage = localStorage.getItem('currentPage') || '404';
+    const [content, setContent] = useState(''); // Add this line
+
+
 
   const openConfirmPCNoti = useCallback(() => {
     setConfirmPCNotiOpen(true);
@@ -134,7 +136,10 @@ const Frame = ({onCloseFrame}) => {
         </Button>
           <GroupDiv>
             <RectangleContainer>
-            <GroupItem placeholder="Nội dung" />            
+            <GroupItem placeholder="Nội dung" 
+            value={content} 
+            onChange={(e) => setContent(e.target.value)} 
+            />            
             </RectangleContainer>
           </GroupDiv>
           <VectorIcon  onClick={onCloseFrame} alt="" src={process.env.PUBLIC_URL + '/assets/Delete.svg'} />
@@ -146,7 +151,7 @@ const Frame = ({onCloseFrame}) => {
           placement="Centered"
           onOutsideClick={closeConfirmPCNoti}
         >
-      <ConfirmPCNoti onClose={closeConfirmPCNoti} onConfirm={() => setShowSuccess(true)} onCloseFrame={onCloseFrame} />        
+      <ConfirmPCNoti user={user} postId={postId} content={content} onClose={closeConfirmPCNoti} onConfirm={() => setShowSuccess(true)} onCloseFrame={onCloseFrame} />        
       </PortalPopup>
       )}
       {showSuccess && 

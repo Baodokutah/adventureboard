@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import axios from 'axios';
 import { useMockedUser } from '../../hooks/use-mocked-user';
 
-function Create({ tags, setTags })
+function Create({ tags, setTags }) // Add the new props here
 {
 
     const [openModal, setOpenModal] = useState(false);
@@ -31,7 +31,7 @@ function Create({ tags, setTags })
             token: user.id, 
         };
         try {
-            const response = await axios.post('http://localhost:6969/api/post/create', postData);
+            const response = await axios.post('/api/post/create', postData);
             console.log(response.data);
         } catch (error) {
             console.error(error);
@@ -56,8 +56,8 @@ function Create({ tags, setTags })
                 label="Tiêu đề"
                 multiline
                 rows={1}
-                value={title} // Set the value to the state
-                onChange={(e) => setTitle(e.target.value)} // Update the state when input changes
+                value={title} 
+                onChange={(e) => setTitle(e.target.value)} 
                 type='string'
                 color="info"
                 sx={{width:'70dvw'}}
@@ -67,8 +67,8 @@ function Create({ tags, setTags })
                 label="Mô tả (không bắt buộc)"
                 multiline
                 rows={11}
-                value={description} // Set the value to the state
-                onChange={(e) => setDescription(e.target.value)} // Update the state when input changes
+                value={description} 
+                onChange={(e) => setDescription(e.target.value)} 
                 type='string'
                 sx={{width:'70dvw'}}
             />
@@ -108,7 +108,7 @@ function Create({ tags, setTags })
                         shrink: true,
                     }}
                     inputProps={{
-                        min: 1, // Set the minimum value to 0
+                        min: 1, 
                     }}
                     size='small'
                     sx={{

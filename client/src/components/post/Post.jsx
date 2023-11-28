@@ -24,7 +24,7 @@ export function InPost({ title, tags, content, comments, author, date, postId, o
     };
 
     try {
-      const response = await axios.post('http://localhost:6969/api/comment/create', commentData);
+      const response = await axios.post('/api/comment/create', commentData);
       console.log(response.data);
       setComment('');
       onNewComment();
