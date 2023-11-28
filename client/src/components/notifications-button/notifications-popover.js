@@ -19,10 +19,12 @@ import {
   Typography
 } from '@mui/material';
 import { Scrollbar } from '../scrollbar';
+import { useNavigate } from 'react-router-dom';
 
 const renderContent = (notification) => {
 
-  
+
+
   let createdAt;
   if (notification.createdAt) {
     createdAt = format(new Date(notification.createdAt), "dd MMMM, h:mm a", { locale: vi });
@@ -131,9 +133,14 @@ export const NotificationsPopover = (props) => {
     open = false,
     ...other
   } = props;
+  const navigate = useNavigate();
 
   const isEmpty = notifications.length === 0;
-
+  const handleNotificationClick = (notification) => {
+    if (notification.post) {
+      navigate(`/post/${notification.post._id}`);
+    }
+  };
   return (
     <Popover
       anchorEl={anchorEl}
@@ -187,6 +194,7 @@ export const NotificationsPopover = (props) => {
             <List disablePadding>
               {notifications.map((notification) => (
                 <ListItem
+                  onClick={() => handleNotificationClick(notification)}
                   divider
                   key={notification.id}
                   sx={{

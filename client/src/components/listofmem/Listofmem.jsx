@@ -5,7 +5,18 @@ import { Confirm } from '../popup/Popup';
 import {useMockedUser} from "../../hooks/use-mocked-user"
 import axios from 'axios';
 import './listofmem.css';
-import useIsMember from '../../hooks/use-ismember';
+
+const useIsMember = (user, memberList) => {
+  const [buttonClickedJoin, setButtonClickedJoin] = useState(false);
+
+  useEffect(() => {
+    if (user && memberList.some(mem => mem && mem._id === user._id)) {
+      setButtonClickedJoin(true);
+    }
+  }, [memberList, user]);
+
+  return [buttonClickedJoin, setButtonClickedJoin];
+};
 
 export default function ListOfMem({maxMem, member, author, postId,currPage}) {
   const [openModal, setOpenModal] = useState(false);
@@ -13,7 +24,7 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
   const [memberList, setMemberList] = useState([]);
   const [count, setCount] = useState(0);
   const user = useMockedUser();
-  const { isMember, buttonClickedJoin } = useIsMember(user, memberList);
+  const [buttonClickedJoin, setButtonClickedJoin] = useIsMember(user, memberList);
   console.log(member)
 
   useEffect(() => {
@@ -59,28 +70,26 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
     setFrameOpen(!isFrameOpen);
   };
 
-  const handleSetMember = (mem) =>
-  {
-    if(memberList.length >= maxMem)
-    {
+  const handleSetMember = (mem) => {
+    if(memberList.length >= maxMem) {
       alert("OUI WUT ARE U DOING");
       return null;
     }
-    // console.log(memberList);
-    if(!buttonClickedJoin)
-    {
+    if(!buttonClickedJoin) {
       setMemberList([...memberList, mem]);
-      setCount(count + 1)
+      setCount(count + 1);
       joinPost();
+      setButtonClickedJoin(true); 
     }
   }
 
   const handleDeleteMem = (mem) => {
-    if(memberList.includes(mem))
-    {
-      setMemberList(memberList.filter(ele => ele !== mem));
-      setCount(count - 1)
-      removeMember(mem);
+    const userToRemove = memberList.find(member => member._id === mem._id);
+    if(userToRemove) {
+      setMemberList(memberList.filter(member => member !== userToRemove));
+      setCount(count - 1);
+      removeMember(userToRemove);
+      setButtonClickedJoin(false); 
     }
   }
 
@@ -91,7 +100,7 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
   }
 
   const isMem = (mem) => {    
-    if((user) && mem===user.name) return true;
+    if((user) && mem._id===user._id) return true;
     return false;
   }
 
@@ -101,9 +110,8 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
     <div id='listofmember' className='member'>
       <button className={`joinButton ${buttonClickedJoin ? 'clicked' : ''}`}
       onClick={() => {
-        {!buttonClickedJoin ? handleSetMember(user.name) :handleDeleteMem(user.name)}
+        buttonClickedJoin ? handleDeleteMem(user) : handleSetMember(user);
       }}>
-        {/* <h2 style={{ color: 'black' }}>THAM GIA</h2> */}
         {buttonClickedJoin ? <h2 className='joinedButton'>ĐÃ THAM GIA</h2> : <h2 style={{ color: 'black' }}>THAM GIA</h2>}
       </button>
       <div className='listOfMemBigBox'>
@@ -114,13 +122,11 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
             <div key={idx}>
               <h5>{mem.name}</h5>
               {console.log(isAuth())}
-              {isAuth() || isMem(mem.name) ? (
+              {isAuth() || isMem(mem) ? (
                 <Button
                 variant='X'
                 onClick={() => {
-                  // handleDeleteMem(mem)
                   setOpenModal(true)
-                  // console.log(openModal)
                 }}
                 sx={{borderRadius:"0%", height: '2ch', width: '1ch'}}
                 >
