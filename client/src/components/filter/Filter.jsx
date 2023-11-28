@@ -126,7 +126,7 @@ function FilterBoxGroup({ onTagsChange }) {
   const [inputValue, setInputValue] = useState('');
 
   const handleAddChip = () => {
-    if (inputValue.trim()) {
+    if (inputValue.trim() && inputValue.length < 8) {
       setChips([...chips, inputValue]);
 
       setStudyTags((studyTags) => {
@@ -143,6 +143,8 @@ function FilterBoxGroup({ onTagsChange }) {
         });
 
       setInputValue('');
+    } else {
+      alert("Nhóm lớp gì mà dài thế anh zai. Tính xss hay j :)))");
     }
   };
   const handleDeleteChip = (chipToDelete) => {
