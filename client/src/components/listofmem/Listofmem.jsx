@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Button } from '@mui/material';
 import Frame from '../send-noti/Frame';
 import { Confirm } from '../popup/Popup';
 import {useMockedUser} from "../../hooks/use-mocked-user"
 import axios from 'axios';
+import { AuthContext } from '../../context/auth/firebase-context';
 import './listofmem.css';
 
 const useIsMember = (user, memberList) => {
@@ -107,15 +108,17 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
     if((user) && mem._id===user._id) return true;
     return false;
   }
-
+  const { isAuthenticated } = useContext(AuthContext);
   useEffect(() => {}, [memberList])
 
   return (
     <div id='listofmember' className='member'>
       <button className={`joinButton ${buttonClickedJoin ? 'clicked' : ''}`}
-      onClick={() => {
-        buttonClickedJoin ? handleDeleteMem(user) : handleSetMember(user);
-      }}>
+        onClick={() => {
+          buttonClickedJoin ? handleDeleteMem(user) : handleSetMember(user);
+        }}
+        style={{ visibility: isAuthenticated ? 'visible' : 'hidden' }}
+      >
         {buttonClickedJoin ? <h2 className='joinedButton'>ĐÃ THAM GIA</h2> : <h2 style={{ color: 'black' }}>THAM GIA</h2>}
       </button>
       <div className='listOfMemBigBox'>

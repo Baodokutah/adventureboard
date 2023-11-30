@@ -24,6 +24,10 @@ function Study() {
       setTriggerUpdate(!triggerUpdate);
     };
 
+    const handleNewReply = () => {
+      setTriggerUpdate(!triggerUpdate);
+    };
+
     const handleTagsChange = (tags) => {
       setSelectedTags(tags);
     };
@@ -80,7 +84,7 @@ function Study() {
         {id ? <ListOfMem postId={postContent._id} author={postContent.author}  maxMem={postContent.maxuser} member={postContent.joined_users} currPage={`post/${id}`}/> : <FilterBox onTagsChange={handleTagsChange} />}
             {id ? (
               <div className='Inpost'>
-                <InPost {...getPostById(id)} title={postContent.title} postId={id} content={postContent.content} date={readableDate} author={postContent.author} comments={postContent.comments} onNewComment={handleNewComment}   onDeletePost={() => setRefreshPosts(!refreshPosts)}/>
+                <InPost {...getPostById(id)} title={postContent.title} postId={id} content={postContent.content} date={readableDate} author={postContent.author} comments={postContent.comments} onNewComment={handleNewComment}   onDeletePost={() => setRefreshPosts(!refreshPosts)} onNewReply={handleNewReply}/>
               </div>
              ) : (
                 <div className='Posts'>

@@ -22,6 +22,10 @@ function CTXH() {
       setTriggerUpdate(!triggerUpdate);
     };
 
+    const handleNewReply = () => {
+      setTriggerUpdate(!triggerUpdate);
+    };
+
     const handleTagsChange = (tags) => {
       setSelectedTags(tags);
     };
@@ -80,7 +84,7 @@ const filteredPosts = posts.filter((post) =>
             {id ? (
 
               <div className='Inpost'>
-                <InPost {...getPostById(id)} title={postContent.title} postId={id} content={postContent.content} date={readableDate} author={postContent.author} comments={postContent.comments}   onDeletePost={() => setRefreshPosts(!refreshPosts)} onNewComment={handleNewComment}/>
+                <InPost {...getPostById(id)} title={postContent.title} postId={id} content={postContent.content} date={readableDate} author={postContent.author} comments={postContent.comments}   onDeletePost={() => setRefreshPosts(!refreshPosts)} onNewComment={handleNewComment} onNewReply={handleNewReply}/>
               </div>
              ) : (
                 <div className='Posts'>
