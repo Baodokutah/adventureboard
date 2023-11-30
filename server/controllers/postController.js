@@ -200,7 +200,8 @@ async function updatePost(req,res) {
         await Post.findByIdAndUpdate(req.body.pid, {
             title: req.body.title,
             content: req.body.content,
-            tags: req.body.tags
+            tags: req.body.tags,
+            maxuser: req.body.maxuser
         })
         return res.status(200).json({
             success: true,
