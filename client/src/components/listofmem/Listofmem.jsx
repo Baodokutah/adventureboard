@@ -34,7 +34,7 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
   
   const joinPost = async () => {
     try {
-      const response = await axios.post('/api/post/join', {
+      const response = await axios.post(process.env.REACT_APP_API_URL + '/api/post/join', {
         pid: postId,
         token: user.id
       });
@@ -51,7 +51,7 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
 
   const removeMember = async (mem) => {
     try {
-      const response = await axios.post('/api/post/removeMem', {
+      const response = await axios.post(process.env.REACT_APP_API_URL + '/api/post/removeMem', {
         pid: postId,
         uid: mem._id,
         token: user.id

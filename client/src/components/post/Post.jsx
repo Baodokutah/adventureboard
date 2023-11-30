@@ -30,7 +30,7 @@ export function InPost({ title, tags, content, comments, author, date, postId, o
     try {
       const response = await axios({
         method: 'post',
-        url: '/api/post/delete',
+        url: process.env.REACT_APP_API_URL + '/api/post/delete',
         data: {
           pid: postId,
           token: user.id, 
@@ -77,7 +77,7 @@ console.log(author)
     };
 
     try {
-      const response = await axios.post('/api/comment/create', commentData);
+      const response = await axios.post(process.env.REACT_APP_API_URL + '/api/comment/create', commentData);
       console.log(response.data);
       setComment('');
       onNewComment();

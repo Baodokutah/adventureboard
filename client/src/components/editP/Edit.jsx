@@ -38,7 +38,7 @@ function Edit({ tags, setTags, Ptitle, Pdescription, Pquantity, Pid, type }) // 
         };
       
         try {
-          const response = await axios.post('/api/post/update', postData);
+          const response = await axios.post(process.env.REACT_APP_API_URL + '/api/post/update', postData);
           console.log(response.data);
           setLink(response.data.Post); // Set the link state
         } catch (error) {

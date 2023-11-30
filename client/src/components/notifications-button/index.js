@@ -39,7 +39,7 @@ const useNotifications = () => {
     // Optimistically update the state
     setNotifications((prevState) => prevState.filter((notification) => notification.id !== notificationId));
 
-    axios.post('/api/noti/remove', {
+    axios.post(process.env.REACT_APP_API_URL + '/api/noti/remove', {
       token: user.id, 
       nid: [notificationId]
     })
@@ -61,7 +61,7 @@ const useNotifications = () => {
     // Optimistically update the state
     setNotifications([]);
 
-    axios.post('/api/noti/remove', {
+    axios.post(process.env.REACT_APP_API_URL + '/api/noti/remove', {
       token: user.id, 
       nid: notifications.map(notification => notification.id)
     })
