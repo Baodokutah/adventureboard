@@ -1,7 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Chip, FormControl, InputLabel, Select, MenuItem, TextField, InputAdornment, IconButton, Button, CircularProgress } from '@mui/material';
+import { Chip, FormControl, InputLabel, Select, MenuItem, TextField, InputAdornment, IconButton, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import { AuthContext } from '../../context/auth/firebase-context';
+import { useContext } from 'react';
 import './filter.css'
 
 export var newTags = [];
@@ -121,7 +123,6 @@ function FilterBoxCTXH({ onTagsChange }) {
 
 function FilterBoxGroup({ onTagsChange }) {
   const [studyTags, setStudyTags] = useState([{type:"subjectCode", tags : []}, {type:"classCode", tags : []}]);
-
   const [chips, setChips] = useState([]);
   const [inputValue, setInputValue] = useState('');
 
@@ -274,6 +275,7 @@ export default function FilterBox({onTagsChange}) {
   const location = useLocation();
   const currentPage = location.pathname.includes('ctxh') ? 'ctxh' : location.pathname.includes('study') ? 'study' : 'default';
   // alert(currentPage);
+  const { isAuthenticated } = useContext(AuthContext);
 
   useEffect(() => {
     localStorage.setItem('currentPage', currentPage);
@@ -295,7 +297,9 @@ export default function FilterBox({onTagsChange}) {
             fontWeight:700,
             fontSize:"2.7vh",
             marginTop:2.3475,
-            marginLeft:1.6}}>
+            marginLeft:1.6,
+            visibility: isAuthenticated ? 'visible' : 'hidden' 
+            }}>
               Tạo bài viết
           </Button>
       </Link>

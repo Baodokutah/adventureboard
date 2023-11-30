@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Comment } from '../comment.js';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
@@ -13,8 +13,11 @@ import './post.css';
 import axios from 'axios';
 import { Confirm } from '../popup/Popup.jsx';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../context/auth/firebase-context';
 
-export function InPost({ title, tags, content, comments, author, date, postId, onNewComment,onDeletePost}) {
+
+
+export function InPost({ title, tags, content, comments, author, date, postId, onNewComment,onDeletePost, onNewReply}) {
   const [comment, setComment] = useState('');
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const location = useLocation();
@@ -54,6 +57,7 @@ export function InPost({ title, tags, content, comments, author, date, postId, o
 
 
 
+
   const isAuth = () => {    
     if((author && user) && author._id===user._id) return true;
     return false;
@@ -82,6 +86,9 @@ console.log(author)
       console.error(error);
     }
   };
+
+  const { isAuthenticated } = useContext(AuthContext);
+
   return (
     <div className='postContentDisplay'>
       <h5 style={{fontWeight: 'normal'}}>{(author) ? author.name : null }・{date}</h5>
@@ -106,6 +113,7 @@ console.log(author)
       <div className='content'>{content}</div>
       <div className='cmt'>
         <div className='cmtInput'>
+        {isAuthenticated && (
         <FormControl sx={{ m: 1, width: '100ch', zIndex:1 }} variant="standard">
           <InputLabel htmlFor="standard-adornment-password">Bình luận</InputLabel>
           <Input
@@ -127,7 +135,7 @@ console.log(author)
               </InputAdornment>
             }
           />
-          </FormControl>
+          </FormControl>)}
         </div>
         {/* Display the buttons when the comment input field is not empty */}
         {comment && (
@@ -147,9 +155,19 @@ console.log(author)
         </div>
         )}
         <div className="ui comments">
-            {comments && comments.map((comment) => (
-              <Comment key={comment._id} {...comment} />
-            ))}
+        {comments && comments.map((comment) => (
+          <React.Fragment key={comment._id}>
+          <Comment {...comment} onNewReply={onNewReply} />
+            <div style={{ marginLeft: '50px' }}>
+              {comment.replied.map((reply) => (
+                <div style={{ marginBottom: '30px' }}>
+                <Comment key={reply._id} {...reply} isReply={true}/>
+                </div>
+
+              ))}
+            </div>
+          </React.Fragment>
+        ))}
           </div>
       </div>
       {showConfirmModal && (

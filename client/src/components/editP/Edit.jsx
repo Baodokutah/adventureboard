@@ -108,10 +108,10 @@ function Edit({ tags, setTags, Ptitle, Pdescription, Pquantity, Pid, type }) // 
             </div>
             <div className='quantity'>Số lượng:
                 <TextField
+                    disabled
                     id="NumOfMemPost"
                     type="number"
                     value={quantity} // Set the value to the state
-                    onChange={(e) => setQuantity(parseInt(e.target.value))} // Update the state when input changes
                     InputLabelProps={{
                         shrink: true,
                     }}
