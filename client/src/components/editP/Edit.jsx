@@ -1,42 +1,50 @@
-import './create.css'
+import './edit.css'
 import { Success, Filter } from '../popup/Popup';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import axios from 'axios';
 import { useMockedUser } from '../../hooks/use-mocked-user';
 
-function Create({ tags, setTags }) // Add the new props here
+function Edit({ tags, setTags, Ptitle, Pdescription, Pquantity, Pid, type }) // Add the new props here
 {
 
     const [openModal, setOpenModal] = useState(false);
     const [openFilter, setOpenFilter] = useState(false);
-    const currentPage = localStorage.getItem('currentPage') || '404';
-    // Define states for each input field
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [quantity, setQuantity] = useState(1);
-
+    const [link, setLink] = useState('');
     const user = useMockedUser();
+    let page;
+    (type === 'Group') ? page = "study" : page =  "ctxh";
+    console.log(page)
+    useEffect(() => {
+        setTitle(Ptitle);
+        setDescription(Pdescription);
+        setQuantity(Pquantity);
+      }, [Ptitle, Pdescription, Pquantity]);
+    
 
-    const handleSubmit = async () => {
-
+      const handleUpdate = async () => {
         const postData = {
-            type: (currentPage === 'study') ? 'Group' : 'CTXH',
-            title: title,
-            content: description,
-            tags: tags,
-            maxuser: quantity,
-            token: user.id, 
+          pid: Pid,
+          token: user.id,
+          title: title,
+          content: description,
+          tags: tags,
+          maxuser: quantity,
         };
+      
         try {
-            const response = await axios.post('/api/post/create', postData);
-            console.log(response.data);
+          const response = await axios.post('/api/post/update', postData);
+          console.log(response.data);
+          setLink(response.data.Post); // Set the link state
         } catch (error) {
-            console.error(error);
+          console.error(error);
         }
-    }
+      }
 
     return(
         <div className="create">
@@ -93,17 +101,17 @@ function Create({ tags, setTags }) // Add the new props here
                 <Filter
                 open={openFilter}
                 onClose={() => setOpenFilter(false)}
-                page={currentPage}
+                page={page}
                 tags={tags}
                 setTags={setTags}
                 />
             </div>
             <div className='quantity'>Số lượng:
                 <TextField
+                    disabled
                     id="NumOfMemPost"
                     type="number"
                     value={quantity} // Set the value to the state
-                    onChange={(e) => setQuantity(parseInt(e.target.value))} // Update the state when input changes
                     InputLabelProps={{
                         shrink: true,
                     }}
@@ -135,15 +143,15 @@ function Create({ tags, setTags }) // Add the new props here
                     variant="Đăng"
                     onClick={() => {
                         setOpenModal(true);
-                        handleSubmit();
+                        handleUpdate();
                     }}>
                     Đăng
                 </Button>
                 <Success
                 open={openModal}
                 onClose={() => setOpenModal(false)}
-                action='Tạo bài viết thành công!'
-                page={currentPage}
+                action='Cập nhật bài viết thành công!'
+                page={`${page}/post/${link}`}
                 imgSrc={"https://www.svgrepo.com/show/522783/check-circle.svg"}
                 />
             </div>
@@ -151,4 +159,4 @@ function Create({ tags, setTags }) // Add the new props here
     );
 }
 
-export default Create;
+export default Edit;

@@ -1,53 +1,105 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import Bell01Icon from '@untitled-ui/icons-react/build/esm/Bell01';
 import { Badge, IconButton, SvgIcon, Tooltip } from '@mui/material';
 import { usePopover } from '../../hooks/use-popover';
-import { notifications as initialNotifications } from './notifications';
 import { NotificationsPopover } from './notifications-popover';
+import { useMockedUser } from '../../hooks/use-mocked-user';
+import axios from 'axios';
+
+const transformNotifications = (notifications) => {
+  return notifications.map(notification => {
+    const author = notification?.post?.author || {}; 
+    let type;
+    if (notification.content.includes('đã xóa bạn khỏi nhóm của họ') || 
+        notification.content.includes('Bạn đã rời khỏi nhóm!') ||
+        notification.content.includes('have joined your post!')) {
+      type = 'system';
+    } else {
+      type = 'noti';
+    }
+
+    return {
+      id: notification._id,
+      type: type,
+      description: notification.content,
+      avatar: author.avatar,
+      author: author.name,
+      createdAt: notification.date,
+      post: notification.post,
+      authorId: author._id
+    };
+  });
+};
 
 const useNotifications = () => {
-  const [notifications, setNotifications] = useState(initialNotifications);
-  const unread = useMemo(() => {
-    return notifications.reduce((acc, notification) => acc + (notification.read ? 0 : 1), 0);
-  }, [notifications]);
+  const user = useMockedUser();
+  const [notifications, setNotifications] = useState(transformNotifications(user.noti));
 
   const handleRemoveOne = useCallback((notificationId) => {
-    setNotifications((prevState) => {
-      return prevState.filter((notification) => notification.id !== notificationId);
-    });
-  }, []);
+    // Optimistically update the state
+    setNotifications((prevState) => prevState.filter((notification) => notification.id !== notificationId));
 
-  const handleMarkAllAsRead = useCallback(() => {
-    setNotifications((prevState) => {
-      return prevState.map((notification) => ({
-        ...notification,
-        read: true
-      }));
+    axios.post('/api/noti/remove', {
+      token: user.id, 
+      nid: [notificationId]
+    })
+    .then(response => {
+      if (!response.data.success) {
+        console.error('Failed to remove notification:', response.data.message);
+        // If the request failed, revert the state update
+        setNotifications(user.noti);
+      }
+    })
+    .catch(error => {
+      console.error('Error removing notification:', error);
+      // If there was an error, revert the state update
+      setNotifications(user.noti);
     });
-  }, []);
+  }, [user.id, user.noti]);
+
+  const removeAll = useCallback(() => {
+    // Optimistically update the state
+    setNotifications([]);
+
+    axios.post('/api/noti/remove', {
+      token: user.id, 
+      nid: notifications.map(notification => notification.id)
+    })
+    .then(response => {
+      if (!response.data.success) {
+        console.error('Failed to remove notifications:', response.data.message);
+        setNotifications(user.noti);
+      }
+    })
+    .catch(error => {
+      console.error('Error removing notifications:', error);
+      // If there was an error, revert the state update
+      setNotifications(user.noti);
+    });
+  }, [notifications, user.id, user.noti]);
 
   return {
-    handleMarkAllAsRead,
+    removeAll,
     handleRemoveOne,
     notifications,
-    unread
   };
 };
 
 export const NotificationsButton = () => {
   const popover = usePopover();
-  const { handleRemoveOne, handleMarkAllAsRead, notifications, unread } = useNotifications();
+
+  const { handleRemoveOne, removeAll, notifications } = useNotifications();
 
   return (
     <>
-      <Tooltip title="Notifications">
+      <Tooltip title="Thông báo">
         <IconButton
           ref={popover.anchorRef}
           onClick={popover.handleOpen}
         >
           <Badge
             color="error"
-            badgeContent={unread}
+            badgeContent={notifications.length}
           >
             <SvgIcon style={{fontSize:'xx-large'}}>
               <Bell01Icon />
@@ -59,7 +111,7 @@ export const NotificationsButton = () => {
         anchorEl={popover.anchorRef.current}
         notifications={notifications}
         onClose={popover.handleClose}
-        onMarkAllAsRead={handleMarkAllAsRead}
+        onRemoveAll={removeAll}
         onRemoveOne={handleRemoveOne}
         open={popover.open}
       />

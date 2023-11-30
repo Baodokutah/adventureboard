@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import Mail04Icon from '@untitled-ui/icons-react/build/esm/Mail04';
+import MessageChatSquareIcon from '@untitled-ui/icons-react/build/esm/MessageChatSquare';
 import XIcon from '@untitled-ui/icons-react/build/esm/X';
 import {
   Avatar,
@@ -18,17 +19,27 @@ import {
   Typography
 } from '@mui/material';
 import { Scrollbar } from '../scrollbar';
+import { useNavigate } from 'react-router-dom';
 
-const renderContent = (notification) => {
-  const createdAt = format(new Date(notification.createdAt), "dd MMMM, h:mm a", { locale: vi });
+const renderContent = (notification, navigate) => {
+  let createdAt;
+  if (notification.createdAt) {
+    createdAt = format(new Date(notification.createdAt), "dd MMMM, h:mm a", { locale: vi });
+  } else {
+    createdAt = 'Invalid date';
+  }
 
   switch (notification.type) {
-    case 'kick': {
+    case 'system': {
       return (
         <>
           <ListItemAvatar sx={{ mt: 0.5 }}>
-            <Avatar src={notification.avatar} />
-          </ListItemAvatar>
+          <Avatar>
+              <SvgIcon>
+                <MessageChatSquareIcon />
+              </SvgIcon>
+            </Avatar>
+            </ListItemAvatar>
           <ListItemText
             primary={(
               <Box
@@ -42,13 +53,13 @@ const renderContent = (notification) => {
                   sx={{ mr: 0.5 }}
                   variant="subtitle2"
                 >
-                 <strong>{notification.author}</strong> 
+                 <strong>Hệ thống</strong> 
                 </Typography>
                 <Typography
                   sx={{ mr: 0.5 }}
                   variant="body2"
                 >
-                  Đã xóa bạn khỏi nhóm của họ
+                  {notification.description}
                 </Typography>
               </Box>
             )}
@@ -84,7 +95,17 @@ const renderContent = (notification) => {
                   variant="subtitle2"
                   sx={{ mr: 0.5 }}
                 >
-                <strong>{notification.author}</strong> 
+              <span
+                style={{ cursor: 'pointer', color: '#000000E5' }} 
+                onMouseEnter={(e) => e.target.style.textDecoration = 'underline'}
+                onMouseLeave={(e) => e.target.style.textDecoration = 'none'}
+                onClick={(event) => {
+                  event.stopPropagation(); 
+                  navigate(`/user/${notification.authorId}`);
+                }}
+              >  
+                <strong>{notification.author}</strong>
+              </span> 
                   </Typography>
                 <Typography variant="body2">
                   {notification.description}
@@ -114,14 +135,19 @@ export const NotificationsPopover = (props) => {
     anchorEl,
     notifications,
     onClose,
-    onMarkAllAsRead,
+    onRemoveAll,
     onRemoveOne,
     open = false,
     ...other
   } = props;
+  const navigate = useNavigate();
 
   const isEmpty = notifications.length === 0;
-
+  const handleNotificationClick = (notification) => {
+    if (notification.post) {
+      (notification.post.types === 'Group') ? navigate(`/study/post/${notification.post._id}`) :navigate(`/ctxh/post/${notification.post._id}`) ;
+    }
+  };
   return (
     <Popover
       anchorEl={anchorEl}
@@ -150,9 +176,9 @@ export const NotificationsPopover = (props) => {
         >
           Thông báo
         </Typography>
-        <Tooltip title="Nhấn để đọc tất cả">
+        <Tooltip title="Nhấn để xóa tất cả thông báo">
           <IconButton
-            onClick={onMarkAllAsRead}
+            onClick={onRemoveAll}
             size="small"
             color="inherit"
           >
@@ -175,9 +201,11 @@ export const NotificationsPopover = (props) => {
             <List disablePadding>
               {notifications.map((notification) => (
                 <ListItem
+                  onClick={() => handleNotificationClick(notification)}
                   divider
                   key={notification.id}
                   sx={{
+                    cursor: 'pointer',
                     alignItems: 'flex-start',
                     '&:hover': {
                       backgroundColor: 'action.hover'
@@ -187,7 +215,7 @@ export const NotificationsPopover = (props) => {
                     }
                   }}
                   secondaryAction={(
-                    <Tooltip title="Remove">
+                    <Tooltip title="Xóa">
                       <IconButton
                         edge="end"
                         onClick={() => onRemoveOne?.(notification.id)}
@@ -200,7 +228,7 @@ export const NotificationsPopover = (props) => {
                     </Tooltip>
                   )}
                 >
-                  {renderContent(notification)}
+                  {renderContent(notification, navigate)}
                 </ListItem>
               ))}
             </List>
@@ -214,7 +242,7 @@ NotificationsPopover.propTypes = {
   anchorEl: PropTypes.any,
   notifications: PropTypes.array.isRequired,
   onClose: PropTypes.func,
-  onMarkAllAsRead: PropTypes.func,
+  onRemoveALl: PropTypes.func,
   onRemoveOne: PropTypes.func,
   open: PropTypes.bool
 };

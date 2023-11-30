@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Comment } from '../comment.js';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
@@ -11,11 +11,64 @@ import SendIcon from '@mui/icons-material/Send';
 import { useMockedUser } from '../../hooks/use-mocked-user.js';
 import './post.css';
 import axios from 'axios';
+import { Confirm } from '../popup/Popup.jsx';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../context/auth/firebase-context';
 
-export function InPost({ title, tags, content, comments, author, date, postId, onNewComment}) {
-  const [comment, setComment] = useState(''); // Add this state variable
+
+
+export function InPost({ title, tags, content, comments, author, date, postId, onNewComment,onDeletePost, onNewReply}) {
+  const [comment, setComment] = useState('');
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const currentPage = location.pathname.includes('ctxh') ? '/ctxh' : location.pathname.includes('study') ? '/study' : '404';
 
   const user = useMockedUser()
+
+  const handleDeletePost = async () => {
+    try {
+      const response = await axios({
+        method: 'post',
+        url: '/api/post/delete',
+        data: {
+          pid: postId,
+          token: user.id, 
+        },
+      });
+      if (response.data.success) {
+        console.log('Delete post success!');
+        onDeletePost();
+        navigate(currentPage)
+        
+      } else {
+        console.log('Failed to delete post:', response.data.message);
+      }
+
+      // You might want to do something with the response here, like updating the UI
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleEditPost = () => {
+    navigate(`/edit/${postId}`);
+  };
+
+
+
+
+  const isAuth = () => {    
+    if((author && user) && author._id===user._id) return true;
+    return false;
+  }
+console.log(author)
+// console.log(user._id)
+
+  const handleOpenConfirmModal = () => {
+    setShowConfirmModal(true);
+  };
+
   const handleCommentSubmit = async () => {
     const commentData = {
       token: user.id,
@@ -24,7 +77,7 @@ export function InPost({ title, tags, content, comments, author, date, postId, o
     };
 
     try {
-      const response = await axios.post('http://localhost:6969/api/comment/create', commentData);
+      const response = await axios.post('/api/comment/create', commentData);
       console.log(response.data);
       setComment('');
       onNewComment();
@@ -33,18 +86,23 @@ export function InPost({ title, tags, content, comments, author, date, postId, o
       console.error(error);
     }
   };
+
+  const { isAuthenticated } = useContext(AuthContext);
+
   return (
     <div className='postContentDisplay'>
-      <h5 style={{fontWeight: 'normal'}}>{author}・{date}</h5>
+      <h5 style={{fontWeight: 'normal'}}>{(author) ? author.name : null }・{date}</h5>
       <h2>{title}</h2>
+      {isAuth() ? (
       <div className='imgLoc'>
-        <IconButton aria-label='toggle visibility'>
+          <IconButton aria-label='toggle visibility' onClick={handleEditPost}>
           <img alt='editButt' style={{width:'45px', height:'45px'}} src={process.env.PUBLIC_URL + '/assets/edit-svgrepo-com.svg'}/>
         </IconButton>
-        <IconButton aria-label='toggle visibility'>
-          <img alt='editButt' style={{width:'48px', height:'48px'}} src={process.env.PUBLIC_URL + '/assets/delete-svgrepo-com.svg'}/>
-        </IconButton>
+        <IconButton aria-label='toggle visibility' onClick={handleOpenConfirmModal}>
+        <img alt='deleteButt' style={{width:'48px', height:'48px'}} src={process.env.PUBLIC_URL + '/assets/delete-svgrepo-com.svg'}/>
+      </IconButton>
       </div>
+      ): null}
       <div style={{ display: 'flex', flexDirection: 'row', gap: '25px' }}>
         {tags && tags.map((tag, index) => (
           <div key={index} className='tag'>
@@ -55,6 +113,7 @@ export function InPost({ title, tags, content, comments, author, date, postId, o
       <div className='content'>{content}</div>
       <div className='cmt'>
         <div className='cmtInput'>
+        {isAuthenticated && (
         <FormControl sx={{ m: 1, width: '100ch', zIndex:1 }} variant="standard">
           <InputLabel htmlFor="standard-adornment-password">Bình luận</InputLabel>
           <Input
@@ -76,7 +135,7 @@ export function InPost({ title, tags, content, comments, author, date, postId, o
               </InputAdornment>
             }
           />
-          </FormControl>
+          </FormControl>)}
         </div>
         {/* Display the buttons when the comment input field is not empty */}
         {comment && (
@@ -96,11 +155,30 @@ export function InPost({ title, tags, content, comments, author, date, postId, o
         </div>
         )}
         <div className="ui comments">
-            {comments && comments.map((comment) => (
-              <Comment key={comment._id} {...comment} />
-            ))}
+        {comments && comments.map((comment) => (
+          <React.Fragment key={comment._id}>
+          <Comment {...comment} onNewReply={onNewReply} />
+            <div style={{ marginLeft: '50px' }}>
+              {comment.replied.map((reply) => (
+                <div style={{ marginBottom: '30px' }}>
+                <Comment key={reply._id} {...reply} isReply={true}/>
+                </div>
+
+              ))}
+            </div>
+          </React.Fragment>
+        ))}
           </div>
       </div>
+      {showConfirmModal && (
+        <Confirm
+          open={showConfirmModal}
+          onClose={() => setShowConfirmModal(false)}
+          action={"xóa bài viết"}
+          onConfirm={() => handleDeletePost()}
+          imgSrc={process.env.PUBLIC_URL + "/assets/Delete.svg"}
+        />
+      )}
     </div>
   );
 }

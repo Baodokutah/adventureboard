@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { Success } from "../popup/Popup";
-import { useState } from "react";
+import axios from 'axios';
+
 const XcNhn = styled.p`
   margin-block-start: 0;
   margin-block-end: 5px;
@@ -96,15 +96,30 @@ const ConfirmPcNotiRoot = styled.div`
   font-family: "Noto Sans";
 `;
 
-const ConfirmPCNoti = ({ onClose, onConfirm, onCloseFrame }) => {
+const ConfirmPCNoti = ({ onClose, onConfirm, onCloseFrame, user, postId, content }) => {
 
 
-    const handleConfirm = () => {
+
+  const sendNotification = async () => {
+    try {
+      const response = await axios.post('/api/noti/send', {
+        pid: postId, // replace with your post id
+        token: user.id, // replace with your token
+        content: content,
+      });
+
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleConfirm = async () => {
     // handle confirm action here
     console.log('Confirmed');
+    await sendNotification();
     onConfirm();
     onClose();
-
   };
 
   const handleReturn = () => {

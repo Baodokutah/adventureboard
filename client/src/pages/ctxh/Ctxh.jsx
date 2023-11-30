@@ -16,8 +16,13 @@ function CTXH() {
     const [postContent, setPostContent] = useState('');
     const [triggerUpdate, setTriggerUpdate] = useState(false);
     const [selectedTags, setSelectedTags] = useState([]);
+    const [refreshPosts, setRefreshPosts] = useState(false);
     const { searchQuery = '' } = useContext(SearchContext);
     const handleNewComment = () => {
+      setTriggerUpdate(!triggerUpdate);
+    };
+
+    const handleNewReply = () => {
       setTriggerUpdate(!triggerUpdate);
     };
 
@@ -28,19 +33,19 @@ function CTXH() {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await axios.get('http://localhost:6969/api/post/CTXH');
+                const response = await axios.get('/api/post/CTXH');
                 setPosts(response.data.Posts);
             } catch (error) {
                 console.error('Failed to fetch posts:', error);
             }
         };
         fetchPosts();
-    }, []);
+    }, [refreshPosts]);
 
     useEffect(() => {
       const fetchPostContent = async () => {
         try {
-          const response = await axios.get(`http://localhost:6969/api/post/${id}`);
+          const response = await axios.get(`/api/post/${id}`);
           setPostContent(response.data.Post);
         } catch (error) {
           console.error('Failed to fetch post content:', error);
@@ -73,14 +78,13 @@ const filteredPosts = posts.filter((post) =>
 );
 
 
-
     return (
         <div className='componentDisplay'>
             {id ? <ListOfMem postId={postContent._id} author={postContent.author}  maxMem={postContent.maxuser} member={postContent.joined_users} currPage={`post/${id}`}/> : <FilterBox onTagsChange={handleTagsChange} />}
             {id ? (
 
               <div className='Inpost'>
-                <InPost {...getPostById(id)} title={postContent.title} postId={id} content={postContent.content} date={readableDate} author={postContent && postContent.author ? postContent.author.name : ''} comments={postContent.comments} onNewComment={handleNewComment}/>
+                <InPost {...getPostById(id)} title={postContent.title} postId={id} content={postContent.content} date={readableDate} author={postContent.author} comments={postContent.comments}   onDeletePost={() => setRefreshPosts(!refreshPosts)} onNewComment={handleNewComment} onNewReply={handleNewReply}/>
               </div>
              ) : (
                 <div className='Posts'>

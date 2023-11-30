@@ -138,7 +138,6 @@ const SwitchTrack = styled('span')(
 export function withLocation(Component) {
   return function WrappedComponent(props) {
     const location = useLocation();
-    console.log(location); // Thêm dòng này để kiểm tra giá trị của location
     return <Component {...props} location={location} />;
   }
 }
@@ -177,8 +176,7 @@ handleLogin = async () => {
 
 render(){
   const { location, postTitles = [] } = this.props;
-  const {  isLoading, loading } = this.context;
-  console.log(this.props.postTitles); // Add this line
+  const {  isLoading, loading, isAuthenticated } = this.context;
 
   if (isLoading) {
     return (
@@ -191,16 +189,15 @@ render(){
   }
 
 return (
-    <AuthContext.Consumer>
-        {authContext => (
+    <>
           <SearchContext.Consumer>
             {searchContext => (
               <>
-                <nav className={authContext.isAuthenticated ? "logged" : "nav"}>
+                <nav className={isAuthenticated ? "logged" : "nav"}>
                   <Link to="/">
                       <img src={process.env.PUBLIC_URL + '/assets/logo/logo.svg'} alt="logo" style={{width: '75px', height: '75px'}} />
                   </Link>
-                  {authContext.isAuthenticated  ? (
+                  {isAuthenticated  ? (
                       <div>
                       <ul id="navbar" className={this.state.clicked ? "#navbar active" : "#navbar"}>
                       {location.pathname !== "/"  ? (
@@ -211,7 +208,7 @@ return (
                           <li>
                           <Autocomplete
                               id="autocomplete-input"
-                              options={postTitles || []}
+                              options={postTitles.slice(0, 5) || []} 
                               freeSolo
                               inputValue={searchContext.searchQuery}
                               color="neutral"
@@ -268,8 +265,8 @@ return (
           </>
           )}
         </SearchContext.Consumer>
-      )}
-    </AuthContext.Consumer>
+      
+    </>
 );
 }
 }
