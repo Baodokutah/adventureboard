@@ -1,0 +1,19 @@
+.create{
+    width: 91.67%;
+    height: 80%;
+    left: 3.8%;
+    top: 2.34%;
+    position: relative;
+    background-color: white;
+    /* display: flex; */
+    /* flex-direction: column; */
+    border-radius: 11px;
+    padding: 23px;
+}
+
+
+.quantity{
+    bottom: 3%;
+    left: 2%;
+    position: absolute;
+}

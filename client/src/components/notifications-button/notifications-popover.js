@@ -21,10 +21,7 @@ import {
 import { Scrollbar } from '../scrollbar';
 import { useNavigate } from 'react-router-dom';
 
-const renderContent = (notification) => {
-
-
-
+const renderContent = (notification, navigate) => {
   let createdAt;
   if (notification.createdAt) {
     createdAt = format(new Date(notification.createdAt), "dd MMMM, h:mm a", { locale: vi });
@@ -98,7 +95,17 @@ const renderContent = (notification) => {
                   variant="subtitle2"
                   sx={{ mr: 0.5 }}
                 >
-                <strong>{notification.author}</strong> 
+              <span
+                style={{ cursor: 'pointer', color: '#000000E5' }} 
+                onMouseEnter={(e) => e.target.style.textDecoration = 'underline'}
+                onMouseLeave={(e) => e.target.style.textDecoration = 'none'}
+                onClick={(event) => {
+                  event.stopPropagation(); 
+                  navigate(`/user/${notification.authorId}`);
+                }}
+              >  
+                <strong>{notification.author}</strong>
+              </span> 
                   </Typography>
                 <Typography variant="body2">
                   {notification.description}
@@ -138,7 +145,7 @@ export const NotificationsPopover = (props) => {
   const isEmpty = notifications.length === 0;
   const handleNotificationClick = (notification) => {
     if (notification.post) {
-      navigate(`/post/${notification.post._id}`);
+      (notification.post.types === 'Group') ? navigate(`/study/post/${notification.post._id}`) :navigate(`/ctxh/post/${notification.post._id}`) ;
     }
   };
   return (
@@ -169,7 +176,7 @@ export const NotificationsPopover = (props) => {
         >
           Thông báo
         </Typography>
-        <Tooltip title="Nhấn để đọc tất cả">
+        <Tooltip title="Nhấn để xóa tất cả thông báo">
           <IconButton
             onClick={onRemoveAll}
             size="small"
@@ -198,6 +205,7 @@ export const NotificationsPopover = (props) => {
                   divider
                   key={notification.id}
                   sx={{
+                    cursor: 'pointer',
                     alignItems: 'flex-start',
                     '&:hover': {
                       backgroundColor: 'action.hover'
@@ -207,7 +215,7 @@ export const NotificationsPopover = (props) => {
                     }
                   }}
                   secondaryAction={(
-                    <Tooltip title="Remove">
+                    <Tooltip title="Xóa">
                       <IconButton
                         edge="end"
                         onClick={() => onRemoveOne?.(notification.id)}
@@ -220,7 +228,7 @@ export const NotificationsPopover = (props) => {
                     </Tooltip>
                   )}
                 >
-                  {renderContent(notification)}
+                  {renderContent(notification, navigate)}
                 </ListItem>
               ))}
             </List>

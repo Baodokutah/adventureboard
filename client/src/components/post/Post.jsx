@@ -11,11 +11,60 @@ import SendIcon from '@mui/icons-material/Send';
 import { useMockedUser } from '../../hooks/use-mocked-user.js';
 import './post.css';
 import axios from 'axios';
+import { Confirm } from '../popup/Popup.jsx';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-export function InPost({ title, tags, content, comments, author, date, postId, onNewComment}) {
-  const [comment, setComment] = useState(''); // Add this state variable
+export function InPost({ title, tags, content, comments, author, date, postId, onNewComment,onDeletePost}) {
+  const [comment, setComment] = useState('');
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const currentPage = location.pathname.includes('ctxh') ? '/ctxh' : location.pathname.includes('study') ? '/study' : '404';
 
   const user = useMockedUser()
+
+  const handleDeletePost = async () => {
+    try {
+      const response = await axios({
+        method: 'post',
+        url: '/api/post/delete',
+        data: {
+          pid: postId,
+          token: user.id, 
+        },
+      });
+      if (response.data.success) {
+        console.log('Delete post success!');
+        onDeletePost();
+        navigate(currentPage)
+        
+      } else {
+        console.log('Failed to delete post:', response.data.message);
+      }
+
+      // You might want to do something with the response here, like updating the UI
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleEditPost = () => {
+    navigate(`/edit/${postId}`);
+  };
+
+
+
+  const isAuth = () => {    
+    if((author && user) && author._id===user._id) return true;
+    return false;
+  }
+console.log(author)
+// console.log(user._id)
+
+  const handleOpenConfirmModal = () => {
+    setShowConfirmModal(true);
+  };
+
   const handleCommentSubmit = async () => {
     const commentData = {
       token: user.id,
@@ -35,16 +84,18 @@ export function InPost({ title, tags, content, comments, author, date, postId, o
   };
   return (
     <div className='postContentDisplay'>
-      <h5 style={{fontWeight: 'normal'}}>{author}・{date}</h5>
+      <h5 style={{fontWeight: 'normal'}}>{(author) ? author.name : null }・{date}</h5>
       <h2>{title}</h2>
+      {isAuth() ? (
       <div className='imgLoc'>
-        <IconButton aria-label='toggle visibility'>
+          <IconButton aria-label='toggle visibility' onClick={handleEditPost}>
           <img alt='editButt' style={{width:'45px', height:'45px'}} src={process.env.PUBLIC_URL + '/assets/edit-svgrepo-com.svg'}/>
         </IconButton>
-        <IconButton aria-label='toggle visibility'>
-          <img alt='editButt' style={{width:'48px', height:'48px'}} src={process.env.PUBLIC_URL + '/assets/delete-svgrepo-com.svg'}/>
-        </IconButton>
+        <IconButton aria-label='toggle visibility' onClick={handleOpenConfirmModal}>
+        <img alt='deleteButt' style={{width:'48px', height:'48px'}} src={process.env.PUBLIC_URL + '/assets/delete-svgrepo-com.svg'}/>
+      </IconButton>
       </div>
+      ): null}
       <div style={{ display: 'flex', flexDirection: 'row', gap: '25px' }}>
         {tags && tags.map((tag, index) => (
           <div key={index} className='tag'>
@@ -101,6 +152,15 @@ export function InPost({ title, tags, content, comments, author, date, postId, o
             ))}
           </div>
       </div>
+      {showConfirmModal && (
+        <Confirm
+          open={showConfirmModal}
+          onClose={() => setShowConfirmModal(false)}
+          action={"xóa bài viết"}
+          onConfirm={() => handleDeletePost()}
+          imgSrc={process.env.PUBLIC_URL + "/assets/Delete.svg"}
+        />
+      )}
     </div>
   );
 }

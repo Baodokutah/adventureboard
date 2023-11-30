@@ -10,6 +10,7 @@ import { AuthProvider } from "./context/auth/firebase-context";
 // import InPost from "./components/post/Post";
 import OtherProfile from "./pages/otherProfile/otherProfile";
 import { SearchProvider, PostTitleContext, StudyPostTitleContext } from './context/search-context';
+import UpdatePost from "./pages/updatePost/updatePost";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -21,7 +22,11 @@ function App() {
     const fetchPosts = async () => {
       try {
         const response = await axios.get('/api/post/CTXH');
-        setPostTitles(response.data.Posts.map(post => post.title));
+        const allPostTitles = response.data.Posts.map(post => post.title);
+        const uniquePostTitles = allPostTitles.filter((title, index, self) => 
+          self.indexOf(title) === index
+        );
+        setPostTitles(uniquePostTitles);
       } catch (error) {
         console.error('Failed to fetch posts:', error);
       }
@@ -33,13 +38,19 @@ function App() {
     const fetchPosts = async () => {
       try {
         const response = await axios.get('/api/post/Group');
-        setStudyPostTitles(response.data.Posts.map(post => post.title));
+        const allStudyPostTitles = response.data.Posts.map(post => post.title);
+        const uniqueStudyPostTitles = allStudyPostTitles.filter((title, index, self) => 
+          self.indexOf(title) === index
+        );
+        setStudyPostTitles(uniqueStudyPostTitles);
       } catch (error) {
         console.error('Failed to fetch posts:', error);
       }
     };
     fetchPosts();
   }, []);
+
+
 
 
 
@@ -61,6 +72,7 @@ function App() {
           <Route path="/create" element={<CreatePost />} />
           <Route path="/profile" element={<Profile/>   }/>       
           <Route path="/user/:id" element={<OtherProfile/>}/>
+          <Route path="/edit/:postId" element={<UpdatePost />} />
         </Routes>
         </StudyPostTitleContext.Provider>
         </PostTitleContext.Provider>

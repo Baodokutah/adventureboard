@@ -36,8 +36,8 @@ export default function Profile() {
     );
   }
 
-  const handlePostClick = (postId) => {
-    navigate(`/study/post/${postId}`);
+  const handlePostClick = (postId, types) => {
+    (types === 'Group') ? navigate(`/study/post/${postId}`) : navigate(`/ctxh/post/${postId}`);
 };
 
   return (
@@ -48,7 +48,7 @@ export default function Profile() {
                       const date = new Date(post.date);
                       const readableDate = format(date, 'dd-MM-yyyy');                      
                       return (
-                        <div key={post._id} onClick={() => handlePostClick(post._id)}>
+                        <div key={post._id} onClick={() => handlePostClick(post._id, post.types)}>
                             <PostTitle title={post.title} tags={post.tags}  author={post.author.name} date={readableDate} />
                         </div>
                       );

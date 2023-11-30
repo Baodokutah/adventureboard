@@ -16,6 +16,7 @@ function CTXH() {
     const [postContent, setPostContent] = useState('');
     const [triggerUpdate, setTriggerUpdate] = useState(false);
     const [selectedTags, setSelectedTags] = useState([]);
+    const [refreshPosts, setRefreshPosts] = useState(false);
     const { searchQuery = '' } = useContext(SearchContext);
     const handleNewComment = () => {
       setTriggerUpdate(!triggerUpdate);
@@ -35,7 +36,7 @@ function CTXH() {
             }
         };
         fetchPosts();
-    }, []);
+    }, [refreshPosts]);
 
     useEffect(() => {
       const fetchPostContent = async () => {
@@ -72,8 +73,6 @@ const filteredPosts = posts.filter((post) =>
   post.content?.toLowerCase().includes(String(searchQuery).toLowerCase()))
 );
 
-console.log(postContent.author)
-
 
     return (
         <div className='componentDisplay'>
@@ -81,7 +80,7 @@ console.log(postContent.author)
             {id ? (
 
               <div className='Inpost'>
-                <InPost {...getPostById(id)} title={postContent.title} postId={id} content={postContent.content} date={readableDate} author={postContent && postContent.author ? postContent.author.name : ''} comments={postContent.comments} onNewComment={handleNewComment}/>
+                <InPost {...getPostById(id)} title={postContent.title} postId={id} content={postContent.content} date={readableDate} author={postContent.author} comments={postContent.comments}   onDeletePost={() => setRefreshPosts(!refreshPosts)} onNewComment={handleNewComment}/>
               </div>
              ) : (
                 <div className='Posts'>

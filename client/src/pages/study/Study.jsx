@@ -5,7 +5,7 @@ import { PostTitle, InPost } from '../../components/post/Post';
 import { useNavigate, useParams } from 'react-router-dom';
 import ListOfMem from '../../components/listofmem/Listofmem';
 import { format } from 'date-fns';
-import { SearchContext, StudyPostTitleContext } from '../../context/search-context';
+import { SearchContext } from '../../context/search-context';
 import { useContext } from 'react';
 
 import "./study.css"
@@ -17,6 +17,7 @@ function Study() {
     const [postContent, setPostContent] = useState('');
     const [triggerUpdate, setTriggerUpdate] = useState(false);
     const [selectedTags, setSelectedTags] = useState([]);
+    const [refreshPosts, setRefreshPosts] = useState(false);
     const { searchQuery } = useContext(SearchContext);
 
     const handleNewComment = () => {
@@ -37,7 +38,7 @@ function Study() {
             }
         };
         fetchPosts();
-    }, []);
+    }, [refreshPosts]);
 
     useEffect(() => {
       const fetchPostContent = async () => {
@@ -74,16 +75,12 @@ function Study() {
     post.content?.toLowerCase().includes(searchQuery?.toLowerCase()))
     );
 
-
-console.log(postContent.author)
-
     return (
-      <StudyPostTitleContext.Provider value={posts.map(post => post.title)}>
         <div className='componentDisplay'>
         {id ? <ListOfMem postId={postContent._id} author={postContent.author}  maxMem={postContent.maxuser} member={postContent.joined_users} currPage={`post/${id}`}/> : <FilterBox onTagsChange={handleTagsChange} />}
             {id ? (
               <div className='Inpost'>
-                <InPost {...getPostById(id)} title={postContent.title} postId={id} content={postContent.content} date={readableDate} author={postContent && postContent.author ? postContent.author.name : ''} comments={postContent.comments} onNewComment={handleNewComment}/>
+                <InPost {...getPostById(id)} title={postContent.title} postId={id} content={postContent.content} date={readableDate} author={postContent.author} comments={postContent.comments} onNewComment={handleNewComment}   onDeletePost={() => setRefreshPosts(!refreshPosts)}/>
               </div>
              ) : (
                 <div className='Posts'>
@@ -99,7 +96,6 @@ console.log(postContent.author)
                 </div>
             )}
         </div>
-        </StudyPostTitleContext.Provider>
     );
 }
 
