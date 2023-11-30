@@ -10,7 +10,8 @@ async function getAllCTXHPost(req,res){
     try {
         CTXHposts = await Post.find(
             { types: 'CTXH' },
-            { title: 1, author: 1, tags: 1, date: 1}
+            { title: 1, author: 1, tags: 1, date: 1},
+            { sort: {date: -1}}
         ).populate({
             path: 'author',
             select: 'name'
@@ -32,7 +33,8 @@ async function getAllGroupPost(req,res){
     try {
         Groupposts = await Post.find(
             { types: 'Group' },
-            { title: 1, author: 1, tags: 1, date: 1}
+            { title: 1, author: 1, tags: 1, date: 1},
+            { sort: {date: -1}}
         ).populate({
             path: 'author',
             select: 'name'
