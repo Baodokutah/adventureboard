@@ -1,5 +1,5 @@
 import {useNavigate } from 'react-router-dom';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Chip from '@mui/material/Chip';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
@@ -62,6 +62,7 @@ const cancelButtonStyles = {
   border: '1px solid #000',
   background: '#FE3939',
   color: '#FFF',
+  cursor: 'pointer',
 };
 
 const confirmButtonStyles = {
@@ -75,10 +76,12 @@ const confirmButtonStyles = {
   border: '1px solid #000',
   background: '#0DD321',
   color: '#FFF',
+  cursor: 'pointer',
 };
 
 export function Success({ open, onClose, onCloseFrame, action, page, imgSrc }) {
   const navigate = useNavigate();
+  console.log('Success component rendered'); // Add this line
 
   const handleConfirm = () => {
     if (page) {
@@ -120,14 +123,15 @@ export function Success({ open, onClose, onCloseFrame, action, page, imgSrc }) {
   );
 }
 
-export function Confirm({ open, onClose, action, onConfirm, imgSrc }) {
+export function Confirm({ open, onClose, action, page, onConfirm, imgSrc }) {
   const [openSuccessModal, setOpenSuccessModal] = useState(false);
 
-  const handleConfirm = () => {
-    // Open the SuccessModal
+  const handleConfirm =  () => {
+    // Wait for the onConfirm function to complete
+    // await onConfirm();
+    // Then open the SuccessModal
     setOpenSuccessModal(true);
   };
-
   if (!open) return null;
   return (
     <div onClick={onClose} style={overlayStyles}>
@@ -152,6 +156,7 @@ export function Confirm({ open, onClose, action, onConfirm, imgSrc }) {
         {openSuccessModal && (
         <Success
           action={`Đã ${action} thành công`}
+          page={page}
           open={openSuccessModal}
           onClose={() => {
             setOpenSuccessModal(false);
@@ -172,6 +177,19 @@ export function Filter({open, onClose, page, tags, setTags}){
                                             , {type:"ctxhCode", tags : []}]);
 
     const [selectedTag, setSelectedTag] = useState({});
+
+    useEffect(() => {
+      setSelectedTag(tags.reduce((acc, tag) => ({ ...acc, [tag]: true }), {}));
+  }, [tags]);
+
+  useEffect(() => {
+    setAllTags([
+      {type:"subjectCode", tags : []}, 
+      {type:"classCode", tags : []}, 
+      {type:"ctxhCode", tags : tags}
+    ]);
+  }, [tags]);
+
     //ctxh
     const handleClickTag = (tag) => {
     setSelectedTag(prevState => ({...prevState, [tag]: !prevState[tag]}));
@@ -288,6 +306,8 @@ export function Filter({open, onClose, page, tags, setTags}){
     };
 
     const [subjectSelect, setSubjectSelect] = useState({});
+
+
     const handleSelectSubject = (event) => {
         setSubjectSelect(event.target.value);
         const tag = {type:"subjectCode", tags: [event.target.value]};

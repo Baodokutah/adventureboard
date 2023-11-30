@@ -58,6 +58,7 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
   
       if (response.data.success) {
         console.log('Remove member success!');
+
       } else {
         console.log('Failed to remove member:', response.data.message);
       }
@@ -83,15 +84,18 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
     }
   }
 
-  const handleDeleteMem = (mem) => {
+
+  const handleDeleteMem = async (mem) => {
     const userToRemove = memberList.find(member => member._id === mem._id);
     if(userToRemove) {
+      await removeMember(userToRemove); // Await here  
       setMemberList(memberList.filter(member => member !== userToRemove));
       setCount(count - 1);
-      removeMember(userToRemove);
       setButtonClickedJoin(false); 
+
     }
   }
+
 
   //check auth
   const isAuth = () => {    
@@ -135,14 +139,17 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
               ) : null}
               <Confirm
                 open={openModal}
-                onClose={() => {setOpenModal(false)}}
+                onClose={() => setOpenModal(false)}
                 action={`xóa thành viên ${mem.name} ra khỏi nhóm`}
                 imgSrc={process.env.PUBLIC_URL + "/assets/button-circle-round-delete-x-svgrepo-com.svg"}
                 onConfirm={() => handleDeleteMem(mem)}
+                
+                
               />
             </div>
           ))}
         </div>
+        {isAuth() ? (
         <Button
           onClick={toggleFrame}
           sx={{border:"1px solid black",
@@ -160,6 +167,7 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
               >
               Gửi thông báo
         </Button>
+        ) : null}
       </div>
       {isFrameOpen && (
     <div className="popup-container">

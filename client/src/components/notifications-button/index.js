@@ -8,6 +8,7 @@ import axios from 'axios';
 
 const transformNotifications = (notifications) => {
   return notifications.map(notification => {
+    const author = notification?.post?.author || {}; 
     let type;
     if (notification.content.includes('đã xóa bạn khỏi nhóm của họ') || 
         notification.content.includes('Bạn đã rời khỏi nhóm!') ||
@@ -21,9 +22,11 @@ const transformNotifications = (notifications) => {
       id: notification._id,
       type: type,
       description: notification.content,
-      avatar: notification.post.author.avatar,
-      author: notification.post.author.name,
-      createdAt: notification.date
+      avatar: author.avatar,
+      author: author.name,
+      createdAt: notification.date,
+      post: notification.post,
+      authorId: author._id
     };
   });
 };
@@ -89,7 +92,7 @@ export const NotificationsButton = () => {
 
   return (
     <>
-      <Tooltip title="Notifications">
+      <Tooltip title="Thông báo">
         <IconButton
           ref={popover.anchorRef}
           onClick={popover.handleOpen}
