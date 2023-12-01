@@ -11,3 +11,7 @@
     flex-shrink: 0;    
     gap: 30px
 }
+
+.pcard h1 {
+    text-align: center;
+}

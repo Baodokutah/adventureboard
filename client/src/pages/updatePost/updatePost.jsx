@@ -13,7 +13,7 @@ function UpdatePost() {
     useEffect(() => {
         const fetchPostContent = async () => {
           try {
-            const response = await axios.get(`/api/post/${postId}`);
+            const response = await axios.get(process.env.REACT_APP_API_URL + `/api/post/${postId}`);
             setPostContent(response.data.Post);
             setTags(response.data.Post.tags);
           } catch (error) {

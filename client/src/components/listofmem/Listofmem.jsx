@@ -6,6 +6,7 @@ import {useMockedUser} from "../../hooks/use-mocked-user"
 import axios from 'axios';
 import { AuthContext } from '../../context/auth/firebase-context';
 import './listofmem.css';
+import { Link } from 'react-router-dom';
 
 const useIsMember = (user, memberList) => {
   const [buttonClickedJoin, setButtonClickedJoin] = useState(false);
@@ -34,7 +35,7 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
   
   const joinPost = async () => {
     try {
-      const response = await axios.post('/api/post/join', {
+      const response = await axios.post(process.env.REACT_APP_API_URL + '/api/post/join', {
         pid: postId,
         token: user.id
       });
@@ -51,7 +52,7 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
 
   const removeMember = async (mem) => {
     try {
-      const response = await axios.post('/api/post/removeMem', {
+      const response = await axios.post(process.env.REACT_APP_API_URL + '/api/post/removeMem', {
         pid: postId,
         uid: mem._id,
         token: user.id
@@ -127,8 +128,12 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
           <h4>Số lượng: {memberList.length}/{maxMem}</h4>
           {memberList.map((mem, idx) => (
             <div key={idx}>
+            <Link
+       className="author-link"
+        to={author ? `/user/${author._id}` : '#'} 
+          >
               <h5>{mem.name}</h5>
-              {console.log(isAuth())}
+              </Link>
               {isAuth() || isMem(mem) ? (
                 <Button
                 variant='X'

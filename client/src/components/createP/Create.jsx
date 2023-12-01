@@ -17,7 +17,7 @@ function Create({ tags, setTags }) // Add the new props here
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [quantity, setQuantity] = useState(1);
-
+    const [link, setLink] = useState('');
     const user = useMockedUser();
 
     const handleSubmit = async () => {
@@ -31,8 +31,9 @@ function Create({ tags, setTags }) // Add the new props here
             token: user.id, 
         };
         try {
-            const response = await axios.post('/api/post/create', postData);
+            const response = await axios.post(process.env.REACT_APP_API_URL + '/api/post/create', postData);
             console.log(response.data);
+            setLink(response.data.Post); 
         } catch (error) {
             console.error(error);
         }
@@ -143,7 +144,7 @@ function Create({ tags, setTags }) // Add the new props here
                 open={openModal}
                 onClose={() => setOpenModal(false)}
                 action='Tạo bài viết thành công!'
-                page={currentPage}
+                page={`${currentPage}/post/${link}`}
                 imgSrc={"https://www.svgrepo.com/show/522783/check-circle.svg"}
                 />
             </div>

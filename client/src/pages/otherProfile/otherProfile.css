@@ -23,10 +23,17 @@ Avatar {
     margin-top: 60px ;
    }
 
-.PostDisplay {
-    width: 65vw;
-}
-
+   .PostDisplay{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    gap: 50px;
+    /* overflow: hidden; */
+    margin-top: 100px;
+    margin-left: 80px;
+    max-width: 100%; /* Add a max-width to contain within the viewport */
+    /* flex-wrap: wrap; */
+  }
 .Posts {
     width: 100%;
   }

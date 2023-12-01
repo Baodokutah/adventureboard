@@ -62,7 +62,7 @@ export const AuthProvider = (props) => {
       // Check if the email ends with "@hcmut.edu.vn"
       if (user.email.endsWith("@hcmut.edu.vn")) {
         // Send user data to backend
-        const response = await fetch('/api/user/login', {
+        const response = await fetch(process.env.REACT_APP_API_URL + '/api/user/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

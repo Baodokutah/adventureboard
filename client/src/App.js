@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import Home from "./pages/home/Home";
 import CTXH from "./pages/ctxh/Ctxh";
 import Study from "./pages/study/Study";
@@ -7,21 +7,24 @@ import PostPage from "./pages/post/PostPage";
 import Navbar from "./components/navbar/Navbar";
 import CreatePost from "./pages/createPost/createPost";
 import { AuthProvider } from "./context/auth/firebase-context";
-// import InPost from "./components/post/Post";
 import OtherProfile from "./pages/otherProfile/otherProfile";
 import { SearchProvider, PostTitleContext, StudyPostTitleContext } from './context/search-context';
 import UpdatePost from "./pages/updatePost/updatePost";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import Page404 from "./pages/404";
+import pathToRegexp from 'path-to-regexp';
 
 function App() {
   const [postTitles, setPostTitles] = useState([]);
   const [studyPostTitles, setStudyPostTitles] = useState([]);
+  const location = useLocation();
+  const paths = ['/', '/ctxh', '/ctxh/post/:id', '/study', '/study/post/:id', '/create', '/profile', '/user/:id', '/edit/:postId'];
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('/api/post/CTXH');
+        const response = await axios.get(process.env.REACT_APP_API_URL + '/api/post/CTXH');
         const allPostTitles = response.data.Posts.map(post => post.title);
         const uniquePostTitles = allPostTitles.filter((title, index, self) => 
           self.indexOf(title) === index
@@ -37,7 +40,7 @@ function App() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('/api/post/Group');
+        const response = await axios.get(process.env.REACT_APP_API_URL + '/api/post/Group');
         const allStudyPostTitles = response.data.Posts.map(post => post.title);
         const uniqueStudyPostTitles = allStudyPostTitles.filter((title, index, self) => 
           self.indexOf(title) === index
@@ -50,32 +53,35 @@ function App() {
     fetchPosts();
   }, []);
 
-
-
-
-
+  function pathMatches(pathname, pattern) {
+    const match = pathToRegexp(pattern);
+    return match.test(pathname);
+  }
+  const is404 = paths.every(path => !pathMatches(location.pathname, path));
+  
   return (
     <>
       <AuthProvider>
-      <SearchProvider>
-      <PostTitleContext.Provider value={postTitles}>
-      <StudyPostTitleContext.Provider value={studyPostTitles}>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/ctxh" element={<CTXH />}>
-            <Route path="/ctxh/post/:id" element={<PostPage />} />
-          </Route>
-          <Route path="/study" element={<Study />}>
-            <Route path="/study/post/:id" element={<PostPage />} />
-          </Route>
-          <Route path="/create" element={<CreatePost />} />
-          <Route path="/profile" element={<Profile/>   }/>       
-          <Route path="/user/:id" element={<OtherProfile/>}/>
-          <Route path="/edit/:postId" element={<UpdatePost />} />
-        </Routes>
-        </StudyPostTitleContext.Provider>
-        </PostTitleContext.Provider>
+        <SearchProvider>
+          <PostTitleContext.Provider value={postTitles}>
+            <StudyPostTitleContext.Provider value={studyPostTitles}>
+              {!is404 && <Navbar />}
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/ctxh" element={<CTXH />}>
+                  <Route path="/ctxh/post/:id" element={<PostPage />} />
+                </Route>
+                <Route path="/study" element={<Study />}>
+                  <Route path="/study/post/:id" element={<PostPage />} />
+                </Route>
+                <Route path="/create" element={<CreatePost />} />
+                <Route path="/profile" element={<Profile/>   }/>       
+                <Route path="/user/:id" element={<OtherProfile/>}/>
+                <Route path="/edit/:postId" element={<UpdatePost />} />
+                <Route path="*" element={<Page404 />} />        
+              </Routes>
+            </StudyPostTitleContext.Provider>
+          </PostTitleContext.Provider>
         </SearchProvider>
       </AuthProvider>
     </>
@@ -83,4 +89,3 @@ function App() {
 }
 
 export default App;
-

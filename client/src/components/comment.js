@@ -28,7 +28,7 @@ export const Comment = ({onNewReply, ...props}) => {
   }; 
   const handleReplySubmit = async () => {
     try {
-      const response = await axios.post('/api/comment/reply', {
+      const response = await axios.post(process.env.REACT_APP_API_URL + '/api/comment/reply', {
         token: user.id, 
         content: reply,
         cid: id, 

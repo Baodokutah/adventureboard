@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Chip, FormControl, InputLabel, Select, MenuItem, TextField, InputAdornment, IconButton, Button } from '@mui/material';
+import { Chip,  TextField, InputAdornment, IconButton, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { AuthContext } from '../../context/auth/firebase-context';
 import { useContext } from 'react';
@@ -10,7 +10,6 @@ export var newTags = [];
 
 function FilterBoxCTXH({ onTagsChange }) {
   const [ctxhTags, setCtxhTags] = useState({tags:[]});
-
   const [selectedTag, setSelectedTag] = useState({});
   const handleClickTag = (tag) => {
     setSelectedTag(prevState => ({...prevState, [tag]: !prevState[tag]}));
@@ -165,79 +164,39 @@ function FilterBoxGroup({ onTagsChange }) {
     });
   };
 
-  const [subjectSelect, setSubjectSelect] = useState('');
 
-  const handleSelectSubject = (event) => {
-    setSubjectSelect(event.target.value);
-
-    setStudyTags((studyTags) => {
-      return studyTags.map((tag) => {
-        if (tag.type === 'subjectCode') {
-          // If the tag has the same type, update the tags array
-          const updatedTags = [event.target.value];
-          onTagsChange(updatedTags);
-          return { ...tag, tags: updatedTags };
-        }
-        // Otherwise, keep the tag unchanged
-        return tag;
-      });
-    });
-  };
 
   newTags = studyTags.flatMap((tag) => tag.tags);
 
   return (
       <div className='filterBigBox'>
       <div className='filterBox'><h1>Bộ lọc</h1></div>
-          <h3>Mã môn</h3>
-          <div className='tagBox_Study'>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label"></InputLabel>
-              <Select
-                labelId="simple-select-class-code-label"
-                id="simple-select-class-code"
-                label=""
-                sx={{
-                  width: '159px',
-                  height: '23px',
-                  borderRadius:30,
-                }}
-                value={subjectSelect}
-                onChange={handleSelectSubject}
-              >
-                <MenuItem value='MT2003'>MT2003</MenuItem>
-                <MenuItem value='MT2013'>MT2013</MenuItem>
-                <MenuItem value='CO2014'>CO2014</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-
-         <h3>Nhóm lớp</h3>
+         <h3>Nhóm lớp & Mã môn</h3>
          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
          <TextField
-  value={inputValue}
-  onChange={(e) => setInputValue(e.target.value)}
-  placeholder="Nhập lớp"
-  variant="outlined"
-  fullWidth
-  InputProps={{
-    endAdornment: (
-      <InputAdornment position="end">
-<IconButton
-  aria-label="add"
-  onClick={handleAddChip}
-  style={{
-    marginRight: '-20px',
-    cursor: 'pointer',
-  }}
->
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          placeholder="Nhập lớp & môn"
+          variant="outlined"
+          fullWidth
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+        <IconButton
+          aria-label="add"
+          onClick={handleAddChip}
+          style={{
+            marginRight: '-20px',
+            cursor: 'pointer',
+          }}
+        >
   <AddIcon />
 </IconButton>
         </InputAdornment>
     ),
     style: {
       borderRadius: '20px',
-      width: '159px',
+      width: '180px',
       height: '23px',
     },
   }}

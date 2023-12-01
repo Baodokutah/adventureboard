@@ -8,6 +8,7 @@ import { format } from 'date-fns';
 import "./ctxh.css"
 import { useContext } from 'react';
 import { SearchContext } from '../../context/search-context';
+import Pagination from '@mui/material/Pagination';
 
 function CTXH() {
     const { id } = useParams();
@@ -18,6 +19,7 @@ function CTXH() {
     const [selectedTags, setSelectedTags] = useState([]);
     const [refreshPosts, setRefreshPosts] = useState(false);
     const { searchQuery = '' } = useContext(SearchContext);
+    const [page, setPage] = useState(1);
     const handleNewComment = () => {
       setTriggerUpdate(!triggerUpdate);
     };
@@ -33,7 +35,7 @@ function CTXH() {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await axios.get('/api/post/CTXH');
+                const response = await axios.get(process.env.REACT_APP_API_URL + '/api/post/CTXH');
                 setPosts(response.data.Posts);
             } catch (error) {
                 console.error('Failed to fetch posts:', error);
@@ -45,7 +47,7 @@ function CTXH() {
     useEffect(() => {
       const fetchPostContent = async () => {
         try {
-          const response = await axios.get(`/api/post/${id}`);
+          const response = await axios.get(process.env.REACT_APP_API_URL + `/api/post/${id}`);
           setPostContent(response.data.Post);
         } catch (error) {
           console.error('Failed to fetch post content:', error);
@@ -88,7 +90,8 @@ const filteredPosts = posts.filter((post) =>
               </div>
              ) : (
                 <div className='Posts'>
-                  {filteredPosts.sort((a, b) => new Date(b.date) - new Date(a.date)).map((post) => {
+                <div className='PostDisplay'>
+                  {filteredPosts.slice((page - 1) * 10, page * 10).sort((a, b) => new Date(b.date) - new Date(a.date)).map((post) => {
                       const date = new Date(post.date);
                       const readableDate = format(date, 'dd-MM-yyyy');
                       return (
@@ -97,7 +100,11 @@ const filteredPosts = posts.filter((post) =>
                         </div>
                       );
                     })}
-                </div>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                    <Pagination count={Math.ceil(filteredPosts.length / 10)} page={page} onChange={(event, value) => setPage(value)} />
+                  </div>               
+                  </div>
             )}
         </div>
     );
