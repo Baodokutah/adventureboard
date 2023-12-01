@@ -33,8 +33,8 @@ function FilterBoxCTXH({ onTagsChange }) {
   useEffect(() => {}, [ctxhTags]);
   // Custom styles for the chip
   const chipStyle = {
-    width: '104px', // Fixed width for each chip
-    height: '23px', // Fixed height for each chip
+    width: '7vw', // Fixed width for each chip
+    height: '3vh', // Fixed height for each chip
     margin: '4px 4px 4px 0', // Margin to space out the chips
     fontSize: '0.75rem', // Adjust font size as needed
   };
@@ -44,9 +44,10 @@ function FilterBoxCTXH({ onTagsChange }) {
     display: 'grid',
     gridTemplateColumns: 'repeat(2, 1fr)', // Two columns layout
     gap: '8px', // Space between chips
-    marginBottom: '16px', // Space below each row of chips
-    marginRight: '40px',
+    // marginBottom: '16px', // Space below each row of chips
+    // marginRight: '40px',
     fontWeight: 'bold',
+    zIndex: "1"
   };
   newTags = ctxhTags.tags;
   return (
@@ -257,7 +258,8 @@ export default function FilterBox({onTagsChange}) {
             fontSize:"2.7vh",
             marginTop:2.3475,
             marginLeft:1.6,
-            visibility: isAuthenticated ? 'visible' : 'hidden' 
+            visibility: isAuthenticated ? 'visible' : 'hidden',
+            fontSize: "1.3vi",
             }}>
               Tạo bài viết
           </Button>

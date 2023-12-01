@@ -28,12 +28,12 @@ function Create({ tags, setTags }) // Add the new props here
             content: description,
             tags: tags,
             maxuser: quantity,
-            token: user.id, 
+            token: user.id,
         };
         try {
             const response = await axios.post(process.env.REACT_APP_API_URL + '/api/post/create', postData);
             console.log(response.data);
-            setLink(response.data.Post); 
+            setLink(response.data.Post);
         } catch (error) {
             console.error(error);
         }
@@ -57,8 +57,8 @@ function Create({ tags, setTags }) // Add the new props here
                 label="Tiêu đề"
                 multiline
                 rows={1}
-                value={title} 
-                onChange={(e) => setTitle(e.target.value)} 
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 type='string'
                 color="info"
                 sx={{width:'70dvw'}}
@@ -68,14 +68,14 @@ function Create({ tags, setTags }) // Add the new props here
                 label="Mô tả (không bắt buộc)"
                 multiline
                 rows={11}
-                value={description} 
-                onChange={(e) => setDescription(e.target.value)} 
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 type='string'
                 sx={{width:'70dvw'}}
             />
             </Box>
 
-            <div style={{display:"flex", flexDirection:"row", gap:'1.7%'}}>
+            <div style={{display:"flex", flexDirection:"row", gap:'1.7%', flexWrap:'wrap'}}>
                 {tags.map((tag, index) => (
                     <div key={index}  className='tag' style={{width: "7.88%", height: "3.36%"}}>
                         {tag}
@@ -93,7 +93,12 @@ function Create({ tags, setTags }) // Add the new props here
                 </Button>
                 <Filter
                 open={openFilter}
-                onClose={() => setOpenFilter(false)}
+                onClose={() =>
+                    {
+                        setOpenFilter(false)
+                        // setTags([])
+                    }
+                }
                 page={currentPage}
                 tags={tags}
                 setTags={setTags}
@@ -109,7 +114,7 @@ function Create({ tags, setTags }) // Add the new props here
                         shrink: true,
                     }}
                     inputProps={{
-                        min: 1, 
+                        min: 1,
                     }}
                     size='small'
                     sx={{

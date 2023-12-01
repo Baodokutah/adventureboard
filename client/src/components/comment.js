@@ -25,20 +25,20 @@ export const Comment = ({onNewReply, ...props}) => {
   const { isAuthenticated } = useContext(AuthContext);
   const handleReplyChange = (event) => {
     setReply(event.target.value);
-  }; 
+  };
   const handleReplySubmit = async () => {
     try {
       const response = await axios.post(process.env.REACT_APP_API_URL + '/api/comment/reply', {
-        token: user.id, 
+        token: user.id,
         content: reply,
-        cid: id, 
+        cid: id,
       });
-  
+
       if (response.data.success) {
         console.log('Reply sent successfully!');
         setReply('');
         setIsReplying(false);
-        onNewReply();  
+        onNewReply();
       } else {
         console.log('Failed to send reply:', response.data.message);
       }
@@ -80,7 +80,7 @@ export const Comment = ({onNewReply, ...props}) => {
           <Link
             color="text.primary"
             href={`/user/${author._id}`}
-            underline="hover" 
+            underline="hover"
             variant="subtitle2"
           >
             {author.name}
@@ -100,13 +100,13 @@ export const Comment = ({onNewReply, ...props}) => {
         </Typography>
       </Stack>
       {!isReplying && !isReply &&  isAuthenticated   && (
-      <Link 
+      <Link
         onClick={() => setIsReplying(true)}
-        color="text.primary" 
-        underline="hover" 
-        sx={{ 
-          fontSize: '0.8rem', 
-          color: 'black', 
+        color="text.primary"
+        underline="hover"
+        sx={{
+          fontSize: '0.8rem',
+          color: 'black',
           ml: 1 ,
           cursor: 'pointer'
         }}
@@ -131,7 +131,7 @@ export const Comment = ({onNewReply, ...props}) => {
             }}
             aria-label="toggle visibility"
           >
-            <img style={{ width: '30px', height: '30px' }} alt='sendButt' src={process.env.PUBLIC_URL + '/assets/comment-material-2-svgrepo-com.svg'} />
+            <img style={{ width: '30px', height: '30px' }} alt='sendButt' src={process.env.PUBLIC_URL + '/assets/comment-normal.svg'} />
           </IconButton>
         </InputAdornment>
       }
@@ -144,15 +144,15 @@ export const Comment = ({onNewReply, ...props}) => {
       onClick={() => {
           setReply('');
           setIsReplying(false);
-        }}      variant="outlined" 
+        }}      variant="outlined"
       startIcon={<DeleteIcon />}
       sx={{ borderRadius: 50, width: '80px', height: '30px', marginRight: '10px' }}
     >
       Hủy
     </Button>
     <Button
-      onClick={handleReplySubmit} 
-      variant="contained" 
+      onClick={handleReplySubmit}
+      variant="contained"
       endIcon={<SendIcon/>}
       sx={{ borderRadius: 50, width: '80px', height: '30px' }}
     >

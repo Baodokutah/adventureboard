@@ -87,7 +87,7 @@ export function Success({ open, onClose, onCloseFrame, action, page, imgSrc }) {
       onClose();
       if (onCloseFrame) {
         onCloseFrame();
-      }    
+      }
     }
   };
 
@@ -181,8 +181,8 @@ export function Filter({open, onClose, page, tags, setTags}){
 
   useEffect(() => {
     setAllTags([
-      {type:"subjectCode", tags : []}, 
-      {type:"classCode", tags : []}, 
+      {type:"subjectCode", tags : []},
+      {type:"classCode", tags : []},
       {type:"ctxhCode", tags : tags}
     ]);
   }, [tags]);
@@ -403,7 +403,15 @@ export function Filter({open, onClose, page, tags, setTags}){
           style={modalContainerStyles}
           className='modalContainerFilter filterBigBox'
         >
-          <div style={filterBoxStyles} className='filterBox' onClick={onClose}>
+          <div style={filterBoxStyles}
+              className='filterBox'
+              onClick={()=>
+                {
+                  onClose()
+                  setChips([])
+                }
+              }
+          >
             <h1>X</h1>
           </div>
           <h3>Nhóm lớp & Mã môn</h3>

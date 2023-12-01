@@ -17,11 +17,13 @@
     border-radius: 30px;
     width: 7vw;
     height: 3vh;
+    margin-top: 1px;
     /* padding: 0.2em 0.25em; */
-    display: flex;
+    display: grid;
     justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
+    white-space: wrap;
+    text-overflow: ellipsis;
     /* background-color: white; */
     background-color: #00000014;
 }
@@ -73,6 +75,7 @@
     width: 74.5vw;
     min-height: 80vh;
     white-space: pre-wrap;
+    font-size: 1vi;
 }
 
 .postContentDisplay{
@@ -81,9 +84,10 @@
     min-height: 81vh;
     gap: 2vh;
     background-color: white;
-    padding: 16px;
+    padding: 1vi;
     white-space: pre-wrap;
     border-radius: 11px;
+    /* font-size: 2.3vb; */
 }
 
 .postContentDisplay .imgLoc{
