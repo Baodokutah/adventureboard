@@ -32,14 +32,14 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
   useEffect(() => {
     setMemberList(member ? member : []);
   }, [member]);
-  
+
   const joinPost = async () => {
     try {
       const response = await axios.post(process.env.REACT_APP_API_URL + '/api/post/join', {
         pid: postId,
         token: user.id
       });
-  
+
       if (response.data.success) {
         console.log('Join post success!');
       } else {
@@ -57,7 +57,7 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
         uid: mem._id,
         token: user.id
       });
-  
+
       if (response.data.success) {
         console.log('Remove member success!');
 
@@ -68,7 +68,7 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
       console.error('Failed to send request:', error);
     }
   };
-  
+
   const toggleFrame = () => {
     setFrameOpen(!isFrameOpen);
   };
@@ -82,7 +82,7 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
       setMemberList([...memberList, mem]);
       setCount(count + 1);
       joinPost();
-      setButtonClickedJoin(true); 
+      setButtonClickedJoin(true);
     }
   }
 
@@ -90,22 +90,22 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
   const handleDeleteMem = async (mem) => {
     const userToRemove = memberList.find(member => member._id === mem._id);
     if(userToRemove) {
-      await removeMember(userToRemove); // Await here  
+      await removeMember(userToRemove); // Await here
       setMemberList(memberList.filter(member => member !== userToRemove));
       setCount(count - 1);
-      setButtonClickedJoin(false); 
+      setButtonClickedJoin(false);
 
     }
   }
 
 
   //check auth
-  const isAuth = () => {    
+  const isAuth = () => {
     if((author && user) && author._id===user._id) return true;
     return false;
   }
 
-  const isMem = (mem) => {    
+  const isMem = (mem) => {
     if((user) && mem._id===user._id) return true;
     return false;
   }
@@ -130,7 +130,7 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
             <div key={idx}>
             <Link
        className="author-link"
-        to={author ? `/user/${author._id}` : '#'} 
+        to={author ? `/user/${author._id}` : '#'}
           >
               <h5>{mem.name}</h5>
               </Link>
@@ -151,8 +151,8 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
                 action={`xóa thành viên ${mem.name} ra khỏi nhóm`}
                 imgSrc={process.env.PUBLIC_URL + "/assets/button-circle-round-delete-x-svgrepo-com.svg"}
                 onConfirm={() => handleDeleteMem(mem)}
-                
-                
+
+
               />
             </div>
           ))}
@@ -170,7 +170,8 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
               color:'black',
               fontFamily:"Noto Sans",
               fontSize:'2.5vh',
-              fontWeight: 700 }}
+              fontWeight: 700,
+              fontSize:"1vi" }}
               variant="Gửi thông báo"
               >
               Gửi thông báo

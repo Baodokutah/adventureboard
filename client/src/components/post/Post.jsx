@@ -23,6 +23,7 @@ export function InPost({ title, tags, content, comments, author, date, postId, o
   const location = useLocation();
   const navigate = useNavigate();
   const currentPage = location.pathname.includes('ctxh') ? '/ctxh' : location.pathname.includes('study') ? '/study' : '404';
+  const [countCmt, setCountCmt] = useState(0);
 
   const user = useMockedUser()
 
@@ -33,14 +34,14 @@ export function InPost({ title, tags, content, comments, author, date, postId, o
         url: process.env.REACT_APP_API_URL + '/api/post/delete',
         data: {
           pid: postId,
-          token: user.id, 
+          token: user.id,
         },
       });
       if (response.data.success) {
         console.log('Delete post success!');
         onDeletePost();
         navigate(currentPage)
-        
+
       } else {
         console.log('Failed to delete post:', response.data.message);
       }
@@ -58,7 +59,7 @@ export function InPost({ title, tags, content, comments, author, date, postId, o
 
 
 
-  const isAuth = () => {    
+  const isAuth = () => {
     if((author && user) && author._id===user._id) return true;
     return false;
   }
@@ -95,7 +96,7 @@ console.log(author)
       <Link
        className="author-link"
         to={author ? `/user/${author._id}` : '#'}
-        
+
       >
 
       {(author) ? author.name : null }
@@ -138,8 +139,9 @@ console.log(author)
                       position:'relative'
                     }}
                     aria-label="toggle visibility"
+                    onClick={() => {setCountCmt(countCmt + 1)}}
                   >
-                    <img style={{ width: '30px', height: '30px' }} alt='sendButt' src={process.env.PUBLIC_URL + '/assets/comment-material-2-svgrepo-com.svg'} />
+                    <img style={{ width: '30px', height: '30px' }} alt='sendButt' src={countCmt >= 7 ? process.env.PUBLIC_URL + '/assets/comment-rainbow.svg' : process.env.PUBLIC_URL + '/assets/comment-normal.svg'} />
                   </IconButton>
               </InputAdornment>
             }
@@ -172,7 +174,6 @@ console.log(author)
                 <div style={{ marginBottom: '30px' }}>
                 <Comment key={reply._id} {...reply} isReply={true}/>
                 </div>
-
               ))}
             </div>
           </React.Fragment>
