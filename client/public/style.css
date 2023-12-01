@@ -5,11 +5,9 @@
     font-family: 'Noto Sans';
 }
 
-.Posts > :first-child {
-    margin-top: 100px !important;
-   }
-   .Posts > :last-child {
-     margin-bottom: 60px !important; 
+
+   .PostDisplay > :last-child > *{
+     margin-bottom: 100px !important; 
    }
  
    .Posts {
@@ -17,7 +15,9 @@
      max-height: 90vh; /* Adjust the value as needed */
      overflow-y: auto;
    }
- 
+
+
+  
    /* .Inpost{
      margin-left: 100px;
      margin-top: 30px;
