@@ -42,6 +42,7 @@ export default function OtherProfile() {
     <div className="profile">
     <ProfileCard user={userData} className="ProfileCard"/>
     <div className="Posts">
+    <div className='PostDisplay'>
     {userPosts.map((post) => {
                       const date = new Date(post.date);
                       const readableDate = format(date, 'dd-MM-yyyy');                      
@@ -51,6 +52,7 @@ export default function OtherProfile() {
                         </div>
                       );
                     })}   
+                    </div>
         </div>
     </div>
   )

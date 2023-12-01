@@ -12,7 +12,7 @@ import { useMockedUser } from '../../hooks/use-mocked-user.js';
 import './post.css';
 import axios from 'axios';
 import { Confirm } from '../popup/Popup.jsx';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../../context/auth/firebase-context';
 
 
@@ -91,7 +91,16 @@ console.log(author)
 
   return (
     <div className='postContentDisplay'>
-      <h5 style={{fontWeight: 'normal'}}>{(author) ? author.name : null }・{date}</h5>
+      <h5 style={{fontWeight: 'normal'}}>
+      <Link
+       className="author-link"
+        to={author ? `/user/${author._id}` : '#'}
+        
+      >
+
+      {(author) ? author.name : null }
+      </Link>
+      ・{date}</h5>
       <h2>{title}</h2>
       {isAuth() ? (
       <div className='imgLoc'>
@@ -188,7 +197,6 @@ export function PostTitle({ title = null, tags, date, author}) {
     return <div className='PostDisplay'><div className='nullTitleBox'></div></div>;
   } else {
     return (
-      <div className='PostDisplay'>
       <div className='postTitleBox'>
         <h3>{title}</h3>
         <div style={{ display: 'flex', gap: '25px', justifyContent: 'flex-start'}}>
@@ -200,7 +208,6 @@ export function PostTitle({ title = null, tags, date, author}) {
           ))}
           <h4 style={{fontWeight: 'normal', marginLeft: 'auto'}}>{author}・{date}</h4>
         </div>
-      </div>
       </div>
     );
   }

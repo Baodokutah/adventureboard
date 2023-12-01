@@ -90,6 +90,7 @@ function Study() {
               </div>
              ) : (
                 <div className='Posts'>
+                <div className='PostDisplay'>                    
                    {filteredPosts.slice((page - 1) * 10, page * 10).sort((a, b) => new Date(b.date) - new Date(a.date)).map((post) => {
                       const date = new Date(post.date);
                       const readableDate = format(date, 'dd-MM-yyyy');                      
@@ -99,6 +100,7 @@ function Study() {
                         </div>
                       );
                     })}
+                    </div>
                     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
                       <Pagination count={Math.ceil(filteredPosts.length / 10)} page={page} onChange={(event, value) => setPage(value)} />
                     </div>

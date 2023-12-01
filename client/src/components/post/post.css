@@ -3,6 +3,15 @@
   100% { filter: hue-rotate(360deg); }
 }
 
+.author-link {
+  text-decoration: none;
+  color: #000;
+}
+
+.author-link:hover {
+  text-decoration: underline;
+}
+
 .tag{
     /* border: 1px solid black; */
     border-radius: 30px;
@@ -25,9 +34,9 @@
     padding: 10px;
     height: 13vh;
     gap: 25px;
-    width: 100%;
-    margin-top: 5vh;
-    margin-left: 8vw !important;
+    width: 70vw;
+    /* margin-top: 5vh;
+    margin-left: 8vw !important; */
     box-sizing: border-box;
     /* border: 1px black solid; */
     /* flex-wrap: wrap; */
@@ -44,16 +53,7 @@
     height: 17.67%;
 }
 
-.PostDisplay{
-    display: flex;
-    flex-direction: column;
-    min-width: 66.52vw;
-    /* height: 587px; */
-    gap: 3.4vh;
-    width: 70vw; /* Adjusted from min-width */
-    max-width: 100%; /* Add a max-width to contain within the viewport */
-    /* flex-wrap: wrap; */
-}
+
 
 .tagBox{
     display: flex;

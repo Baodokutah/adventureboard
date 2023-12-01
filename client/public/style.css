@@ -6,7 +6,7 @@
 }
 
 .Posts > :first-child {
-    margin-top: 60px !important;
+    margin-top: 100px !important;
    }
    .Posts > :last-child {
      margin-bottom: 60px !important; 

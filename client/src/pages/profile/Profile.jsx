@@ -44,6 +44,7 @@ export default function Profile() {
     <div className="profile">
     <ProfileCard user={userData} className="ProfileCard"/>
     <div className="Posts">
+    <div className='PostDisplay'>
     {userPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((post) => {
                       const date = new Date(post.date);
                       const readableDate = format(date, 'dd-MM-yyyy');                      
@@ -53,6 +54,7 @@ export default function Profile() {
                         </div>
                       );
                     })}   
+                    </div>
         </div>
     </div>
   )

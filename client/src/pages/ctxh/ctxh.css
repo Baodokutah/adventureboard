@@ -7,4 +7,15 @@
   overflow: auto;
 }
 
+.PostDisplay{
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  gap: 50px;
+  /* overflow: hidden; */
+  margin-top: 100px;
+  margin-left: 120px;
+  max-width: 100%; /* Add a max-width to contain within the viewport */
+  /* flex-wrap: wrap; */
+}
 

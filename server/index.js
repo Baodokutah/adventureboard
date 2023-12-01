@@ -7,7 +7,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const app = express();
-const port = 6969;
+const PORT = process.env.PORT || 3000;
 const db = require('./db')
 
 // routes
@@ -28,8 +28,8 @@ app.use(cors());
 
 db.connect();
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`)
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running at http://0.0.0.0:${PORT}`)
 });
 
 app.get('/', (req, res) => {

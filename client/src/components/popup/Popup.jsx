@@ -1,9 +1,6 @@
 import {useNavigate } from 'react-router-dom';
 import React, {useState, useEffect} from 'react';
 import Chip from '@mui/material/Chip';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import AddIcon from '@mui/icons-material/Add';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -260,17 +257,14 @@ export function Filter({open, onClose, page, tags, setTags}){
       fontSize: '70%',
       bottom: '4%',
       position: 'absolute',
+      cursor: 'pointer'
     };
 
     const filterBoxStyles = {
       cursor: 'pointer',
     };
 
-    const tagBoxStudyStyles = {
-      width: '159px',
-      height: '23px',
-      borderRadius: '30px',
-    };
+
 
     const [chips, setChips] = useState([]);
     const [inputValue, setInputValue] = useState('');
@@ -305,16 +299,8 @@ export function Filter({open, onClose, page, tags, setTags}){
       });
     };
 
-    const [subjectSelect, setSubjectSelect] = useState({});
 
 
-    const handleSelectSubject = (event) => {
-        setSubjectSelect(event.target.value);
-        const tag = {type:"subjectCode", tags: [event.target.value]};
-        const filteredTags = allTags.filter((tag) => tag.type !== 'subjectCode');
-        setAllTags([...filteredTags,tag]);
-        setTags([...filteredTags,tag].flatMap((tag) => tag.tags));
-    }
 
     if (!open) return null;
 
@@ -420,31 +406,12 @@ export function Filter({open, onClose, page, tags, setTags}){
           <div style={filterBoxStyles} className='filterBox' onClick={onClose}>
             <h1>X</h1>
           </div>
-          <h3>Mã môn</h3>
-          <div className='tagBox_Study' style={tagBoxStudyStyles}>
-            <FormControl fullWidth>
-              <Select
-                placeholder='Chọn mã môn học'
-                labelId='simple-select-class-code-label'
-                id='simple-select-class-code'
-                label=''
-                sx={tagBoxStudyStyles}
-                value={subjectSelect}
-                onChange={handleSelectSubject}
-              >
-                <MenuItem value={`MT2003`}>MT2003</MenuItem>
-                <MenuItem value='MT2013'>MT2013</MenuItem>
-                <MenuItem value='CO2014'>CO2014</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-
-          <h3>Nhóm lớp</h3>
-          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-            <TextField
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              placeholder='Nhập lớp'
+          <h3>Nhóm lớp & Mã môn</h3>
+         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+         <TextField
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          placeholder="Nhập lớp & môn"
               variant='outlined'
               fullWidth
               InputProps={{
@@ -464,7 +431,7 @@ export function Filter({open, onClose, page, tags, setTags}){
                 ),
                 style: {
                   borderRadius: '20px',
-                  width: '159px',
+                  width: '180px',
                   height: '23px',
                 },
               }}
