@@ -6,6 +6,7 @@ import ProfileCard from "../../components/profile_card/ProfileCard";
 import "./otherProfile.css";
 import { PostTitle } from '../../components/post/Post';
 import { useParams } from 'react-router-dom';
+import Preloader from '../../components/loading/Loading';
 
 export default function OtherProfile() {
     const { id } = useParams();
@@ -29,7 +30,7 @@ export default function OtherProfile() {
 
 
   if (!userData) {
-    return <div>Loading...</div>;
+    return Preloader;
   }
 
 

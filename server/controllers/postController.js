@@ -151,7 +151,6 @@ async function createPost(req, res) {
                 success: false,
                 message: "Invalid Token"    
             })
-        
         post = await Post.create({
             types: req.body.type,
             author: postOwner._id,

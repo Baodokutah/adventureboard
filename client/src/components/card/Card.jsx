@@ -31,7 +31,7 @@ export default function Card() {
                   },
                   fontFamily:"Noto Sans",
                   bottom:"1.5ch",
-                  // whiteSpace: 'nowrap'
+                  whiteSpace: 'nowrap'
                 }}
                 variant="contained"
                 startIcon={<EventIcon style={{fontSize:"xx-large"}}/>}
@@ -58,7 +58,7 @@ export default function Card() {
                   },
                   fontFamily:"Noto Sans",
                   bottom:"1.5ch",
-                  // whiteSpace: 'nowrap' // Add this lin
+                  whiteSpace: 'nowrap' // Add this lin
                 }}
                 variant="contained"
                 startIcon={<SchoolIcon style={{fontSize:"xx-large"}}/>}

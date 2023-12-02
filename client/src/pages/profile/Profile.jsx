@@ -8,6 +8,7 @@ import { PostTitle } from '../../components/post/Post';
 import { useMockedUser } from '../../hooks/use-mocked-user';
 import CircularProgress from '@mui/material/CircularProgress';
 
+
 export default function Profile() {
   const user = useMockedUser();
   const id = user?._id;
