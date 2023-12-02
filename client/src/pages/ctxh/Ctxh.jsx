@@ -101,7 +101,7 @@ const filteredPosts = posts.filter((post) =>
                       );
                     })}
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', height: '100px' }}>
                     <Pagination count={Math.ceil(filteredPosts.length / 10)} page={page} onChange={(event, value) => setPage(value)} />
                   </div>               
                   </div>

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { formatDistanceToNowStrict } from 'date-fns';
 import { vi } from 'date-fns/locale';
-import { Avatar, Box, Link, Stack, Typography } from '@mui/material';
+import { Avatar, Box, Link, Stack, Typography, FormHelperText } from '@mui/material';
 import { useState } from 'react';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
@@ -21,12 +21,21 @@ export const Comment = ({onNewReply, ...props}) => {
   const ago = formatDistanceToNowStrict(new Date(createdAt), { locale: vi });
   const [isReplying, setIsReplying] = useState(false);
   const [reply, setReply] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const user = useMockedUser();
   const { isAuthenticated } = useContext(AuthContext);
   const handleReplyChange = (event) => {
     setReply(event.target.value);
   };
   const handleReplySubmit = async () => {
+    if (!reply.trim()) {
+      setIsError(true);
+      setErrorMessage('Reply cannot be empty');
+      return;
+    }
+    setIsSubmitting(true);
     try {
       const response = await axios.post(process.env.REACT_APP_API_URL + '/api/comment/reply', {
         token: user.id,
@@ -39,11 +48,15 @@ export const Comment = ({onNewReply, ...props}) => {
         setReply('');
         setIsReplying(false);
         onNewReply();
+        setIsError(false);
+        setErrorMessage('');
       } else {
         console.log('Failed to send reply:', response.data.message);
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -136,6 +149,7 @@ export const Comment = ({onNewReply, ...props}) => {
         </InputAdornment>
       }
     />
+    {isError && <FormHelperText error>{errorMessage}</FormHelperText>}
   </FormControl>
 )}
 {reply && (
@@ -155,6 +169,7 @@ export const Comment = ({onNewReply, ...props}) => {
       variant="contained"
       endIcon={<SendIcon/>}
       sx={{ borderRadius: 50, width: '80px', height: '30px' }}
+      disabled={isSubmitting}
     >
       Đăng
     </Button>

@@ -169,7 +169,6 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
               position:"absolute",
               color:'black',
               fontFamily:"Noto Sans",
-              fontSize:'2.5vh',
               fontWeight: 700,
               fontSize:"1vi" }}
               variant="Gửi thông báo"

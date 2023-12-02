@@ -255,7 +255,6 @@ export default function FilterBox({onTagsChange}) {
             height: '8vh',
             color:"white",
             fontWeight:700,
-            fontSize:"2.7vh",
             marginTop:2.3475,
             marginLeft:1.6,
             visibility: isAuthenticated ? 'visible' : 'hidden',
