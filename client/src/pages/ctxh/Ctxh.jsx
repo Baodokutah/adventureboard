@@ -90,21 +90,21 @@ const filteredPosts = posts.filter((post) =>
               </div>
              ) : (
                 <div className='Posts'>
-                <div className='PostDisplay'>
-                  {filteredPosts.slice((page - 1) * 10, page * 10).sort((a, b) => new Date(b.date) - new Date(a.date)).map((post) => {
+                  <div className='PostDisplay'>
+                  {filteredPosts.slice((page - 1) * 7, page * 7).sort((a, b) => new Date(b.date) - new Date(a.date)).map((post) => {
                       const date = new Date(post.date);
                       const readableDate = format(date, 'dd-MM-yyyy');
                       return (
-                        <div key={post._id} onClick={() => handlePostClick(post._id)}>
+                        <div key={post._id} onClick={() => handlePostClick(post._id)} style={{width:"90%"}}>
                             <PostTitle title={post.title} tags={post.tags}  author={post.author.name} date={readableDate} />
                         </div>
                       );
                     })}
+                    <div style={{ display: 'flex', justifyContent: 'center', height: '100px', marginBottom: "3ch"}}>
+                      <Pagination count={Math.ceil(filteredPosts.length / 7)} page={page} onChange={(event, value) => setPage(value)} />
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', height: '100px' }}>
-                    <Pagination count={Math.ceil(filteredPosts.length / 10)} page={page} onChange={(event, value) => setPage(value)} />
-                  </div>               
                   </div>
+                </div>
             )}
         </div>
     );
