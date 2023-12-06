@@ -33,18 +33,15 @@
 }
 
 .postTitleBox{
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
     background-color: white;
     border-radius: 11px;
     padding: 10px;
-    /* height: 13vh; */
     gap: 25px;
-    width: 70vw;
-    /* margin-top: 5vh;
-    margin-left: 8vw !important; */
+    width: 100%;
+    min-height: 10ch;
     box-sizing: border-box;
-    /* border: 1px black solid; */
 }
 
 
