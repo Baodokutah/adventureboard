@@ -70,13 +70,9 @@ Input {
 
 }
 .navhome {
-<<<<<<< Updated upstream
-    margin-left: 0px;
-=======
     margin-left: 20px;
     display: flex;
     gap: 50px;
->>>>>>> Stashed changes
 }
 #navbar li a {
     text-decoration: none;
@@ -134,14 +130,10 @@ Input {
         transition: 0.3s ease-in-out;
     }
 
-<<<<<<< Updated upstream
     #switch {
         margin-left: -10px !important;
     }
     
-=======
-
->>>>>>> Stashed changes
     Input{
         width: 30vw;
     }
