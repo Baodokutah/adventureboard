@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect, useRef } from 'react';
 import Bell01Icon from '@untitled-ui/icons-react/build/esm/Bell01';
 import { Badge, IconButton, SvgIcon, Tooltip } from '@mui/material';
 import { usePopover } from '../../hooks/use-popover';
@@ -12,7 +12,7 @@ const transformNotifications = (notifications) => {
     let type;
     if (notification.content.includes('đã xóa bạn khỏi nhóm của họ') || 
         notification.content.includes('Bạn đã rời khỏi nhóm!') ||
-        notification.content.includes('have joined your post!')) {
+        notification.content.includes('đẫ tham gia nhóm của bạn!')) {
       type = 'system';
     } else {
       type = 'noti';
@@ -33,50 +33,94 @@ const transformNotifications = (notifications) => {
 
 const useNotifications = () => {
   const user = useMockedUser();
-  const [notifications, setNotifications] = useState(transformNotifications(user.noti));
+  const [notifications, setNotifications] = useState([]);
+  const [deletionInProgress, setDeletionInProgress] = useState(false);
+  const intervalId = useRef(null);
+
+
+
+  const fetchNotifications = useCallback(async () => {
+    const response = await fetch(process.env.REACT_APP_API_URL + '/api/user/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: user.name,
+        mail: user.email,
+        avatar: user.avatar ,
+        token: user.id ,
+      }),
+    });
+  
+    const data = await response.json();
+    if (data && data.User) {
+      setNotifications(prevNotifications => {
+        const newNotifications = transformNotifications(data.User.notification);
+        console.log(newNotifications)
+        if ((JSON.stringify(newNotifications) !== JSON.stringify(prevNotifications)) && !deletionInProgress) {
+          return newNotifications;
+        }
+        return prevNotifications;
+      });
+    }
+  }, [user, deletionInProgress]);
+
+  useEffect(() => {
+    fetchNotifications();
+    if (!deletionInProgress) {
+      intervalId.current = setInterval(fetchNotifications, 5000);
+    }
+    return () => clearInterval(intervalId.current);
+  }, [fetchNotifications, deletionInProgress]);
+
+
+
 
   const handleRemoveOne = useCallback((notificationId) => {
-    // Optimistically update the state
-    setNotifications((prevState) => prevState.filter((notification) => notification.id !== notificationId));
+    let newNotifications = notifications.filter((notification) => notification.id !== notificationId);
+    setDeletionInProgress(true);
 
     axios.post(process.env.REACT_APP_API_URL + '/api/noti/remove', {
       token: user.id, 
       nid: [notificationId]
     })
     .then(response => {
-      if (!response.data.success) {
+      if (response.data.success) {
+        // If the request succeeded, update the state
+        setNotifications(newNotifications);
+        setDeletionInProgress(false);
+      } else {
         console.error('Failed to remove notification:', response.data.message);
         // If the request failed, revert the state update
-        setNotifications(user.noti);
+        setNotifications(prevState => [...prevState]);
       }
     })
     .catch(error => {
       console.error('Error removing notification:', error);
       // If there was an error, revert the state update
-      setNotifications(user.noti);
+      setNotifications(prevState => [...prevState]);
+      setDeletionInProgress(false);
     });
-  }, [user.id, user.noti]);
+  }, [user.id, notifications]);
 
   const removeAll = useCallback(() => {
-    // Optimistically update the state
-    setNotifications([]);
-
     axios.post(process.env.REACT_APP_API_URL + '/api/noti/remove', {
       token: user.id, 
       nid: notifications.map(notification => notification.id)
     })
     .then(response => {
-      if (!response.data.success) {
+      if (response.data.success) {
+        // If the request succeeded, update the state
+        setNotifications([]);
+      } else {
         console.error('Failed to remove notifications:', response.data.message);
-        setNotifications(user.noti);
       }
     })
     .catch(error => {
       console.error('Error removing notifications:', error);
-      // If there was an error, revert the state update
-      setNotifications(user.noti);
     });
-  }, [notifications, user.id, user.noti]);
+  }, [notifications, user.id]);
 
   return {
     removeAll,

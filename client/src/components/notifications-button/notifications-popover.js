@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
@@ -130,6 +131,47 @@ const renderContent = (notification, navigate) => {
   }
 };
 
+const NotificationItem = React.memo(({ notification, navigate, onRemoveOne }) => {
+  const handleNotificationClick = (notification) => {
+    if (notification.post) {
+      (notification.post.types === 'Group') ? navigate(`/study/post/${notification.post._id}`) :navigate(`/ctxh/post/${notification.post._id}`) ;
+    }
+  };
+
+  return (
+    <ListItem
+      onClick={() => handleNotificationClick(notification)}
+      divider
+      key={notification.id}
+      sx={{
+        cursor: 'pointer',
+        alignItems: 'flex-start',
+        '&:hover': {
+          backgroundColor: 'action.hover'
+        },
+        '& .MuiListItemSecondaryAction-root': {
+          top: '24%'
+        }
+      }}
+      secondaryAction={(
+        <Tooltip title="Xóa">
+          <IconButton
+            edge="end"
+            onClick={() => onRemoveOne?.(notification.id)}
+            size="small"
+          >
+            <SvgIcon>
+              <XIcon />
+            </SvgIcon>
+          </IconButton>
+        </Tooltip>
+      )}
+    >
+      {renderContent(notification, navigate)}
+    </ListItem>
+  );
+});
+
 export const NotificationsPopover = (props) => {
   const {
     anchorEl,
@@ -141,13 +183,9 @@ export const NotificationsPopover = (props) => {
     ...other
   } = props;
   const navigate = useNavigate();
+  console.log(notifications); // log the notifications prop
 
   const isEmpty = notifications.length === 0;
-  const handleNotificationClick = (notification) => {
-    if (notification.post) {
-      (notification.post.types === 'Group') ? navigate(`/study/post/${notification.post._id}`) :navigate(`/ctxh/post/${notification.post._id}`) ;
-    }
-  };
   return (
     <Popover
       anchorEl={anchorEl}
@@ -200,36 +238,12 @@ export const NotificationsPopover = (props) => {
           <Scrollbar sx={{ maxHeight: 400 }}>
             <List disablePadding>
               {notifications.map((notification) => (
-                <ListItem
-                  onClick={() => handleNotificationClick(notification)}
-                  divider
+                <NotificationItem
                   key={notification.id}
-                  sx={{
-                    cursor: 'pointer',
-                    alignItems: 'flex-start',
-                    '&:hover': {
-                      backgroundColor: 'action.hover'
-                    },
-                    '& .MuiListItemSecondaryAction-root': {
-                      top: '24%'
-                    }
-                  }}
-                  secondaryAction={(
-                    <Tooltip title="Xóa">
-                      <IconButton
-                        edge="end"
-                        onClick={() => onRemoveOne?.(notification.id)}
-                        size="small"
-                      >
-                        <SvgIcon>
-                          <XIcon />
-                        </SvgIcon>
-                      </IconButton>
-                    </Tooltip>
-                  )}
-                >
-                  {renderContent(notification, navigate)}
-                </ListItem>
+                  notification={notification}
+                  navigate={navigate}
+                  onRemoveOne={onRemoveOne}
+                />
               ))}
             </List>
           </Scrollbar>
@@ -242,8 +256,7 @@ NotificationsPopover.propTypes = {
   anchorEl: PropTypes.any,
   notifications: PropTypes.array.isRequired,
   onClose: PropTypes.func,
-  onRemoveALl: PropTypes.func,
+  onRemoveAll: PropTypes.func,
   onRemoveOne: PropTypes.func,
   open: PropTypes.bool
 };
-

@@ -303,7 +303,7 @@ async function joinPost(req, res) {
             user_join = await User.findById(UserInfo._id, { name: 1 })
             noti = await Notification.create({
                 success: true,
-                content: `User ${user_join.name} have joined your post!`,
+                content: `${user_join.name} đẫ tham gia nhóm của bạn!`,
                 post: req.body.pid
             })
             await User.findByIdAndUpdate(PostInfo.author, { $push: { notification: noti } })

@@ -127,7 +127,7 @@ function FilterBoxGroup({ onTagsChange }) {
   const [inputValue, setInputValue] = useState('');
 
   const handleAddChip = () => {
-    if (inputValue.trim() && inputValue.length < 8) {
+    if (inputValue.trim() && inputValue.length < 8 && chips.length < 18) {
       setChips([...chips, inputValue]);
 
       setStudyTags((studyTags) => {
@@ -145,7 +145,7 @@ function FilterBoxGroup({ onTagsChange }) {
 
       setInputValue('');
     } else {
-      alert("Nhóm lớp gì mà dài thế anh zai. Tính xss hay j :)))");
+      alert("Có lỗi xảy ra vui lòng kiểm tra mình đã nhập gì chưa và không được nhập quá 8 ký tự, số chip không quá 18");
     }
   };
   const handleDeleteChip = (chipToDelete) => {
@@ -220,9 +220,10 @@ function FilterBoxGroup({ onTagsChange }) {
             style={{
               backgroundColor: '#9C00B6',
               borderRadius: '15px',
-              maxWidth: '80px',
+              // maxWidth: '80px',
               color: '#FFFFFF',
               fontWeight: 'bold',
+
             }}
           />
         ))}

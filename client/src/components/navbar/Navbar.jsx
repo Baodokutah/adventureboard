@@ -1,4 +1,4 @@
-import { Component, useContext } from "react";
+import { Component, useContext, useEffect, useState } from "react";
 import "./navbar.css";
 import { Link } from "react-router-dom";
 import { styled } from '@mui/material/styles';
@@ -20,8 +20,17 @@ function MUISwitch(props) {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const [isStudy, setIsStudy] = useState(location.pathname.startsWith('/study'));
+  const currentPage = localStorage.getItem('currentPage') || '404';
   const isCtxh = location.pathname.startsWith('/ctxh');
-  const isStudy = location.pathname.startsWith('/study');
+
+  
+  useEffect(() => {
+    setIsStudy(location.pathname.startsWith('/study'));
+    if (location.pathname.startsWith('/create')  && currentPage === 'study') {
+      setIsStudy(true);
+    }
+  }, [location, currentPage]);
 
   const handleChange = (event) => {
     navigate(event.target.checked ? '/study' : '/ctxh');
@@ -40,8 +49,8 @@ function MUISwitch(props) {
 
   return (
     <SwitchRoot className={clsx(stateClasses)}>
-      <SwitchTrack>
-        <SwitchThumb className={clsx(stateClasses)} />
+      <SwitchTrack stateClasses={stateClasses}>
+        <SwitchThumb className={clsx(stateClasses)}  stateClasses={stateClasses}/> 
       </SwitchTrack>
       <SwitchInput {...getInputProps()} aria-label="Demo switch" />
     </SwitchRoot>
@@ -49,18 +58,7 @@ function MUISwitch(props) {
 }
 
 
-const grey = {
-  50: '#F3F6F9',
-  100: '#E5EAF2',
-  200: '#DAE2ED',
-  300: '#C7D0DD',
-  400: '#B0B8C4',
-  500: '#9DA8B7',
-  600: '#6B7A90',
-  700: '#434D5B',
-  800: '#303740',
-  900: '#1C2025',
-};
+
 
 const SwitchRoot = styled('span')`
   display: inline-block;
@@ -82,10 +80,11 @@ const SwitchInput = styled('input')`
   cursor: pointer;
 `;
 
-const SwitchThumb = styled('span')`
+const SwitchThumb = styled('span')(
+  ({ stateClasses }) => `
   position: absolute;
   display: block;
-  background-color: #8B5A2B;
+  background-color: ${stateClasses.checked ? '#8B5A2B' : '#D9D9D9'};
   width: 35px;
   height: 35px;
   border-radius:50px;
@@ -102,7 +101,7 @@ const SwitchThumb = styled('span')`
     /* false positive: */
     /* stylelint-disable unit-no-unknown */
     background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="22" width="24" viewBox="0 0 22 24"><path fill="${encodeURIComponent(
-        '#fff',
+        '#8B5A2B',
       )}" d="M16.9276 13.2H11.0016V19.2H16.9276V13.2ZM15.7424 0V2.4H6.26089V0H3.89052V2.4H2.70533C1.38978 2.4 0.346813 3.48 0.346813 4.8L0.334961 21.6C0.334961 22.92 1.38978 24 2.70533 24H19.2979C20.6016 24 21.6683 22.92 21.6683 21.6V4.8C21.6683 3.48 20.6016 2.4 19.2979 2.4H18.1127V0H15.7424ZM19.2979 21.6H2.70533V8.4H19.2979V21.6Z"/></svg>')
       center center no-repeat;
     /* stylelint-enable unit-no-unknown */
@@ -124,11 +123,12 @@ const SwitchThumb = styled('span')`
       /* stylelint-enable unit-no-unknown */
     }
   }
-`;
+  `,
+  );
 
 const SwitchTrack = styled('span')(
-  ({ theme }) => `
-  background-color: ${theme.palette.mode === 'dark' ? grey[800] : grey[400]};
+  ({ stateClasses }) => `
+  background-color: ${stateClasses.checked ? '#D9D9D9' : '#8B5A2B'};
   border-radius: 50px;
   width: 100%;
   height: 100%;
@@ -180,11 +180,23 @@ render(){
 
   if (isLoading) {
     return (
-      <nav>
-        <Skeleton variant="text" />
-        <Skeleton variant="circular" width={40} height={40} />
-        <Skeleton variant="rectangular" height={50} />
-      </nav>
+      <nav className={isAuthenticated ? "logged" : "nav"}>
+      <Skeleton variant="rectangular" width={75} height={75} className="logo-skeleton" /> {/* Logo */}
+      {location.pathname === "/"  ? (
+        <div className="navhome" style={{marginRight: "30px"}}>
+        <Skeleton variant="circle" width={40} height={40} /> 
+        <Skeleton variant="circle" width={40} height={40} /> 
+        </div>
+      ) : (
+        <div id="navbar" className="nav-skeleton">
+        <Skeleton id="switch" variant="circle" width={77} height={47} /> 
+        <Skeleton variant="circle" width="50vw" height={40} /> 
+        <Skeleton variant="circle" width={40} height={40} /> 
+        <Skeleton variant="circle" width={40} height={40} /> 
+        <Skeleton variant="circle" width={40} height={40} /> 
+        </div>
+      )}
+    </nav>
     );
   }
 

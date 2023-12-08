@@ -36,7 +36,8 @@ const modalContainerStyles = {
 };
 
 const imgStyles = {
-  width: '12vw',
+  marginBottom: '20px',
+  width: '10vw',
   objectFit: 'cover',
 };
 

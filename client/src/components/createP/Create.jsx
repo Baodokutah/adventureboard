@@ -21,7 +21,11 @@ function Create({ tags, setTags }) // Add the new props here
     const user = useMockedUser();
 
     const handleSubmit = async () => {
-
+        if (!title || !tags.length || !quantity) {
+            alert('Xinn hãy điền đầy đủ các trường được yêu cầu!');
+            return;
+        }
+    
         const postData = {
             type: (currentPage === 'study') ? 'Group' : 'CTXH',
             title: title,
@@ -30,6 +34,7 @@ function Create({ tags, setTags }) // Add the new props here
             maxuser: quantity,
             token: user.id,
         };
+        setOpenModal(true);
         try {
             const response = await axios.post(process.env.REACT_APP_API_URL + '/api/post/create', postData);
             console.log(response.data);
@@ -140,7 +145,6 @@ function Create({ tags, setTags }) // Add the new props here
                     }}
                     variant="Đăng"
                     onClick={() => {
-                        setOpenModal(true);
                         handleSubmit();
                     }}>
                     Đăng
