@@ -13,18 +13,11 @@ async function sendNoti(req, res) {
         }
         
         let PostInfo;
-        try {
-            PostInfo = await Post.findById(req.body.pid, { joined_users: 1, author: 1 });
-            if (!PostInfo) {
-                return res.status(404).json({
-                    success: false,
-                    message: 'Post doesn\'t exist!'
-                });
-            }
-        } catch (err) {
-            return res.status(500).json({
+        PostInfo = await Post.findById(req.body.pid, { joined_users: 1, author: 1 });
+        if (!PostInfo) {
+            return res.status(404).json({
                 success: false,
-                message: err.message
+                message: 'Post doesn\'t exist!'
             });
         }
 
@@ -72,19 +65,13 @@ async function removeNoti(req, res) {
         }
 
         let NotiInfo;
-        try{
-            NotiInfo = await User.findOne({ token: req.body.token, notification: { $in: req.body.nid }}, { notification: 1 })
-            if (!NotiInfo)
-                return res.status(404).json({
-                        success: false,
-                        message: 'Notification doesn\'t exist!'
-                    });
-        } catch (err) {
-            return res.status(500).json({
+      
+        NotiInfo = await User.findOne({ token: req.body.token, notification: { $in: req.body.nid }}, { notification: 1 })
+        if (!NotiInfo)
+            return res.status(404).json({
                 success: false,
-                message: err.message
+                message: 'Notification doesn\'t exist!'
             });
-        }
 
         await User.findOneAndUpdate({ token: req.body.token }, { $pull: { notification: { $in: req.body.nid }}})
         return res.status(200).json({
