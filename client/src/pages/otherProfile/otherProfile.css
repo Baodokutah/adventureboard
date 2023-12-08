@@ -21,12 +21,5 @@ Avatar {
 
 .profile > :first-child {
     margin-top: 60px ;
-   }
-
-.PostDisplay {
-    width: 65vw;
 }
 
-.Posts {
-    width: 100%;
-  }

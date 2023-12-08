@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Chip, FormControl, InputLabel, Select, MenuItem, TextField, InputAdornment, IconButton, Button } from '@mui/material';
+import { Chip,  TextField, InputAdornment, IconButton, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { AuthContext } from '../../context/auth/firebase-context';
 import { useContext } from 'react';
@@ -10,7 +10,6 @@ export var newTags = [];
 
 function FilterBoxCTXH({ onTagsChange }) {
   const [ctxhTags, setCtxhTags] = useState({tags:[]});
-
   const [selectedTag, setSelectedTag] = useState({});
   const handleClickTag = (tag) => {
     setSelectedTag(prevState => ({...prevState, [tag]: !prevState[tag]}));
@@ -34,8 +33,8 @@ function FilterBoxCTXH({ onTagsChange }) {
   useEffect(() => {}, [ctxhTags]);
   // Custom styles for the chip
   const chipStyle = {
-    width: '104px', // Fixed width for each chip
-    height: '23px', // Fixed height for each chip
+    width: '7vw', // Fixed width for each chip
+    height: '3vh', // Fixed height for each chip
     margin: '4px 4px 4px 0', // Margin to space out the chips
     fontSize: '0.75rem', // Adjust font size as needed
   };
@@ -45,9 +44,10 @@ function FilterBoxCTXH({ onTagsChange }) {
     display: 'grid',
     gridTemplateColumns: 'repeat(2, 1fr)', // Two columns layout
     gap: '8px', // Space between chips
-    marginBottom: '16px', // Space below each row of chips
-    marginRight: '40px',
+    // marginBottom: '16px', // Space below each row of chips
+    // marginRight: '40px',
     fontWeight: 'bold',
+    zIndex: "1"
   };
   newTags = ctxhTags.tags;
   return (
@@ -165,79 +165,39 @@ function FilterBoxGroup({ onTagsChange }) {
     });
   };
 
-  const [subjectSelect, setSubjectSelect] = useState('');
 
-  const handleSelectSubject = (event) => {
-    setSubjectSelect(event.target.value);
-
-    setStudyTags((studyTags) => {
-      return studyTags.map((tag) => {
-        if (tag.type === 'subjectCode') {
-          // If the tag has the same type, update the tags array
-          const updatedTags = [event.target.value];
-          onTagsChange(updatedTags);
-          return { ...tag, tags: updatedTags };
-        }
-        // Otherwise, keep the tag unchanged
-        return tag;
-      });
-    });
-  };
 
   newTags = studyTags.flatMap((tag) => tag.tags);
 
   return (
       <div className='filterBigBox'>
       <div className='filterBox'><h1>Bộ lọc</h1></div>
-          <h3>Mã môn</h3>
-          <div className='tagBox_Study'>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label"></InputLabel>
-              <Select
-                labelId="simple-select-class-code-label"
-                id="simple-select-class-code"
-                label=""
-                sx={{
-                  width: '159px',
-                  height: '23px',
-                  borderRadius:30,
-                }}
-                value={subjectSelect}
-                onChange={handleSelectSubject}
-              >
-                <MenuItem value='MT2003'>MT2003</MenuItem>
-                <MenuItem value='MT2013'>MT2013</MenuItem>
-                <MenuItem value='CO2014'>CO2014</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-
-         <h3>Nhóm lớp</h3>
+         <h3>Nhóm lớp & Mã môn</h3>
          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
          <TextField
-  value={inputValue}
-  onChange={(e) => setInputValue(e.target.value)}
-  placeholder="Nhập lớp"
-  variant="outlined"
-  fullWidth
-  InputProps={{
-    endAdornment: (
-      <InputAdornment position="end">
-<IconButton
-  aria-label="add"
-  onClick={handleAddChip}
-  style={{
-    marginRight: '-20px',
-    cursor: 'pointer',
-  }}
->
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          placeholder="Nhập lớp & môn"
+          variant="outlined"
+          fullWidth
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+        <IconButton
+          aria-label="add"
+          onClick={handleAddChip}
+          style={{
+            marginRight: '-20px',
+            cursor: 'pointer',
+          }}
+        >
   <AddIcon />
 </IconButton>
         </InputAdornment>
     ),
     style: {
       borderRadius: '20px',
-      width: '159px',
+      width: '180px',
       height: '23px',
     },
   }}
@@ -295,10 +255,10 @@ export default function FilterBox({onTagsChange}) {
             height: '8vh',
             color:"white",
             fontWeight:700,
-            fontSize:"2.7vh",
             marginTop:2.3475,
             marginLeft:1.6,
-            visibility: isAuthenticated ? 'visible' : 'hidden' 
+            visibility: isAuthenticated ? 'visible' : 'hidden',
+            fontSize: "1.3vi",
             }}>
               Tạo bài viết
           </Button>

@@ -102,7 +102,7 @@ const ConfirmPCNoti = ({ onClose, onConfirm, onCloseFrame, user, postId, content
 
   const sendNotification = async () => {
     try {
-      const response = await axios.post('/api/noti/send', {
+      const response = await axios.post(process.env.REACT_APP_API_URL + '/api/noti/send', {
         pid: postId, // replace with your post id
         token: user.id, // replace with your token
         content: content,

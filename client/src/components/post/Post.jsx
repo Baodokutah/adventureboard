@@ -12,10 +12,9 @@ import { useMockedUser } from '../../hooks/use-mocked-user.js';
 import './post.css';
 import axios from 'axios';
 import { Confirm } from '../popup/Popup.jsx';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../../context/auth/firebase-context';
-
-
+import FormHelperText from '@mui/material/FormHelperText';
 
 export function InPost({ title, tags, content, comments, author, date, postId, onNewComment,onDeletePost, onNewReply}) {
   const [comment, setComment] = useState('');
@@ -23,6 +22,10 @@ export function InPost({ title, tags, content, comments, author, date, postId, o
   const location = useLocation();
   const navigate = useNavigate();
   const currentPage = location.pathname.includes('ctxh') ? '/ctxh' : location.pathname.includes('study') ? '/study' : '404';
+  const [countCmt, setCountCmt] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const user = useMockedUser()
 
@@ -30,17 +33,17 @@ export function InPost({ title, tags, content, comments, author, date, postId, o
     try {
       const response = await axios({
         method: 'post',
-        url: '/api/post/delete',
+        url: process.env.REACT_APP_API_URL + '/api/post/delete',
         data: {
           pid: postId,
-          token: user.id, 
+          token: user.id,
         },
       });
       if (response.data.success) {
         console.log('Delete post success!');
         onDeletePost();
         navigate(currentPage)
-        
+
       } else {
         console.log('Failed to delete post:', response.data.message);
       }
@@ -55,10 +58,7 @@ export function InPost({ title, tags, content, comments, author, date, postId, o
     navigate(`/edit/${postId}`);
   };
 
-
-
-
-  const isAuth = () => {    
+  const isAuth = () => {
     if((author && user) && author._id===user._id) return true;
     return false;
   }
@@ -70,6 +70,14 @@ console.log(author)
   };
 
   const handleCommentSubmit = async () => {
+    // Prevent empty comments
+    if (!comment.trim()) {
+      setIsError(true);
+      setErrorMessage('Bình luận không được để trống!');
+      return;
+    }
+
+    setIsSubmitting(true);
     const commentData = {
       token: user.id,
       content: comment,
@@ -77,13 +85,16 @@ console.log(author)
     };
 
     try {
-      const response = await axios.post('/api/comment/create', commentData);
+      const response = await axios.post(process.env.REACT_APP_API_URL + '/api/comment/create', commentData);
       console.log(response.data);
       setComment('');
       onNewComment();
-
+      setIsError(false);
+      setErrorMessage('');
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -91,7 +102,16 @@ console.log(author)
 
   return (
     <div className='postContentDisplay'>
-      <h5 style={{fontWeight: 'normal'}}>{(author) ? author.name : null }・{date}</h5>
+      <h5 style={{fontWeight: 'normal'}}>
+      <Link
+       className="author-link"
+        to={author ? `/user/${author._id}` : '#'}
+
+      >
+
+      {(author) ? author.name : null }
+      </Link>
+      ・{date}</h5>
       <h2>{title}</h2>
       {isAuth() ? (
       <div className='imgLoc'>
@@ -103,7 +123,7 @@ console.log(author)
       </IconButton>
       </div>
       ): null}
-      <div style={{ display: 'flex', flexDirection: 'row', gap: '25px' }}>
+      <div style={{ display: 'flex', flexDirection: 'row', gap: '25px', flexWrap: 'wrap' }}>
         {tags && tags.map((tag, index) => (
           <div key={index} className='tag'>
             {tag}
@@ -129,12 +149,14 @@ console.log(author)
                       position:'relative'
                     }}
                     aria-label="toggle visibility"
+                    onClick={() => {setCountCmt(countCmt + 1)}}
                   >
-                    <img style={{ width: '30px', height: '30px' }} alt='sendButt' src={process.env.PUBLIC_URL + '/assets/comment-material-2-svgrepo-com.svg'} />
+                    <img style={{ width: '30px', height: '30px' }} alt='sendButt' src={countCmt >= 7 ? process.env.PUBLIC_URL + '/assets/comment-rainbow.svg' : process.env.PUBLIC_URL + '/assets/comment-normal.svg'} />
                   </IconButton>
               </InputAdornment>
             }
           />
+          {isError && <FormHelperText error>{errorMessage}</FormHelperText>}
           </FormControl>)}
         </div>
         {/* Display the buttons when the comment input field is not empty */}
@@ -149,6 +171,7 @@ console.log(author)
           <Button
             onClick={handleCommentSubmit} variant="contained" endIcon={<SendIcon/>}
             sx={{ borderRadius: 50, width: '80px', height: '30px' }}
+            disabled={isSubmitting}
           >
             Đăng
           </Button>
@@ -163,7 +186,6 @@ console.log(author)
                 <div style={{ marginBottom: '30px' }}>
                 <Comment key={reply._id} {...reply} isReply={true}/>
                 </div>
-
               ))}
             </div>
           </React.Fragment>
@@ -188,19 +210,19 @@ export function PostTitle({ title = null, tags, date, author}) {
     return <div className='PostDisplay'><div className='nullTitleBox'></div></div>;
   } else {
     return (
-      <div className='PostDisplay'>
       <div className='postTitleBox'>
+          <div style={{ display: 'flex', justifyContent: 'flex-start'}}>
         <h3>{title}</h3>
-        <div style={{ display: 'flex', gap: '25px', justifyContent: 'flex-start'}}>
+        <div style={{fontWeight: 'normal', marginLeft: 'auto', whiteSpace: 'nowrap'}}>{author}・{date}</div>
+        </div>
+        <div style={{ display: 'flex', gap: '25px', justifyContent: 'flex-start', flexWrap: 'wrap'}}>
           {tags.map((tag, index) => (
             <div key={index} className='tag'>
               {tag}
             </div>
 
           ))}
-          <h4 style={{fontWeight: 'normal', marginLeft: 'auto'}}>{author}・{date}</h4>
         </div>
-      </div>
       </div>
     );
   }

@@ -7,11 +7,12 @@ import ListOfMem from '../../components/listofmem/Listofmem';
 import { format } from 'date-fns';
 import { SearchContext } from '../../context/search-context';
 import { useContext } from 'react';
+import Pagination from '@mui/material/Pagination';
 
 import "./study.css"
 
 function Study() {
-    const { id } = useParams(); 
+    const { id } = useParams();
     const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
     const [postContent, setPostContent] = useState('');
@@ -19,6 +20,7 @@ function Study() {
     const [selectedTags, setSelectedTags] = useState([]);
     const [refreshPosts, setRefreshPosts] = useState(false);
     const { searchQuery } = useContext(SearchContext);
+    const [page, setPage] = useState(1);
 
     const handleNewComment = () => {
       setTriggerUpdate(!triggerUpdate);
@@ -35,7 +37,7 @@ function Study() {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await axios.get('/api/post/Group');
+                const response = await axios.get(process.env.REACT_APP_API_URL + '/api/post/Group');
                 setPosts(response.data.Posts);
             } catch (error) {
                 console.error('Failed to fetch posts:', error);
@@ -47,7 +49,7 @@ function Study() {
     useEffect(() => {
       const fetchPostContent = async () => {
         try {
-          const response = await axios.get(`/api/post/${id}`);
+          const response = await axios.get(process.env.REACT_APP_API_URL + `/api/post/${id}`);
           setPostContent(response.data.Post);
         } catch (error) {
           console.error('Failed to fetch post content:', error);
@@ -88,15 +90,20 @@ function Study() {
               </div>
              ) : (
                 <div className='Posts'>
-                   {filteredPosts.sort((a, b) => new Date(b.date) - new Date(a.date)).map((post) => {
+                  <div className='PostDisplay'>
+                   {filteredPosts.slice((page - 1) * 7, page * 7).sort((a, b) => new Date(b.date) - new Date(a.date)).map((post) => {
                       const date = new Date(post.date);
-                      const readableDate = format(date, 'dd-MM-yyyy');                      
+                      const readableDate = format(date, 'dd-MM-yyyy');
                       return (
-                        <div key={post._id} onClick={() => handlePostClick(post._id)}>
+                        <div key={post._id} onClick={() => handlePostClick(post._id)} style={{width:"90%"}}>
                             <PostTitle title={post.title} tags={post.tags}  author={post.author.name} date={readableDate} />
                         </div>
                       );
                     })}
+                    <div style={{ display: 'flex', justifyContent: 'center', height: '100px', marginBottom: "3ch"}}>
+                      <Pagination count={Math.ceil(filteredPosts.length / 7)} page={page} onChange={(event, value) => setPage(value)} />
+                    </div>
+                  </div>
                 </div>
             )}
         </div>

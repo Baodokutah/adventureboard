@@ -3,35 +3,47 @@
   100% { filter: hue-rotate(360deg); }
 }
 
+.author-link {
+  text-decoration: none;
+  color: #000;
+}
+
+.author-link:hover {
+  text-decoration: underline;
+}
+
 .tag{
     /* border: 1px solid black; */
     border-radius: 30px;
-    width: 7vw;
+    min-width: 50px; /* Adjust as needed */
+    max-width: 12vw; /* Adjust as needed */
     height: 3vh;
+    margin-top: 1px;
+    padding-left: 20px;
+    padding-right: 20px;
     /* padding: 0.2em 0.25em; */
-    display: flex;
+    display: grid;
     justify-content: center;
+    white-space: nowrap;
     align-items: center;
-    flex-wrap: wrap;
+    /* white-space: wrap; */
+    text-overflow: ellipsis;
     /* background-color: white; */
     background-color: #00000014;
 }
 
 .postTitleBox{
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
     background-color: white;
     border-radius: 11px;
     padding: 10px;
-    height: 13vh;
     gap: 25px;
     width: 100%;
-    margin-top: 5vh;
-    margin-left: 8vw !important;
+    min-height: 10ch;
     box-sizing: border-box;
-    /* border: 1px black solid; */
-    /* flex-wrap: wrap; */
 }
+
 
 .postTitleBox:hover{
   cursor: pointer;
@@ -44,16 +56,7 @@
     height: 17.67%;
 }
 
-.PostDisplay{
-    display: flex;
-    flex-direction: column;
-    min-width: 66.52vw;
-    /* height: 587px; */
-    gap: 3.4vh;
-    width: 70vw; /* Adjusted from min-width */
-    max-width: 100%; /* Add a max-width to contain within the viewport */
-    /* flex-wrap: wrap; */
-}
+
 
 .tagBox{
     display: flex;
@@ -72,6 +75,7 @@
     width: 74.5vw;
     min-height: 80vh;
     white-space: pre-wrap;
+    font-size: 1vi;
 }
 
 .postContentDisplay{
@@ -80,9 +84,10 @@
     min-height: 81vh;
     gap: 2vh;
     background-color: white;
-    padding: 16px;
+    padding: 1vi;
     white-space: pre-wrap;
     border-radius: 11px;
+    /* font-size: 2.3vb; */
 }
 
 .postContentDisplay .imgLoc{

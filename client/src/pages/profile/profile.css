@@ -5,10 +5,16 @@
     height: 100%;
     position: fixed;
     overflow: hidden;
-
 }
 
-
+.profile .Posts{
+    width: 70vw;
+    /* max-height: 90vh; */
+    /* overflow-y: auto; */
+    left: 80px;
+    top: 10vh;
+    position: relative;
+}
 
 Avatar {
     height: 12px;
@@ -22,11 +28,3 @@ Avatar {
 .profile > :first-child {
     margin-top: 60px ;
    }
-
-.PostDisplay {
-    width: 65vw;
-}
-
-.Posts {
-    width: 100%;
-  }

@@ -50,7 +50,8 @@ async function getUserPosts(req, res) {
             });
         UserPosts = await Post.find(
             { author: UserInfo._id },
-            {content: 0, joined_users: 0, comments: 0}
+            {content: 0, joined_users: 0, comments: 0},
+            { sort: {date: -1}}
         ).populate({
             path: 'author',
             select: 'name'

@@ -10,7 +10,8 @@ async function getAllCTXHPost(req,res){
     try {
         CTXHposts = await Post.find(
             { types: 'CTXH' },
-            { title: 1, author: 1, tags: 1, date: 1}
+            { title: 1, author: 1, tags: 1, date: 1},
+            { sort: {date: -1}}
         ).populate({
             path: 'author',
             select: 'name'
@@ -32,7 +33,8 @@ async function getAllGroupPost(req,res){
     try {
         Groupposts = await Post.find(
             { types: 'Group' },
-            { title: 1, author: 1, tags: 1, date: 1}
+            { title: 1, author: 1, tags: 1, date: 1},
+            { sort: {date: -1}}
         ).populate({
             path: 'author',
             select: 'name'
@@ -122,7 +124,7 @@ async function getPostFromSearch(req, res) {
 
 // Post creation and modify
 async function createPost(req, res) {
-    if (!req.body.type || !req.body.token || !req.body.title)
+    if (!req.body.type || !req.body.token || !req.body.title || !req.body.maxuser)
         return res.status(400).json({
             success: false,
             message: "Bad Request"    
@@ -149,13 +151,12 @@ async function createPost(req, res) {
                 success: false,
                 message: "Invalid Token"    
             })
-
         post = await Post.create({
             types: req.body.type,
             author: postOwner._id,
             title: req.body.title,
-            content: req.body.content,
-            tags: req.body.tags,
+            content: (req.body.content)? req.body.content : "",
+            tags: (req.body.tags)? req.body.tags : [],
             maxuser: req.body.maxuser,
             joined_users: (req.body.type == 'Group')? [postOwner._id]:[]
         });
@@ -199,7 +200,7 @@ async function updatePost(req,res) {
 
         await Post.findByIdAndUpdate(req.body.pid, {
             title: req.body.title,
-            content: req.body.content,
+            content: (req.body.content)? req.body.content : "",
             tags: req.body.tags
         })
         return res.status(200).json({
