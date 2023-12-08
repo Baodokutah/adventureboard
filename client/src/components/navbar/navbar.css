@@ -9,6 +9,17 @@
 
 }
 
+.nav-skeleton {
+    display: flex;
+    align-items: center;
+    width: 80vw;
+    justify-content: space-between;
+    padding: 10px 20px;
+    gap: 50px;
+    margin-right: 50px !important;
+
+}
+
 .logged {
     display: flex;
     align-items: center;
@@ -33,7 +44,7 @@
 
 #switch {
     padding: 0;
-    /* margin-right: 50px !important; */
+    margin-right: 50px !important;
 }
 
 Input {
@@ -59,7 +70,13 @@ Input {
 
 }
 .navhome {
+<<<<<<< Updated upstream
     margin-left: 0px;
+=======
+    margin-left: 20px;
+    display: flex;
+    gap: 50px;
+>>>>>>> Stashed changes
 }
 #navbar li a {
     text-decoration: none;
@@ -117,10 +134,14 @@ Input {
         transition: 0.3s ease-in-out;
     }
 
+<<<<<<< Updated upstream
     #switch {
         margin-left: -10px !important;
     }
     
+=======
+
+>>>>>>> Stashed changes
     Input{
         width: 30vw;
     }

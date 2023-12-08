@@ -45,10 +45,15 @@ function CTXH() {
     }, [refreshPosts]);
 
     useEffect(() => {
+      setPage(1);
+    }, [selectedTags]);
+
+    useEffect(() => {
       const fetchPostContent = async () => {
         try {
           const response = await axios.get(process.env.REACT_APP_API_URL + `/api/post/${id}`);
           setPostContent(response.data.Post);
+          console.log(response)
         } catch (error) {
           console.error('Failed to fetch post content:', error);
         }

@@ -75,6 +75,10 @@
     flex: 1;
 }
 
+.memberContainer > :first-child{
+margin-bottom: 10px;
+}
+
 .memberContainer h4{
     margin: 0;
 }

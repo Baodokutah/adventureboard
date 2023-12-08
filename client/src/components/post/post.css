@@ -59,6 +59,115 @@
     height: 17.67%;
 }
 
+.fa-regular.fa-pen-to-square.fa-xl:hover {
+  animation: fa-beat-fade 1s infinite;
+}
+.iconbutton {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  padding: 0;
+  margin: 0 50px;
+}
+.iconbutton svg {
+  transition: 200ms all;
+}
+.iconbutton.poof {
+  position: relative;
+}
+.iconbutton.poof svg {
+  opacity: 0.01;
+}
+.iconbutton.poof:after {
+  position: absolute;
+  left: 0;
+  bottom: 5px;
+  right: 0;
+  content: "";
+  background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/8585/poof.png) no-repeat 0 0;
+  animation: poof 500ms 1;
+  animation-fill-mode: forwards;
+  background-size: 128px 640px;
+}
+.iconbutton svg {
+  width: 20px;
+}
+.iconbutton.poof:after {
+  height: 20px;
+  background-size: 20px 100px;
+}
+.iconbutton.medium svg {
+  width: 35px;
+}
+.iconbutton.medium:after {
+  height: 35px;
+  background-size: 35px 175px;
+}
+.iconbutton.large svg {
+  margin-top: -15px;
+  width: 37px;
+}
+.iconbutton.large:after {
+  height: 50px;
+  background-size: 50px 250px;
+}
+
+svg.delete-animation .lid {
+  transform-origin: 2px 5px;
+  transition: 500ms all;
+}
+svg.delete-animation .can {
+  transition: 500ms all;
+}
+svg.delete-animation:hover {
+  fill: #cc0000;
+}
+svg.delete-animation:hover .lid {
+  transform: rotate(-30deg);
+}
+svg.delete-animation:active .lid {
+  transform: rotate(-50deg);
+}
+
+@keyframes poof {
+  0% {
+    background-position: 0 0;
+  }
+  20% {
+    background-position: 0 0;
+  }
+  21% {
+    background-position: 0 25%;
+  }
+  40% {
+    background-position: 0 25%;
+  }
+  41% {
+    background-position: 0 50%;
+  }
+  60% {
+    background-position: 0 50%;
+  }
+  61% {
+    background-position: 0 75%;
+  }
+  80% {
+    background-position: 0 75%;
+  }
+  81% {
+    background-position: 0 100%;
+  }
+  99% {
+    background-position: 0 100%;
+  }
+  100% {
+    background-position: 0 200%;
+  }
+}
+
+
+
 
 
 .tagBox{
@@ -96,8 +205,12 @@
 .postContentDisplay .imgLoc{
   right: 10ch;
   position: absolute;
-  gap: 0ch;
+  gap: 2ch;
+  width: auto;
+  height: auto;
   display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .cmt{

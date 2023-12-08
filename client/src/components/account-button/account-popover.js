@@ -92,7 +92,7 @@ export const AccountPopover = (props) => {
           <ListItemText
             primary={(
               <Typography variant="body1">
-                Profile
+                Trang cá nhân
               </Typography>
             )}
           />
@@ -111,7 +111,7 @@ export const AccountPopover = (props) => {
           onClick={handleLogout}
           size="small"
         >
-          Logout
+          Đăng xuất
         </Button>
       </Box>
     </Popover>

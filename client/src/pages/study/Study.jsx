@@ -47,6 +47,10 @@ function Study() {
     }, [refreshPosts]);
 
     useEffect(() => {
+      setPage(1);
+    }, [selectedTags]);
+
+    useEffect(() => {
       const fetchPostContent = async () => {
         try {
           const response = await axios.get(process.env.REACT_APP_API_URL + `/api/post/${id}`);

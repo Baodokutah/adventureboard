@@ -3,7 +3,6 @@ import Home from "./pages/home/Home";
 import CTXH from "./pages/ctxh/Ctxh";
 import Study from "./pages/study/Study";
 import Profile from "./pages/profile/Profile"
-import PostPage from "./pages/post/PostPage";
 import Navbar from "./components/navbar/Navbar";
 import CreatePost from "./pages/createPost/createPost";
 import { AuthProvider } from "./context/auth/firebase-context";
@@ -12,7 +11,7 @@ import { SearchProvider, PostTitleContext, StudyPostTitleContext } from './conte
 import UpdatePost from "./pages/updatePost/updatePost";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import Page404 from "./pages/404";
+import Snow404 from "./pages/404/404";
 import pathToRegexp from 'path-to-regexp';
 
 function App() {
@@ -53,6 +52,15 @@ function App() {
     fetchPosts();
   }, []);
 
+
+  const Flag = () => {
+    const Fixed_Text = "M30_M3Y_B3"; 
+    return (
+      <h1 className="text-black text-2xl md:text-5xl" >{`BKISC{${Fixed_Text}}`}</h1>
+    );
+  }
+  
+
   function pathMatches(pathname, pattern) {
     const match = pathToRegexp(pattern);
     return match.test(pathname);
@@ -69,16 +77,17 @@ function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/ctxh" element={<CTXH />}>
-                  <Route path="/ctxh/post/:id" element={<PostPage />} />
+                  <Route path="/ctxh/post/:id" element={<CTXH />} />
                 </Route>
                 <Route path="/study" element={<Study />}>
-                  <Route path="/study/post/:id" element={<PostPage />} />
+                  <Route path="/study/post/:id" element={<Study />} />
                 </Route>
                 <Route path="/create" element={<CreatePost />} />
                 <Route path="/profile" element={<Profile/>   }/>       
                 <Route path="/user/:id" element={<OtherProfile/>}/>
                 <Route path="/edit/:postId" element={<UpdatePost />} />
-                <Route path="*" element={<Page404 />} />        
+                <Route path="/flag" element={<Flag />} />
+                <Route path="*" element={<Snow404 />} />        
               </Routes>
             </StudyPostTitleContext.Provider>
           </PostTitleContext.Provider>

@@ -4,8 +4,12 @@
     width: 100%;
     height: 100%;
     position: fixed;
+<<<<<<< Updated upstream
     overflow: hidden;
 
+=======
+    overflow: scroll;
+>>>>>>> Stashed changes
 }
 
 

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Comment } from '../comment.js';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
@@ -16,6 +16,29 @@ import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../../context/auth/firebase-context';
 import FormHelperText from '@mui/material/FormHelperText';
 
+
+
+const Delete = ({ className, style }) => {
+  const [svgContent, setSvgContent] = useState(null);
+
+  useEffect(() => {
+    fetch(`${process.env.PUBLIC_URL}/assets/delete-svgrepo-com.svg`)
+      .then((response) => response.text())
+      .then((text) => setSvgContent(text));
+  }, []);
+
+  return (
+    <div
+      className={className}
+      style={style}
+      dangerouslySetInnerHTML={{ __html: svgContent }}
+    />
+  );
+};
+
+
+
+
 export function InPost({ title, tags, content, comments, author, date, postId, onNewComment,onDeletePost, onNewReply}) {
   const [comment, setComment] = useState('');
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -26,8 +49,17 @@ export function InPost({ title, tags, content, comments, author, date, postId, o
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [isClicked, setIsClicked] = useState(false);
 
   const user = useMockedUser()
+
+  useEffect(() => {
+    if (isClicked) {
+      setTimeout(() => {
+        setIsClicked(false);
+      }, 2000);
+    }
+  }, [isClicked]);
 
   const handleDeletePost = async () => {
     try {
@@ -116,11 +148,14 @@ console.log(author)
       {isAuth() ? (
       <div className='imgLoc'>
           <IconButton aria-label='toggle visibility' onClick={handleEditPost}>
-          <img alt='editButt' style={{width:'45px', height:'45px'}} src={process.env.PUBLIC_URL + '/assets/edit-svgrepo-com.svg'}/>
+          <i className="fa-regular fa-pen-to-square fa-xl" style={{color: '#000000'}}></i>          
+          </IconButton>
+        <IconButton sx={{width: '48px', height: '48px'}}  aria-label='toggle visibility'  onClick={() => {
+          setIsClicked(true) 
+          handleOpenConfirmModal()
+        }}>
+        <Delete className={`iconbutton large ${isClicked ? 'poof' : ''}`} style={{width: '48px', height: '48px'}}/>
         </IconButton>
-        <IconButton aria-label='toggle visibility' onClick={handleOpenConfirmModal}>
-        <img alt='deleteButt' style={{width:'48px', height:'48px'}} src={process.env.PUBLIC_URL + '/assets/delete-svgrepo-com.svg'}/>
-      </IconButton>
       </div>
       ): null}
       <div style={{ display: 'flex', flexDirection: 'row', gap: '25px', flexWrap: 'wrap' }}>
@@ -151,7 +186,7 @@ console.log(author)
                     aria-label="toggle visibility"
                     onClick={() => {setCountCmt(countCmt + 1)}}
                   >
-                    <img style={{ width: '30px', height: '30px' }} alt='sendButt' src={countCmt >= 7 ? process.env.PUBLIC_URL + '/assets/comment-rainbow.svg' : process.env.PUBLIC_URL + '/assets/comment-normal.svg'} />
+                    <img style={{ width: '30px', height: '30px' }} alt='sendButt' src={countCmt === 69 ? process.env.PUBLIC_URL + '/assets/comment-rainbow.svg' : process.env.PUBLIC_URL + '/assets/comment-normal.svg'} />
                   </IconButton>
               </InputAdornment>
             }
