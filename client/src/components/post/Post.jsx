@@ -246,12 +246,11 @@ export function PostTitle({ title = null, tags, date, author}) {
   } else {
     return (
       <div className='postTitleBox'>
-              <div style={{ display: 'flex', justifyContent: 'flex-start'}}>
+          <div style={{ display: 'flex', justifyContent: 'flex-start'}}>
         <h3>{title}</h3>
         <div style={{fontWeight: 'normal', marginLeft: 'auto', whiteSpace: 'nowrap'}}>{author}・{date}</div>
         </div>
         <div style={{ display: 'flex', gap: '25px', justifyContent: 'flex-start', flexWrap: 'wrap'}}>
-        
           {tags.map((tag, index) => (
             <div key={index} className='tag'>
               {tag}

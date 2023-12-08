@@ -12,7 +12,7 @@ import { AccountButton } from "../account-button";
 import { withAuth } from "../../hooks/use-auth";
 import Skeleton from '@mui/material/Skeleton';
 import IconButton from '@mui/material/IconButton';
-import { SearchContext, PostTitleContext, StudyPostTitleContext } from '../../context/search-context'; 
+import { SearchContext, PostTitleContext, StudyPostTitleContext } from '../../context/search-context';
 import Autocomplete from '@mui/joy/Autocomplete';
 
 // Your Navbar component code...
@@ -220,7 +220,7 @@ return (
                           <li>
                           <Autocomplete
                               id="autocomplete-input"
-                              options={postTitles.slice(0, 5) || []} 
+                              options={postTitles.slice(0, 5) || []}
                               freeSolo
                               inputValue={searchContext.searchQuery}
                               color="neutral"
@@ -228,7 +228,7 @@ return (
                               variant="outlined"
                               onInputChange={(event, newInputValue) => {
                 this.handleSearch(event, newInputValue, searchContext.setSearchQuery);
-              }}                              
+              }}
                             />
                           </li>
                           <li>
@@ -246,7 +246,7 @@ return (
                           </li>
                           </>
                   ) : (
-                          <div id="navhome" >
+                          <div id="navhome" className="navhome">
                           <li>
                             <NotificationsButton />
                           </li>
@@ -277,7 +277,7 @@ return (
           </>
           )}
         </SearchContext.Consumer>
-      
+
     </>
 );
 }

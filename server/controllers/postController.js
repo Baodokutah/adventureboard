@@ -217,41 +217,38 @@ async function updatePost(req,res) {
 }
 async function deletePost(req, res) {
     try {
-        if(!req.body.pid || !req.body.token)
-        return res.status(404).json({success:false,message:'Bad request'
+        if (!req.body.pid || !req.body.token)
+            return res.status(404).json({
+                success:false,message:'Bad request'
+            })
+    
+        postInfo = await Post.findById(req.body.pid)
+        if (!postInfo) {
+            return res.status(404).json({
+                success:false,message:'Post does not exist'
+            })
+        }
+
+        userInfo = await User.findOne({token: req.body.token})
+        if (!userInfo) {
+            return res.status(404).json({
+                success:false,message:'User does not exist'
+            })
+        }
+
+        if (userInfo._id.toString != postInfo.author._id.toString){
+            return res.status(401).json({
+                success:false,message: 'This is not user\'s Post'
+            })
+        }
+
+        await Comment.findByIdAndDelete({ $in: postInfo.comments })
+
+        await Post.findByIdAndDelete(req.body.pid)
+
+        return res.status(200).json({
+            success:true,message: 'Successfully deleted post'
         })
-        let postInfo;
-        let userInfo;
-        try {
-            postInfo = await Post.findById(req.body.pid)
-        } catch (error) {
-            return res.status(500).json({success:false,message:'Post does not exist'})
-        }
-
-        try {
-            userInfo = await User.findOne({token: req.body.token})
-        } catch (error) {
-            return res.status(500).json({success:false,message:'User does not exist'})
-        }
-        console.log(userInfo)
-        console.log(postInfo)
-        if(userInfo._id.toString != postInfo.author._id.toString){
-            return res.status(404).json({success:false,message: 'This is not user\'s Post'})
-        }
-
-        try {
-            await Comment.findByIdAndDelete({ $in: postInfo.comments })
-        } catch (error) {
-            return res.status(500).json({success:false,message:'Remove comment failed'})
-        }
-
-        try {
-            await Post.findByIdAndDelete(req.body.pid)
-        } catch (error) {
-            return res.status(500).json({success:false,message: 'Delete post failed'})
-        }
-
-        return res.status(200).json({success:true,message: 'Successfully deleted post'})
 
     } catch (err) {
         res.status(500).json({
@@ -272,34 +269,20 @@ async function joinPost(req, res) {
         }
         
         let PostInfo;
-        try {
-            PostInfo = await Post.findById(req.body.pid, { joined_users: 1, author: 1, maxuser: 1 });
-            if (!PostInfo) {
-                return res.status(404).json({
-                    success: false,
-                    message: 'Post doesn\'t exist!'
-                });
-            }
-        } catch (err) {
-            return res.status(500).json({
+        PostInfo = await Post.findById(req.body.pid, { joined_users: 1, author: 1, maxuser: 1 });
+        if (!PostInfo) {
+            return res.status(404).json({
                 success: false,
-                message: err.message
+                message: 'Post doesn\'t exist!'
             });
         }
 
         let UserInfo;
-        try{
-            UserInfo = await User.findOne({ token: req.body.token }, { _id: 1 })
-            if (!UserInfo) {
-                return res.status(403).json({
-                    success: false,
-                    message: 'Invalid token!'
-                });
-            }
-        } catch (err) {
-            return res.status(500).json({
+        UserInfo = await User.findOne({ token: req.body.token }, { _id: 1 })
+        if (!UserInfo) {
+            return res.status(403).json({
                 success: false,
-                message: err.message
+                message: 'Invalid token!'
             });
         }
 
@@ -349,34 +332,20 @@ async function removeMem(req, res) {
         }
 
         let PostInfo;
-        try {
-            PostInfo = await Post.findById(req.body.pid, { joined_users: 1, author: 1 });
-            if (!PostInfo)
-                return res.status(404).json({
-                    success: false,
-                    message: 'Post doesn\'t exist!'
-                });
-        } catch (err) {
-            return res.status(500).json({
+        PostInfo = await Post.findById(req.body.pid, { joined_users: 1, author: 1 });
+        if (!PostInfo)
+            return res.status(404).json({
                 success: false,
-                message: err.message
+                message: 'Post doesn\'t exist!'
             });
-        }
 
         let UserInfo;
-        try {
-            UserInfo = await User.findOne({ token: req.body.token }, { _id: 1, name: 1 });
-            if (!UserInfo)
-                return res.status(404).json({
-                    success: false,
-                    message: 'Invalid token!'
-                });
-        } catch (err) {
-            return res.status(500).json({
+        UserInfo = await User.findOne({ token: req.body.token }, { _id: 1, name: 1 });
+        if (!UserInfo)
+            return res.status(404).json({
                 success: false,
-                message: err.message
+                message: 'Invalid token!'
             });
-        }
         
         if (UserInfo._id == req.body.uid) {
             if (!PostInfo.joined_users.includes( req.body.uid )) {

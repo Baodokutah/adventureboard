@@ -1,7 +1,7 @@
 .nav {
     display: flex;
     align-items: center;
-    justify-content: space-between; 
+    justify-content: space-between;
     background: rgba(151, 116, 83, 0.69);
     padding: 10px 20px;
     max-width: 100%;
@@ -23,7 +23,7 @@
 .logged {
     display: flex;
     align-items: center;
-    justify-content: space-between; 
+    justify-content: space-between;
     background: rgba(151, 116, 83, 0.69);
     padding: 10px 20px;
     max-width: 100%;
@@ -37,7 +37,7 @@
     margin-left: 75vw;
 }
 
-.logged > * { 
+.logged > * {
     flex: 1 1 auto !important; /* This means grow, shrink and have an automatic base size */
     /* min-width: 0;  */
 }
@@ -52,19 +52,18 @@ Input {
 
 }
 
-
 #navbar {
     padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 30px; 
+    gap: 50px;
 }
 
 #navbar li {
     list-style-type: none;
     margin: 0;
-    padding: 0 20px;
+    /* padding: 0 20px; */
     position: relative;
     flex-shrink: 1 !important;
 
@@ -73,10 +72,11 @@ Input {
     margin-left: 20px;
     display: flex;
     gap: 50px;
+
 }
 #navbar li a {
     text-decoration: none;
-    color: black; 
+    color: black;
     font-size: 1.3rem;
     font-weight: bold;
     transition: 0.3s ease-in-out;
@@ -84,13 +84,13 @@ Input {
 }
 
 #navbar li a:hover {
-    background-color: #c8b7a6; 
+    background-color: #c8b7a6;
     border-radius: 15px;
     padding: 5px 15px;
 }
 
 
-.login { 
+.login {
     background-color: #8B5A2B;
     color: white;
     border-radius: 30px;
@@ -99,7 +99,7 @@ Input {
 }
 
 .login:hover {
-    background-color: #c24135; 
+    background-color: #c24135;
     cursor: pointer;
 }
 
@@ -117,7 +117,7 @@ Input {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        justify-content: flex-start; 
+        justify-content: flex-start;
         position: fixed;
         top: 90px;
         right: -500px;
@@ -133,11 +133,11 @@ Input {
     #switch {
         margin-left: -10px !important;
     }
-    
+
     Input{
         width: 30vw;
     }
-    
+
     #navbar.active {
         right: 0px;
         z-index: 4;
@@ -159,5 +159,5 @@ Input {
         font-size: 24px;
         cursor: pointer;
     }
-    
+
 }
