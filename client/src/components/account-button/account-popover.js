@@ -68,6 +68,7 @@ export const AccountPopover = (props) => {
         <Typography
           color="text.secondary"
           variant="body2"
+        sx={{overflowWrap: 'break-word'}}  
         >
           {user.email}
         </Typography>

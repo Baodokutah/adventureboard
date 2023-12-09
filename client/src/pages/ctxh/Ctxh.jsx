@@ -46,7 +46,7 @@ function CTXH() {
 
     useEffect(() => {
       setPage(1);
-    }, [selectedTags]);
+    }, [selectedTags, searchQuery]);
 
     useEffect(() => {
       const fetchPostContent = async () => {

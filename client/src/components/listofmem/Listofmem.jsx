@@ -27,6 +27,7 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
   const [count, setCount] = useState(0);
   const user = useMockedUser();
   const [buttonClickedJoin, setButtonClickedJoin] = useIsMember(user, memberList);
+  const [memberToRemove, setMemberToRemove] = useState(null); // Add this line
   console.log(member)
 
   useEffect(() => {
@@ -130,7 +131,7 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
             <div key={idx}>
             <Link
        className="author-link"
-        to={author ? `/user/${author._id}` : '#'}
+        to={mem ? `/user/${mem._id}` : '#'}
           >
               <h5>{mem.name}</h5>
               </Link>
@@ -138,7 +139,8 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
                 <Button
                 variant='X'
                 onClick={() => {
-                  setOpenModal(true)
+                  setMemberToRemove(mem); // Set the member to be removed here
+                  setOpenModal(true);
                 }}
                 sx={{borderRadius:"0%", height: '2ch', width: '1ch'}}
                 >
@@ -148,11 +150,9 @@ export default function ListOfMem({maxMem, member, author, postId,currPage}) {
               <Confirm
                 open={openModal}
                 onClose={() => setOpenModal(false)}
-                action={`xóa thành viên ${mem.name} ra khỏi nhóm`}
+                action={`xóa thành viên ${memberToRemove ? memberToRemove.name : ''} ra khỏi nhóm`} // Use the memberToRemove here
                 imgSrc={process.env.PUBLIC_URL + "/assets/button-circle-round-delete-x-svgrepo-com.svg"}
-                onConfirm={() => handleDeleteMem(mem)}
-
-
+                onConfirm={() => handleDeleteMem(memberToRemove)} // And here
               />
             </div>
           ))}

@@ -224,7 +224,7 @@ return (
                               freeSolo
                               inputValue={searchContext.searchQuery}
                               color="neutral"
-                              placeholder="Tìm kiếm bài đăng"
+                              placeholder="Tìm kiếm bài viết"
                               variant="outlined"
                               onInputChange={(event, newInputValue) => {
                 this.handleSearch(event, newInputValue, searchContext.setSearchQuery);

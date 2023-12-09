@@ -48,7 +48,7 @@ function Study() {
 
     useEffect(() => {
       setPage(1);
-    }, [selectedTags]);
+    }, [selectedTags, searchQuery]);
 
     useEffect(() => {
       const fetchPostContent = async () => {

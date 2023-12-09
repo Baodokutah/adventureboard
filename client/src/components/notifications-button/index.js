@@ -12,7 +12,7 @@ const transformNotifications = (notifications) => {
     let type;
     if (notification.content.includes('đã xóa bạn khỏi nhóm của họ') || 
         notification.content.includes('Bạn đã rời khỏi nhóm!') ||
-        notification.content.includes('đẫ tham gia nhóm của bạn!')) {
+        notification.content.includes('đã tham gia nhóm của bạn!')) {
       type = 'system';
     } else {
       type = 'noti';
